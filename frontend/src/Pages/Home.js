@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import { motion } from 'framer-motion';
-import Navbar from '../Components/Navbar';
+// import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 
 const MotionBox = motion(Box);
