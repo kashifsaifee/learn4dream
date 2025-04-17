@@ -1,0 +1,19 @@
+/* About.css */
+.about-container {
+    padding: 50px;
+    background-color: #fff;
+    text-align: center;
+  }
+  
+  .about-container h1 {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .about-container p {
+    font-size: 1.1rem;
+    color: #777;
+    line-height: 1.6;
+  }
+  
