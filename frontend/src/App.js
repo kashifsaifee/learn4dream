@@ -7,11 +7,13 @@ import About from './Pages/About';
 import Courses from './Pages/Courses';
 import Services from './Pages/Services';
 import Contact from './Pages/Contact';
+import Header from './Components/Header';
 import './App.css'; // Ensure you have global styles
 
 function App() {
   return (
     <Router>
+      <Header/>
       <Navbar /> {/* The Navbar will be present on all pages */}
       <Routes>
         <Route path="/" element={<Home />} />
