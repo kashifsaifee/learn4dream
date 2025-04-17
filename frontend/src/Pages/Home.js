@@ -1,19 +1,32 @@
 import React from 'react';
-import { Box, Container, Typography, Button, Grid, Paper, TextField } from '@mui/material';
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  TextField,
+} from '@mui/material';
 import { motion } from 'framer-motion';
+import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
 
 const MotionBox = motion(Box);
 const MotionPaper = motion(Paper);
 
 const Home = () => {
   return (
-    <Box>
+    <Box sx={{ overflowX: 'hidden' }}>
+      {/* Navbar
+      <Navbar /> */}
+
       {/* Hero Section */}
       <MotionBox
         sx={{
           bgcolor: 'primary.main',
           color: 'primary.contrastText',
-          py: { xs: 10, md: 14 },
+          py: { xs: 12, md: 16 },
           textAlign: 'center',
         }}
         initial={{ opacity: 0, y: 30 }}
@@ -21,15 +34,19 @@ const Home = () => {
         transition={{ duration: 0.8 }}
       >
         <Container>
-          <Typography variant="h3" gutterBottom>Learn. Grow. Transform.</Typography>
+          <Typography variant="h2" gutterBottom fontWeight="bold">
+            Learn. Grow. Transform.
+          </Typography>
           <Typography variant="h6" paragraph>
             Join Learn4Dream and unlock your future with high-quality, practical courses designed by experts.
           </Typography>
           <Button
             variant="contained"
             color="secondary"
+            size="large"
             sx={{
-              mt: 2,
+              mt: 3,
+              px: 4,
               '&:hover': {
                 bgcolor: '#FF4C4C',
               },
@@ -42,23 +59,47 @@ const Home = () => {
 
       {/* Highlights Section */}
       <Box sx={{ py: 10, textAlign: 'center', bgcolor: 'background.paper' }}>
-        <Typography variant="h4" gutterBottom>Why Learn4Dream?</Typography>
+        <Typography variant="h4" gutterBottom fontWeight="medium">
+          Why Learn4Dream?
+        </Typography>
         <Container>
-          <Grid container spacing={4}>
+          <Grid container spacing={5}>
             {[
-              { title: 'Industry-Relevant Curriculum', desc: 'Stay ahead with content designed by top educators & tech leaders.' },
-              { title: 'Flexible Learning', desc: 'Access courses anytime, anywhere, at your own pace.' },
-              { title: 'Live Doubt Sessions', desc: 'Interact with mentors in real time and get your doubts cleared.' }
+              {
+                title: 'Industry-Relevant Curriculum',
+                desc: 'Stay ahead with content designed by top educators & tech leaders.',
+              },
+              {
+                title: 'Flexible Learning',
+                desc: 'Access courses anytime, anywhere, at your own pace.',
+              },
+              {
+                title: 'Live Doubt Sessions',
+                desc: 'Interact with mentors in real time and get your doubts cleared.',
+              },
             ].map((item, i) => (
               <Grid item xs={12} md={4} key={i}>
                 <MotionPaper
-                  elevation={3}
+                  elevation={4}
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: 'spring', stiffness: 300 }}
-                  sx={{ p: 4, bgcolor: 'primary.main', color: 'text.primary' }}
+                  sx={{
+                    p: 4,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    bgcolor: 'primary.light',
+                    color: 'text.primary',
+                    borderRadius: 3,
+                  }}
                 >
-                  <Typography variant="h6">{item.title}</Typography>
-                  <Typography variant="body1">{item.desc}</Typography>
+                  <Typography variant="h6" fontWeight="bold">
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body1" mt={1}>
+                    {item.desc}
+                  </Typography>
                 </MotionPaper>
               </Grid>
             ))}
@@ -76,7 +117,9 @@ const Home = () => {
         }}
       >
         <Container>
-          <Typography variant="h5" gutterBottom>Stay Updated With Our Latest Courses</Typography>
+          <Typography variant="h5" gutterBottom fontWeight="medium">
+            Stay Updated With Our Latest Courses
+          </Typography>
           <Typography variant="body1" paragraph>
             Subscribe to our newsletter and never miss out on new content and offers.
           </Typography>
@@ -85,32 +128,35 @@ const Home = () => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              mt: 2,
+              mt: 3,
               maxWidth: 500,
-              mx: 'auto'
+              mx: 'auto',
+              borderRadius: 2,
+              overflow: 'hidden',
+              bgcolor: '#fff',
             }}
           >
             <TextField
               type="email"
               placeholder="Your email address"
               variant="outlined"
-              sx={{
-                bgcolor: '#fff',
-                borderRadius: '4px 0 0 4px',
-                flex: 1
-              }}
+              fullWidth
+              sx={{ borderRadius: 0, border: 'none' }}
             />
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              sx={{ borderRadius: '0 4px 4px 0' }}
+              sx={{ borderRadius: 0, px: 4 }}
             >
               Subscribe
             </Button>
           </Box>
         </Container>
       </Box>
+
+      {/* Footer */}
+      <Footer />
     </Box>
   );
 };
