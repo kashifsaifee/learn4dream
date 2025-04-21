@@ -1,63 +1,165 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { TextField, Button, Typography } from '@mui/material'; // Import Material-UI components
-import '../Styles/Contact.css'; // Optional, if you want to keep custom styles
+import {
+  Box,
+  Grid,
+  TextField,
+  Typography,
+  Button,
+  Paper,
+  IconButton,
+} from '@mui/material';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Contact = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [status, setStatus] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',       // ➕ Added phone field
+    subject: '',
+    message: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://127.0.0.1:5000/contact', {
-        email,
-        message,
+      const res = await fetch('http://127.0.0.1:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
 
-      if (res.data.status === "success") {
-        setStatus('Message sent successfully!');
-        setEmail('');
-        setMessage('');
-      } else {
-        setStatus('Failed to send message.');
-      }
-    } catch (err) {
-      setStatus('Error: ' + err.message);
+      const result = await res.json();
+      alert(result.status); // Show success message
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' }); // Reset form
+    } catch (error) {
+      alert('Failed to send message!');
+      console.error(error);
     }
   };
 
   return (
-    <div className="contact-container">
-      <form onSubmit={handleSubmit} className="contact-form">
-        <Typography variant="h4" gutterBottom>Contact Us</Typography>
-        <TextField
-          label="Your Email"
-          type="email"
-          variant="outlined"
-          fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          margin="normal"
-        />
-        <TextField
-          label="Your Message"
-          variant="outlined"
-          multiline
-          rows={4}
-          fullWidth
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          required
-          margin="normal"
-        />
-        <Button variant="contained" color="primary" type="submit">Send Message</Button>
-        {status && <Typography variant="body1">{status}</Typography>}
-      </form>
-    </div>
+    <Box sx={{ flexGrow: 1, px: 5, py: 10, backgroundColor: '#f7fafd' }}>
+      <Grid container spacing={5} alignItems="center" justifyContent="center">
+        {/* Left Side */}
+        <Grid item xs={12} md={5}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+            Let’s chat.
+            <br />
+            Tell us about your project.
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: 'text.secondary', mb: 3 }}>
+            Let’s create something together
+          </Typography>
+
+          <Paper elevation={3} sx={{ display: 'flex', alignItems: 'center', p: 2, maxWidth: 300 }}>
+            <IconButton sx={{ mr: 1 }}>
+              <EmailIcon color="primary" />
+            </IconButton>
+            <Box>
+              <Typography variant="body2">Mail us at</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                contact@lorem.com
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        {/* Right Side - Form */}
+        <Grid item xs={12} md={6}>
+          <Paper
+            elevation={4}
+            sx={{
+              backgroundColor: '#2d6cdf',
+              color: 'white',
+              p: 4,
+              borderRadius: 3,
+            }}
+          >
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+              Send us a message
+            </Typography>
+
+            <Box component="form" sx={{ mt: 2 }} onSubmit={handleSubmit}>
+              <TextField
+                label="Full Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                variant="filled"
+                fullWidth
+                required
+                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
+              />
+              <TextField
+                label="Email Address"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                variant="filled"
+                fullWidth
+                required
+                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
+              />
+              <TextField
+                label="Phone Number"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                variant="filled"
+                fullWidth
+                required
+                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
+              />
+              <TextField
+                label="Subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                variant="filled"
+                fullWidth
+                required
+                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
+              />
+              <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1 }}>
+                Tell us more about your project
+              </Typography>
+              <TextField
+                name="message"
+                multiline
+                rows={5}
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Type your message*"
+                variant="filled"
+                fullWidth
+                required
+                sx={{ mb: 3, backgroundColor: 'white', borderRadius: 1 }}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                sx={{
+                  backgroundColor: 'white',
+                  color: '#000',
+                  fontWeight: 'bold',
+                  '&:hover': { backgroundColor: '#f0f0f0' },
+                }}
+              >
+                Send Message
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
