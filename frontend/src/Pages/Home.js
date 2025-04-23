@@ -1,275 +1,254 @@
-import React from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Grid,
-  Paper,
-} from '@mui/material';
-import { motion } from 'framer-motion';
-import Footer from '../Components/Footer';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import anime from 'animejs/lib/anime.es.js';
+import '../Styles/Home.css';
 
-const MotionBox = motion(Box);
-const MotionPaper = motion(Paper);
+gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
+  const heroRef = useRef(null);
+  const featuresRef = useRef(null);
+  const coursesRef = useRef(null);
+  const ctaRef = useRef(null);
+  const shapeRefs = useRef([]);
+
+  // Add shape to ref array
+  const addToShapeRefs = (el) => {
+    if (el && !shapeRefs.current.includes(el)) {
+      shapeRefs.current.push(el);
+    }
+  };
+
+  useEffect(() => {
+    // Hero animation
+    gsap.from(heroRef.current.querySelectorAll(".hero-content > *"), {
+      duration: 1,
+      y: 50,
+      opacity: 0,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+
+    // Floating shapes animation
+    shapeRefs.current.forEach((shape, i) => {
+      gsap.to(shape, {
+        y: Math.random() * 40 - 20,
+        x: Math.random() * 30 - 15,
+        rotation: Math.random() * 15 - 7.5,
+        duration: 8 + Math.random() * 5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: i * 0.3
+      });
+    });
+
+    // Features animation
+    gsap.from(featuresRef.current.querySelectorAll(".feature-card"), {
+      scrollTrigger: {
+        trigger: featuresRef.current,
+        start: "top 80%"
+      },
+      y: 50,
+      opacity: 0,
+      stagger: 0.15,
+      duration: 0.8,
+      ease: "back.out(1)"
+    });
+
+    // Courses animation
+    const courses = coursesRef.current.querySelectorAll(".course-card");
+    courses.forEach((course, i) => {
+      gsap.from(course, {
+        scrollTrigger: {
+          trigger: coursesRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        x: i % 2 === 0 ? -50 : 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: i * 0.1
+      });
+    });
+
+    // CTA animation
+    anime({
+      targets: ctaRef.current.querySelectorAll(".cta-button"),
+      translateY: [10, -10],
+      duration: 2000,
+      direction: 'alternate',
+      loop: true,
+      easing: 'easeInOutSine'
+    });
+
+    // Background text animation
+    const bgText = document.querySelectorAll(".background-text");
+    bgText.forEach(text => {
+      gsap.to(text, {
+        scrollTrigger: {
+          trigger: text,
+          scrub: true
+        },
+        x: 100,
+        duration: 2
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      shapeRefs.current = [];
+    };
+  }, []);
+
   return (
-    <Box sx={{ overflowX: 'hidden' }}>
+    <div className="home-page">
+      {/* Floating background shapes */}
+      <div className="shape shape-1" ref={addToShapeRefs}></div>
+      <div className="shape shape-2" ref={addToShapeRefs}></div>
+      <div className="shape shape-3" ref={addToShapeRefs}></div>
+      <div className="shape shape-4" ref={addToShapeRefs}></div>
+      
+      {/* Hero Section */}
+      <section className="hero-section" ref={heroRef}>
+        <div className="container">
+          <div className="hero-content">
+            <h1 className="hero-title">
+              Transform Your Learning Experience
+            </h1>
+            <p className="hero-subtitle">
+              Access world-class courses from industry experts and take your skills to the next level
+            </p>
+            <div className="hero-buttons">
+              <button className="primary-button">Explore Courses</button>
+              <button className="secondary-button">Learn More</button>
+            </div>
+          </div>
+          <div className="hero-image">
+            <div className="image-wrapper">
+              <div className="floating-element"></div>
+              <div className="floating-element"></div>
+            </div>
+          </div>
+        </div>
+        <div className="background-text">LEARNING</div>
+      </section>
 
-      <MotionBox
-        sx={{
-          bgcolor: 'primary.main',
-          color: 'primary.contrastText',
-          py: { xs: 8, md: 12 },
-          textAlign: 'center',
-          pt: { xs: 10, md: 12 },
-        }}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <Container>
-          <Typography variant="h2" gutterBottom fontWeight="bold">
-            Learn. Grow. Transform.
-          </Typography>
-          <Typography variant="h6" gutterBottom>
-            Join Learn4Dream and unlock your future with high-quality, practical courses designed by experts.
-          </Typography>
- 
-          <Button
-            component={Link}
-            to="/courses"
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{
-              mt: 3,
-              px: 4,
-              '&:hover': {
-                bgcolor: '#FF4C4C',
-              },
-            }}
-          >
-            Explore Courses
-          </Button>
-        </Container>
-      </MotionBox>
-
-      <Box sx={{ py: 10, textAlign: 'center', bgcolor: 'background.paper' }}>
-        <Typography variant="h4" gutterBottom fontWeight="medium">
-          About Learn4Dream
-        </Typography>
-        <Container>
-          <Typography variant="body1" paragraph>
-            Learn4Dream is an online education platform that provides a wide variety of high-quality courses
-            for students, professionals, and lifelong learners. We offer industry-relevant courses designed by
-            expert instructors, ensuring you stay ahead in your career or studies.
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Whether you're looking to acquire new skills, advance in your career, or gain a deeper understanding
-            of various subjects, Learn4Dream has something for you. Our courses are flexible, accessible,
-            and designed to fit into your busy lifestyle.
-          </Typography>
-        </Container>
-      </Box>
-
-  
-      <Box sx={{ py: 10, textAlign: 'center', bgcolor: 'primary.light' }}>
-        <Typography variant="h4" gutterBottom fontWeight="medium">
-          How It Works
-        </Typography>
-        <Container>
-          <Grid container spacing={4} justifyContent="center">
-            <Grid item xs={12} md={4}>
-              <MotionPaper
-                elevation={4}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                sx={{
-                  p: 4,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  bgcolor: 'background.paper',
-                  color: 'text.primary',
-                  borderRadius: 3,
-                }}
-              >
-                <Typography variant="h6" fontWeight="bold">
-                  Choose a Course
-                </Typography>
-                <Typography variant="body1" mt={1}>
-                  Browse through our wide selection of courses and choose one that suits your needs and goals.
-                </Typography>
-              </MotionPaper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MotionPaper
-                elevation={4}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                sx={{
-                  p: 4,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  bgcolor: 'background.paper',
-                  color: 'text.primary',
-                  borderRadius: 3,
-                }}
-              >
-                <Typography variant="h6" fontWeight="bold">
-                  Start Learning
-                </Typography>
-                <Typography variant="body1" mt={1}>
-                  Dive into the course material at your own pace, with 24/7 access to lectures, assignments,
-                  and discussions.
-                </Typography>
-              </MotionPaper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MotionPaper
-                elevation={4}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                sx={{
-                  p: 4,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  bgcolor: 'background.paper',
-                  color: 'text.primary',
-                  borderRadius: 3,
-                }}
-              >
-                <Typography variant="h6" fontWeight="bold">
-                  Get Certified
-                </Typography>
-                <Typography variant="body1" mt={1}>
-                  Complete the course and earn a certificate that can boost your career prospects.
-                </Typography>
-              </MotionPaper>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-
-      <Box sx={{ py: 10, textAlign: 'center', bgcolor: 'background.default' }}>
-        <Typography variant="h4" gutterBottom fontWeight="medium">
-          Featured Courses
-        </Typography>
-        <Container>
-          <Grid container spacing={4}>
-            {[ 
+      {/* Features Section */}
+      <section className="features-section" ref={featuresRef}>
+        <div className="container">
+          <h2 className="section-title">Why Choose Our Platform</h2>
+          <p className="section-subtitle">Designed to help you achieve your learning goals</p>
+          
+          <div className="features-grid">
+            {[
               {
-                title: 'Web Development',
-                desc: 'Learn how to build modern websites and web applications from scratch using HTML, CSS, JavaScript, and React.',
+                icon: "📚",
+                title: "Comprehensive Courses",
+                desc: "Access hundreds of courses across various disciplines"
               },
               {
-                title: 'Data Science',
-                desc: 'Master data analysis, machine learning, and data visualization with Python and popular libraries like Pandas and Scikit-learn.',
+                icon: "🎓",
+                title: "Expert Instructors",
+                desc: "Learn from industry professionals and academic experts"
               },
               {
-                title: 'Digital Marketing',
-                desc: 'Understand the fundamentals of digital marketing, including SEO, PPC, and social media strategies.',
+                icon: "⏱️",
+                title: "Flexible Learning",
+                desc: "Study at your own pace, anytime and anywhere"
               },
-            ].map((item, i) => (
-              <Grid item xs={12} md={4} key={i}>
-                <MotionPaper
-                  elevation={4}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                  sx={{
-                    p: 4,
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    bgcolor: 'primary.light',
-                    color: 'text.primary',
-                    borderRadius: 3,
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold">
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body1" mt={1}>
-                    {item.desc}
-                  </Typography>
-                </MotionPaper>
-              </Grid>
+              {
+                icon: "📱",
+                title: "Mobile Friendly",
+                desc: "Access courses on any device with our responsive platform"
+              },
+              {
+                icon: "📈",
+                title: "Progress Tracking",
+                desc: "Monitor your learning journey with detailed analytics"
+              },
+              {
+                icon: "🏆",
+                title: "Certification",
+                desc: "Earn recognized certificates upon course completion"
+              }
+            ].map((feature, index) => (
+              <div className="feature-card" key={index}>
+                <div className="feature-icon">{feature.icon}</div>
+                <h3>{feature.title}</h3>
+                <p>{feature.desc}</p>
+              </div>
             ))}
-          </Grid>
-        </Container>
-      </Box>
+          </div>
+        </div>
+        <div className="background-text">KNOWLEDGE</div>
+      </section>
 
-      <Box sx={{ py: 10, textAlign: 'center', bgcolor: 'secondary.main' }}>
-        <Typography variant="h4" gutterBottom fontWeight="medium">
-          What Our Students Say
-        </Typography>
-        <Container>
-          <Grid container spacing={4} justifyContent="center">
-            <Grid item xs={12} md={4}>
-              <MotionPaper
-                elevation={4}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                sx={{
-                  p: 4,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  bgcolor: 'background.paper',
-                  color: 'text.primary',
-                  borderRadius: 3,
-                }}
-              >
-                <Typography variant="h6" fontWeight="bold">
-                  Jane Doe
-                </Typography>
-                <Typography variant="body1" mt={1}>
-                  "The Data Science course was amazing! The instructors were very knowledgeable, and the course
-                  material was really engaging."
-                </Typography>
-              </MotionPaper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MotionPaper
-                elevation={4}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                sx={{
-                  p: 4,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  bgcolor: 'background.paper',
-                  color: 'text.primary',
-                  borderRadius: 3,
-                }}
-              >
-                <Typography variant="h6" fontWeight="bold">
-                  John Smith
-                </Typography>
-                <Typography variant="body1" mt={1}>
-                  "Learn4Dream's Digital Marketing course helped me land my dream job! The resources were
-                  fantastic."
-                </Typography>
-              </MotionPaper>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+      {/* Courses Section */}
+      <section className="courses-section" ref={coursesRef}>
+        <div className="container">
+          <h2 className="section-title">Popular Courses</h2>
+          <p className="section-subtitle">Start learning with our most popular courses</p>
+          
+          <div className="courses-grid">
+            {[
+              {
+                title: "Web Development Bootcamp",
+                category: "Technology",
+                duration: "8 Weeks",
+                level: "Beginner"
+              },
+              {
+                title: "Data Science Fundamentals",
+                category: "Data",
+                duration: "10 Weeks",
+                level: "Intermediate"
+              },
+              {
+                title: "Digital Marketing Mastery",
+                category: "Marketing",
+                duration: "6 Weeks",
+                level: "Beginner"
+              },
+              {
+                title: "Mobile App Development",
+                category: "Technology",
+                duration: "12 Weeks",
+                level: "Advanced"
+              }
+            ].map((course, index) => (
+              <div className="course-card" key={index}>
+                <div className="course-badge">New</div>
+                <div className="course-image"></div>
+                <div className="course-content">
+                  <span className="course-category">{course.category}</span>
+                  <h3>{course.title}</h3>
+                  <div className="course-meta">
+                    <span>{course.duration}</span>
+                    <span>{course.level}</span>
+                  </div>
+                  <button className="course-button">Enroll Now</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <Footer />
-    </Box>
+      {/* CTA Section */}
+      <section className="cta-section" ref={ctaRef}>
+        <div className="container">
+          <h2>Ready to Start Learning?</h2>
+          <p>Join thousands of students advancing their careers with our courses</p>
+          <div className="cta-buttons">
+            <button className="cta-button">Sign Up Free</button>
+            <button className="cta-button outline">Browse Courses</button>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 

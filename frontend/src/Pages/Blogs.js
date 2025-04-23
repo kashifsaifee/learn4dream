@@ -134,8 +134,6 @@ const Blogs = () => {
           </Grid>
         </Container>
       </Box>
-
-      <Footer />
     </Box>
   );
 };

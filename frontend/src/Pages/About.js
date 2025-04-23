@@ -80,8 +80,6 @@ const About = () => {
           </Grid>
         </motion.div>
       </Box>
-
-      <Footer />
     </>
   );
 };
