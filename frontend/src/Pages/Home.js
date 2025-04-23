@@ -64,7 +64,7 @@ const Home = () => {
           Why Learn4Dream?
         </Typography>
         <Container>
-          <Grid container spacing={5}>
+          <Grid container spacing={4}>
             {[
               {
                 title: 'Industry-Relevant Curriculum',

@@ -1,166 +1,116 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Grid,
-  TextField,
-  Typography,
-  Button,
-  Paper,
-  IconButton,
-} from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import '../Styles/Contact.css';
 
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',       // ➕ Added phone field
-    subject: '',
-    message: '',
-  });
+const AnimatedForm = () => {
+  const formRef = useRef(null);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    // GSAP animations for form entrance
+    gsap.from(formRef.current, {
+      duration: 0.8,
+      y: 30,
+      opacity: 0,
+      ease: "power3.out"
+    });
+  }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const res = await fetch('http://127.0.0.1:5000/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await res.json();
-      alert(result.status); // Show success message
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' }); // Reset form
-    } catch (error) {
-      alert('Failed to send message!');
-      console.error(error);
-    }
+    console.log('Form submitted');
+    
+    // Add submission animation
+    gsap.to(formRef.current, {
+      y: -10,
+      duration: 0.3,
+      yoyo: true,
+      repeat: 1,
+      ease: "power1.inOut"
+    });
   };
 
   return (
-    <Box sx={{ flexGrow: 1, px: 5, py: 10, backgroundColor: '#f7fafd' }}>
-      <Grid container spacing={5} alignItems="center" justifyContent="center">
-        {/* Left Side */}
-        <Grid item xs={12} md={5}>
-          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
-            Let’s chat.
-            <br />
-            Tell us about your project.
-          </Typography>
-          <Typography variant="subtitle1" sx={{ color: 'text.secondary', mb: 3 }}>
-            Let’s create something together
-          </Typography>
-
-          <Paper elevation={3} sx={{ display: 'flex', alignItems: 'center', p: 2, maxWidth: 300 }}>
-            <IconButton sx={{ mr: 1 }}>
-              <EmailIcon color="primary" />
-            </IconButton>
-            <Box>
-              <Typography variant="body2">Mail us at</Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                contact@lorem.com
-              </Typography>
-            </Box>
-          </Paper>
-        </Grid>
+    <div className="contact-container">
+      {/* Subtle texture elements */}
+      <div className="texture-box texture-1"></div>
+      <div className="texture-box texture-2"></div>
+      <div className="texture-box texture-3"></div>
+      
+      <div className="contact-content">
+        {/* Left Side - Contact Info */}
+        <div className="contact-info">
+          <h2>Get in Touch</h2>
+          <div className="info-section">
+            <h3>Email Us</h3>
+            <p>info@yourcompany.com</p>
+            <p>support@yourcompany.com</p>
+          </div>
+          <div className="info-section">
+            <h3>Call Us</h3>
+            <p>+1 (123) 456-7890</p>
+            <p>+1 (987) 654-3210</p>
+          </div>
+          <div className="info-section">
+            <h3>Visit Us</h3>
+            <p>123 Business Avenue</p>
+            <p>Suite 456, New York, NY 10001</p>
+          </div>
+        </div>
 
         {/* Right Side - Form */}
-        <Grid item xs={12} md={6}>
-          <Paper
-            elevation={4}
-            sx={{
-              backgroundColor: '#2d6cdf',
-              color: 'white',
-              p: 4,
-              borderRadius: 3,
-            }}
-          >
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
-              Send us a message
-            </Typography>
-
-            <Box component="form" sx={{ mt: 2 }} onSubmit={handleSubmit}>
-              <TextField
-                label="Full Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                variant="filled"
-                fullWidth
-                required
-                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
-              />
-              <TextField
-                label="Email Address"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                variant="filled"
-                fullWidth
-                required
-                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
-              />
-              <TextField
-                label="Phone Number"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                variant="filled"
-                fullWidth
-                required
-                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
-              />
-              <TextField
-                label="Subject"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                variant="filled"
-                fullWidth
-                required
-                sx={{ mb: 2, backgroundColor: 'white', borderRadius: 1 }}
-              />
-              <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1 }}>
-                Tell us more about your project
-              </Typography>
-              <TextField
-                name="message"
-                multiline
-                rows={5}
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Type your message*"
-                variant="filled"
-                fullWidth
-                required
-                sx={{ mb: 3, backgroundColor: 'white', borderRadius: 1 }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                sx={{
-                  backgroundColor: 'white',
-                  color: '#000',
-                  fontWeight: 'bold',
-                  '&:hover': { backgroundColor: '#f0f0f0' },
-                }}
-              >
-                Send Message
-              </Button>
-            </Box>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
+        <div className="form-wrapper" ref={formRef}>
+          <div className="form-container">
+            <div className="form-header">
+              <h2>Send a Message</h2>
+              <p>We'll respond within 24 hours</p>
+            </div>
+            
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  placeholder="Full Name" 
+                  required 
+                />
+              </div>
+              
+              <div className="form-group">
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  placeholder="Email Address" 
+                  required 
+                />
+              </div>
+              
+              <div className="form-group">
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  name="phone" 
+                  placeholder="Phone Number" 
+                />
+              </div>
+              
+              <div className="form-group">
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  placeholder="Your Message" 
+                  required 
+                ></textarea>
+              </div>
+              
+              <button type="submit" className="submit-btn">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Contact;
+export default AnimatedForm;
