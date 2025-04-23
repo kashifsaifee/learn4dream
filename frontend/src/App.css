@@ -32,3 +32,19 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+body {
+  background: linear-gradient(145deg, #1A1A40, #2E2E4D);
+  font-family: 'Inter', sans-serif;
+}
+
+
+
+.hover-heading {
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.hover-heading:hover {
+  color: #ffc107; /* Bootstrap warning yellow */
+  transform: scale(1.05);
+}

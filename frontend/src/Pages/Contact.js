@@ -1,64 +1,99 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { TextField, Button, Typography } from '@mui/material'; // Import Material-UI components
-import '../Styles/Contact.css'; // Optional, if you want to keep custom styles
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import '../Styles/Contact.css';
 
-const Contact = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [status, setStatus] = useState('');
+const AnimatedForm = () => {
+  const pageRef = useRef(null);
+  const formRef = useRef(null);
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    // Page-level animation: entire content slides up
+    gsap.fromTo(
+      pageRef.current,
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+    );
+
+    // Form entrance animation
+    gsap.fromTo(
+      formRef.current,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.3 }
+    );
+  }, []);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      const res = await axios.post('http://127.0.0.1:5000/contact', {
-        email,
-        message,
-      });
+    // Submission animation
+    gsap.to(formRef.current, {
+      y: -5,
+      duration: 0.2,
+      repeat: 1,
+      yoyo: true,
+      ease: 'power1.inOut',
+    });
 
-      if (res.data.status === "success") {
-        setStatus('Message sent successfully!');
-        setEmail('');
-        setMessage('');
-      } else {
-        setStatus('Failed to send message.');
-      }
-    } catch (err) {
-      setStatus('Error: ' + err.message);
-    }
+    console.log('Form submitted');
   };
 
   return (
-    <div className="contact-container">
-      <form onSubmit={handleSubmit} className="contact-form">
-        <Typography variant="h4" gutterBottom>Contact Us</Typography>
-        <TextField
-          label="Your Email"
-          type="email"
-          variant="outlined"
-          fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          margin="normal"
-        />
-        <TextField
-          label="Your Message"
-          variant="outlined"
-          multiline
-          rows={4}
-          fullWidth
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          required
-          margin="normal"
-        />
-        <Button variant="contained" color="primary" type="submit">Send Message</Button>
-        {status && <Typography variant="body1">{status}</Typography>}
-      </form>
-    </div>
+    <section className="contact-container" ref={pageRef}>
+      {/* Decorative Textures */}
+      <div className="texture-box texture-1"></div>
+      <div className="texture-box texture-2"></div>
+      <div className="texture-box texture-3"></div>
+
+      <div className="contact-content">
+        {/* Contact Info */}
+        <aside className="contact-info">
+          <h2>Get in Touch</h2>
+          <div className="info-section">
+            <h3>Email Us</h3>
+            <p>info@yourcompany.com</p>
+            <p>support@yourcompany.com</p>
+          </div>
+          <div className="info-section">
+            <h3>Call Us</h3>
+            <p>+1 (123) 456-7890</p>
+            <p>+1 (987) 654-3210</p>
+          </div>
+          <div className="info-section">
+            <h3>Visit Us</h3>
+            <p>123 Business Avenue</p>
+            <p>Suite 456, New York, NY 10001</p>
+          </div>
+        </aside>
+
+        {/* Contact Form */}
+        <div className="form-wrapper" ref={formRef}>
+          <form className="form-container" onSubmit={handleSubmit} noValidate>
+            <header className="form-header">
+              <h2>Send a Message</h2>
+              <p>We'll respond within 24 hours</p>
+            </header>
+
+            <div className="form-group">
+              <input type="text" name="name" placeholder="Full Name" required />
+            </div>
+            <div className="form-group">
+              <input type="email" name="email" placeholder="Email Address" required />
+            </div>
+            <div className="form-group">
+              <input type="tel" name="phone" placeholder="Phone Number" />
+            </div>
+            <div className="form-group">
+              <textarea name="message" placeholder="Your Message" required></textarea>
+            </div>
+
+            <button type="submit" className="submit-btn">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default Contact;
+export default AnimatedForm;
