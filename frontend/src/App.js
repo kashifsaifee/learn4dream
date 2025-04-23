@@ -8,6 +8,7 @@ import Courses from './Pages/Courses';
 import Services from './Pages/Services';
 import Contact from './Pages/Contact';
 import Header from './Components/Header';
+import Login from './Pages/Login';
 import './App.css'; // Ensure you have global styles
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login/>} />
       </Routes>
     </Router>
   );
