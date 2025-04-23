@@ -1,6 +1,6 @@
-// src/Pages/Courses.js
 import React, { useState } from 'react';
-
+import { motion } from 'framer-motion';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const courses = [
   {
@@ -9,7 +9,7 @@ const courses = [
     description:
       'Master both frontend and backend development with modern technologies including React, Node.js, and MongoDB.',
     price: '$999',
-    image: 'https://dummyimage.com/600x400/000/fff&text=Tushar',
+    image: 'https://dummyimage.com/600x400/007bff/fff&text=Full+Stack',
   },
   {
     id: 'cs',
@@ -17,7 +17,7 @@ const courses = [
     description:
       'Build a strong foundation in computer science fundamentals, algorithms, and data structures.',
     price: '$799',
-    image: 'https://dummyimage.com/600x400/000/fff&text=Tushar',
+    image: 'https://dummyimage.com/600x400/28a745/fff&text=Computer+Science',
   },
   {
     id: 'data',
@@ -25,7 +25,7 @@ const courses = [
     description:
       'Learn data analysis, machine learning, and statistical modeling with Python and R.',
     price: '$899',
-    image: 'https://dummyimage.com/600x400/000/fff&text=Tushar',
+    image: 'https://dummyimage.com/600x400/ffc107/000&text=Data+Science',
   },
 ];
 
@@ -35,7 +35,6 @@ export default function Courses() {
   const enrollCourse = async (courseId) => {
     setLoading(courseId);
     try {
-      // simulate API call
       await new Promise((r) => setTimeout(r, 1500));
       alert('Successfully enrolled!');
     } catch {
@@ -46,42 +45,46 @@ export default function Courses() {
   };
 
   return (
-    <div className="container py-5">
-      {/* Hero */}
+    <motion.div
+      className="container py-5"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
       <div className="text-center mb-5">
-        <h2 className="display-5 text-white hover-heading">
+        <h1 className="display-4 fw-bold text-primary">
           Transform Your Career with Our Courses
-        </h2>
-
-
-        <p className="lead">
+        </h1>
+        <p className="lead text-muted">
           Discover industry‑leading courses designed to help you master today’s digital skills.
         </p>
       </div>
 
-      {/* Courses Grid */}
       <div className="row">
         {courses.map((course) => (
           <div key={course.id} className="col-12 col-md-6 col-lg-4 mb-4">
-            <div className="card h-100 shadow-sm">
+            <div className="card h-100 shadow-lg border-0">
               <img
                 src={course.image}
-                className="card-img-top"
+                className="card-img-top rounded-top"
                 alt={course.title}
                 style={{ height: '200px', objectFit: 'cover' }}
               />
               <div className="card-body d-flex flex-column">
-                <h5 className="card-title">{course.title}</h5>
-                <p className="card-text flex-grow-1">{course.description}</p>
+                <h5 className="card-title text-dark fw-bold">{course.title}</h5>
+                <p className="card-text text-muted flex-grow-1">{course.description}</p>
                 <div className="d-flex justify-content-between align-items-center mt-3">
-                  <span className="h6 text-primary mb-0">{course.price}</span>
+                  <span className="h5 text-success mb-0">{course.price}</span>
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-outline-primary"
                     onClick={() => enrollCourse(course.id)}
                     disabled={loading === course.id}
                   >
                     {loading === course.id && (
-                      <span className="spinner-border spinner-border-sm me-2" role="status" />
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      />
                     )}
                     {loading === course.id ? 'Enrolling...' : 'Enroll Now'}
                   </button>
@@ -91,6 +94,6 @@ export default function Courses() {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

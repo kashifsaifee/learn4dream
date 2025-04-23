@@ -3,42 +3,50 @@ import { gsap } from 'gsap';
 import '../Styles/Contact.css';
 
 const AnimatedForm = () => {
+  const pageRef = useRef(null);
   const formRef = useRef(null);
 
   useEffect(() => {
-    // GSAP animations for form entrance
-    gsap.from(formRef.current, {
-      duration: 0.8,
-      y: 30,
-      opacity: 0,
-      ease: "power3.out"
-    });
+    // Page-level animation: entire content slides up
+    gsap.fromTo(
+      pageRef.current,
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+    );
+
+    // Form entrance animation
+    gsap.fromTo(
+      formRef.current,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.3 }
+    );
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted');
-    
-    // Add submission animation
+
+    // Submission animation
     gsap.to(formRef.current, {
-      y: -10,
-      duration: 0.3,
-      yoyo: true,
+      y: -5,
+      duration: 0.2,
       repeat: 1,
-      ease: "power1.inOut"
+      yoyo: true,
+      ease: 'power1.inOut',
     });
+
+    console.log('Form submitted');
   };
 
   return (
-    <div className="contact-container">
-      {/* Subtle texture elements */}
+    <section className="contact-container" ref={pageRef}>
+      {/* Decorative Textures */}
       <div className="texture-box texture-1"></div>
       <div className="texture-box texture-2"></div>
       <div className="texture-box texture-3"></div>
-      
+
       <div className="contact-content">
-        {/* Left Side - Contact Info */}
-        <div className="contact-info">
+        {/* Contact Info */}
+        <aside className="contact-info">
           <h2>Get in Touch</h2>
           <div className="info-section">
             <h3>Email Us</h3>
@@ -55,61 +63,36 @@ const AnimatedForm = () => {
             <p>123 Business Avenue</p>
             <p>Suite 456, New York, NY 10001</p>
           </div>
-        </div>
+        </aside>
 
-        {/* Right Side - Form */}
+        {/* Contact Form */}
         <div className="form-wrapper" ref={formRef}>
-          <div className="form-container">
-            <div className="form-header">
+          <form className="form-container" onSubmit={handleSubmit} noValidate>
+            <header className="form-header">
               <h2>Send a Message</h2>
               <p>We'll respond within 24 hours</p>
+            </header>
+
+            <div className="form-group">
+              <input type="text" name="name" placeholder="Full Name" required />
             </div>
-            
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <input 
-                  type="text" 
-                  id="name" 
-                  name="name" 
-                  placeholder="Full Name" 
-                  required 
-                />
-              </div>
-              
-              <div className="form-group">
-                <input 
-                  type="email" 
-                  id="email" 
-                  name="email" 
-                  placeholder="Email Address" 
-                  required 
-                />
-              </div>
-              
-              <div className="form-group">
-                <input 
-                  type="tel" 
-                  id="phone" 
-                  name="phone" 
-                  placeholder="Phone Number" 
-                />
-              </div>
-              
-              <div className="form-group">
-                <textarea 
-                  id="message" 
-                  name="message" 
-                  placeholder="Your Message" 
-                  required 
-                ></textarea>
-              </div>
-              
-              <button type="submit" className="submit-btn">Send Message</button>
-            </form>
-          </div>
+            <div className="form-group">
+              <input type="email" name="email" placeholder="Email Address" required />
+            </div>
+            <div className="form-group">
+              <input type="tel" name="phone" placeholder="Phone Number" />
+            </div>
+            <div className="form-group">
+              <textarea name="message" placeholder="Your Message" required></textarea>
+            </div>
+
+            <button type="submit" className="submit-btn">
+              Send Message
+            </button>
+          </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -3,13 +3,13 @@ import {
   Box,
   Container,
   Grid,
-  Link,
   Typography,
   Divider,
   TextField,
   Button,
   IconButton
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import {
   Facebook,
   Twitter,
@@ -34,7 +34,7 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          {/* About */}
+          {/* Brand & Socials */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Learn4Dream
@@ -68,28 +68,26 @@ const Footer = () => {
             </Box>
           </Grid>
 
-          {/* Links */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Quick Links
             </Typography>
-            <Box component="ul" sx={{ listStyle: 'none', pl: 0 }}>
+            <Box component="ul" sx={{ listStyle: 'none', pl: 0, m: 0 }}>
               {[
-                { text: 'Courses', href: '#courses' },
-                { text: 'About Us', href: '#about' },
-                { text: 'Blog', href: '#blog' },
-                { text: 'Contact', href: '#contact' },
-                { text: 'Privacy Policy', href: '#privacy' }
-              ].map(({ text, href }) => (
+                { text: 'Courses', to: '/courses' },
+                { text: 'About Us', to: '/about' },
+                { text: 'Blog', to: '/blog' },
+                { text: 'Contact', to: '/contact' },
+                { text: 'Privacy Policy', to: '/privacy' }
+              ].map(({ text, to }) => (
                 <li key={text}>
                   <Link
-                    href={href}
-                    color="inherit"
-                    underline="hover"
-                    sx={{
+                    to={to}
+                    style={{
                       display: 'block',
-                      py: 0.5,
-                      '&:hover': { color: 'secondary.main' }
+                      padding: '4px 0',
+                      textDecoration: 'none',
+                      color: 'inherit'
                     }}
                   >
                     {text}
@@ -99,12 +97,11 @@ const Footer = () => {
             </Box>
           </Grid>
 
-          {/* Contact */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Contact Us
             </Typography>
-            <Box component="ul" sx={{ listStyle: 'none', pl: 0 }}>
+            <Box component="ul" sx={{ listStyle: 'none', pl: 0, m: 0 }}>
               <li style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
                 <Email sx={{ mr: 1 }} />
                 <Typography variant="body2">contact@learn4dream.com</Typography>
@@ -120,7 +117,6 @@ const Footer = () => {
             </Box>
           </Grid>
 
-          {/* Newsletter */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Newsletter
