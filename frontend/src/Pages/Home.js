@@ -41,6 +41,7 @@ const Home = () => {
             Join Learn4Dream and unlock your future with high-quality, practical courses designed by experts.
           </Typography>
           <Button
+           href = 'Courses'
             variant="contained"
             color="secondary"
             size="large"

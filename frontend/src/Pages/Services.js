@@ -1,12 +1,9 @@
-import '../Styles/Services.css';
+import React from 'react'
 
-const Services = () => {
+function Services() {
   return (
-    <div className="services">
-      <h1>Our Services</h1>
-      <p>Here, we provide details about the services your website offers.</p>
-    </div>
-  );
-};
+    <div>Services</div>
+  )
+}
 
-export default Services;
+export default Services
