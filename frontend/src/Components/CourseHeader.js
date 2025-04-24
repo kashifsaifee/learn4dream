@@ -1,5 +1,4 @@
-// src/Components/CourseHeader.js
-import "../Styles/Courses.css";
+
 import { IoIosSearch } from "react-icons/io";
 import { TypeAnimation } from "react-type-animation";
 import { IoBagOutline } from "react-icons/io5";
@@ -18,13 +17,13 @@ const CourseHeader = () => {
           </button>
           <ul className="dropdown-menu">
             <li>
-              <a className="dropdown-item" href="#">Data Science</a>
+              <a className="dropdown-item" href="/">Data Science</a>
             </li>
             <li>
-              <a className="dropdown-item" href="#">Machine Learning</a>
+              <a className="dropdown-item" href="/">Machine Learning</a>
             </li>
             <li>
-              <a className="dropdown-item" href="#">Artificial Intelligence</a>
+              <a className="dropdown-item" href="/">Artificial Intelligence</a>
             </li>
           </ul>
         </div>
@@ -49,7 +48,7 @@ const CourseHeader = () => {
         </div>
 
         <div className="cart">
-          <a href="#"><IoBagOutline size={25} /> Your Courses</a>
+          <a href="/"><IoBagOutline size={25} /> Your Courses</a>
         </div>
       </div>
     </>
