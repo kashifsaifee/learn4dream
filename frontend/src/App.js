@@ -6,14 +6,11 @@ import About from './Pages/About';
 import Courses from './Pages/Courses';
 import Contact from './Pages/Contact';
 import Login from './Pages/Login';
-<<<<<<< HEAD
-import './App.css'; // Ensure you have global styles
-import Blogs from './Pages/Blogs'
-=======
 import Blogs from './Pages/Blogs';
 import Signup from './Pages/Signup';
 import './App.css';
->>>>>>> 5660eee226b3b940203f888cb1b6eaffc1cccafd
+
+
 
 function App() {
   return (

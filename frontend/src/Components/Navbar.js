@@ -15,129 +15,12 @@ import { Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
+/* ---------- shared menu‑item helper ---------- */
 const NavLinkBtn = ({ to, children, closeMenu }) => {
-  const theme = useTheme();
-  const location = useLocation();
-  const active = location.pathname === to;
+  const theme   = useTheme();
+  const loc     = useLocation();
+  const active  = loc.pathname === to;
   return (
-<<<<<<< HEAD
-    <>
-   
-    <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
-      <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1, color: theme.palette.primary.contrastText }}>
-          Learn4Dream
-        </Typography>
-
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-          <Button
-            component={Link}
-            to="/"
-            sx={{
-              color: location.pathname === '/' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Home
-          </Button>
-          <Button
-            component={Link}
-            to="/about"
-            sx={{
-              color: location.pathname === '/about' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            About
-          </Button>
-          <Button
-            component={Link}
-            to="/courses"
-            sx={{
-              color: location.pathname === '/courses' ? 'orange' : theme.palette.primary.contrastText,  // Orange for active state
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: 'orange',
-              },
-            }}
-          >
-            Courses
-          </Button>
-          <Button
-            component={Link}
-            to="/blogs"
-            sx={{
-              color: location.pathname === '/blogs' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Blogs
-          </Button>
-          <Button
-            component={Link}
-            to="/contact"
-            sx={{
-              color: location.pathname === '/contact' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Contact
-          </Button>
-          <Button
-            component={Link}
-            to="/Login"
-            sx={{
-              color: location.pathname === '/Login' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Login
-          </Button>
-        </Box>
-
-        <IconButton
-          edge="end"
-          color="inherit"
-          aria-label="menu"
-          sx={{ display: { xs: 'flex', md: 'none' } }}
-          onClick={handleMenuClick}
-        >
-          <MenuIcon />
-        </IconButton>
-
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-          sx={{ display: { xs: 'flex', md: 'none' } }}
-        >
-          <MenuItem onClick={() => handleMenuClose()}>Home</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>About</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Courses</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Blogs</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Contact</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Login</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Sign-up</MenuItem>
-        </Menu>
-      </Toolbar>
-    </AppBar>
-    </>
-=======
     <MenuItem
       component={Link}
       to={to}
@@ -149,30 +32,34 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
     >
       {children}
     </MenuItem>
->>>>>>> 5660eee226b3b940203f888cb1b6eaffc1cccafd
   );
 };
 
 export default function Navbar() {
-  const theme = useTheme();
-  const location = useLocation();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const theme      = useTheme();
+  const location   = useLocation();
+  const isMobile   = useMediaQuery(theme.breakpoints.down('md'));
 
-  // anchor state for each dropdown
+  // anchors for dropdowns / hamburger
   const [anchorCourses, setAnchorCourses] = useState(null);
-  const [anchorPages, setAnchorPages] = useState(null);
-  const [anchorMobile, setAnchorMobile] = useState(null);
+  const [anchorPages,   setAnchorPages]   = useState(null);
+  const [anchorMobile,  setAnchorMobile]  = useState(null);
 
-  const open = (setter) => (e) => setter(e.currentTarget);
-  const close = (setter) => () => setter(null);
+  const open  = (set) => (e) => set(e.currentTarget);
+  const close = (set) => () => set(null);
 
   const linkStyle = (path) => ({
     color:
-      location.pathname === path ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-    '&:hover': { bgcolor: theme.palette.primary.dark, color: theme.palette.secondary.main },
+      location.pathname === path
+        ? theme.palette.secondary.main
+        : theme.palette.primary.contrastText,
+    '&:hover': {
+      bgcolor: theme.palette.primary.dark,
+      color: theme.palette.secondary.main,
+    },
   });
 
-  /* ----------  LAYOUT  ---------- */
+  /* ---------- layout ---------- */
   return (
     <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
       <Toolbar sx={{ gap: 2 }}>
@@ -180,7 +67,7 @@ export default function Navbar() {
           Learn4Dream
         </Typography>
 
-        {/* ------------ Desktop Menu ------------ */}
+        {/* ======= Desktop menu ======= */}
         {!isMobile && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button component={Link} to="/" sx={linkStyle('/')}>
@@ -199,10 +86,9 @@ export default function Navbar() {
               anchorEl={anchorCourses}
               open={Boolean(anchorCourses)}
               onClose={close(setAnchorCourses)}
-              MenuListProps={{ dense: true }}
             >
               <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>
-                All Courses
+                All Courses
               </NavLinkBtn>
               <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorCourses)}>
                 Course Detail
@@ -221,7 +107,6 @@ export default function Navbar() {
               anchorEl={anchorPages}
               open={Boolean(anchorPages)}
               onClose={close(setAnchorPages)}
-              MenuListProps={{ dense: true }}
             >
               <NavLinkBtn to="/blogs" closeMenu={close(setAnchorPages)}>
                 Blogs
@@ -235,13 +120,13 @@ export default function Navbar() {
               Contact
             </Button>
 
-            {/* Accent auth buttons */}
+            {/* Auth buttons */}
             <Button
               component={Link}
               to="/login"
               variant="outlined"
               color="secondary"
-              sx={{ borderRadius: 2, ml: 1 }}
+              sx={{ borderRadius: 2 }}
             >
               Login
             </Button>
@@ -252,12 +137,12 @@ export default function Navbar() {
               color="secondary"
               sx={{ borderRadius: 2 }}
             >
-              Sign&nbsp;up
+              Sign up
             </Button>
           </Box>
         )}
 
-        {/* ------------ Mobile Hamburger ------------ */}
+        {/* ======= Mobile hamburger ======= */}
         {isMobile && (
           <>
             <IconButton color="inherit" onClick={open(setAnchorMobile)}>
@@ -268,35 +153,15 @@ export default function Navbar() {
               open={Boolean(anchorMobile)}
               onClose={close(setAnchorMobile)}
             >
-              <NavLinkBtn to="/" closeMenu={close(setAnchorMobile)}>
-                Home
-              </NavLinkBtn>
-
-              <NavLinkBtn to="/courses" closeMenu={close(setAnchorMobile)}>
-                All Courses
-              </NavLinkBtn>
-              <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorMobile)}>
-                Course Detail
-              </NavLinkBtn>
-
-              <NavLinkBtn to="/blogs" closeMenu={close(setAnchorMobile)}>
-                Blogs
-              </NavLinkBtn>
-              <NavLinkBtn to="/about" closeMenu={close(setAnchorMobile)}>
-                About
-              </NavLinkBtn>
-
-              <NavLinkBtn to="/contact" closeMenu={close(setAnchorMobile)}>
-                Contact
-              </NavLinkBtn>
-
+              <NavLinkBtn to="/"                 closeMenu={close(setAnchorMobile)}>Home</NavLinkBtn>
+              <NavLinkBtn to="/courses"          closeMenu={close(setAnchorMobile)}>All Courses</NavLinkBtn>
+              <NavLinkBtn to="/courses/detail"   closeMenu={close(setAnchorMobile)}>Course Detail</NavLinkBtn>
+              <NavLinkBtn to="/blogs"            closeMenu={close(setAnchorMobile)}>Blogs</NavLinkBtn>
+              <NavLinkBtn to="/about"            closeMenu={close(setAnchorMobile)}>About</NavLinkBtn>
+              <NavLinkBtn to="/contact"          closeMenu={close(setAnchorMobile)}>Contact</NavLinkBtn>
               <Divider />
-              <NavLinkBtn to="/login" closeMenu={close(setAnchorMobile)}>
-                Login
-              </NavLinkBtn>
-              <NavLinkBtn to="/signup" closeMenu={close(setAnchorMobile)}>
-                Sign‑up
-              </NavLinkBtn>
+              <NavLinkBtn to="/login"            closeMenu={close(setAnchorMobile)}>Login</NavLinkBtn>
+              <NavLinkBtn to="/signup"           closeMenu={close(setAnchorMobile)}>Sign up</NavLinkBtn>
             </Menu>
           </>
         )}
