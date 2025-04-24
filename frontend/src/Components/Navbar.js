@@ -19,17 +19,7 @@ const Navbar = () => {
 
   return (
     <>
-    <nav>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/courses">Courses</Link></li>
-        <li><Link to="/services">Services</Link></li>
-        <li><Link to="/contact">Contact</Link></li>
-        <li> <Link to="/signup">Sign-up</Link> </li>
-        <li> <Link to="/login">Login</Link> </li>
-      </ul>
-    </nav>
+   
     <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1, color: theme.palette.primary.contrastText }}>
@@ -102,6 +92,19 @@ const Navbar = () => {
           >
             Contact
           </Button>
+          <Button
+            component={Link}
+            to="/Login"
+            sx={{
+              color: location.pathname === '/Login' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
+              '&:hover': {
+                bgcolor: theme.palette.primary.dark,
+                color: theme.palette.secondary.main,
+              },
+            }}
+          >
+            Login
+          </Button>
         </Box>
 
         <IconButton
@@ -125,6 +128,8 @@ const Navbar = () => {
           <MenuItem onClick={() => handleMenuClose()}>Courses</MenuItem>
           <MenuItem onClick={() => handleMenuClose()}>Blogs</MenuItem>
           <MenuItem onClick={() => handleMenuClose()}>Contact</MenuItem>
+          <MenuItem onClick={() => handleMenuClose()}>Login</MenuItem>
+          <MenuItem onClick={() => handleMenuClose()}>Sign-up</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

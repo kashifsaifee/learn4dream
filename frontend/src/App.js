@@ -6,7 +6,6 @@ import Home from './Pages/Home';
 import About from './Pages/About';
 import Courses from './Pages/Courses';
 import Contact from './Pages/Contact';
-import Header from './Components/Header';
 import Login from './Pages/Login';
 import './App.css'; // Ensure you have global styles
 import Blogs from './Pages/Blogs'
@@ -14,7 +13,6 @@ import Blogs from './Pages/Blogs'
 function App() {
   return (
     <Router>
-      <Header/>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
