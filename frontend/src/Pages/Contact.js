@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import '../Styles/Contact.css';
+import Footer from '../Components/Footer';
+
 
 const AnimatedForm = () => {
   const pageRef = useRef(null);
@@ -38,6 +40,7 @@ const AnimatedForm = () => {
   };
 
   return (
+    <>
     <section className="contact-container" ref={pageRef}>
       {/* Decorative Textures */}
       <div className="texture-box texture-1"></div>
@@ -93,6 +96,9 @@ const AnimatedForm = () => {
         </div>
       </div>
     </section>
+    {/* Footer */}
+    <Footer />
+    </>
   );
 };
 

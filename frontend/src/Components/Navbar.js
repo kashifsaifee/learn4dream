@@ -15,129 +15,13 @@ import { Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
+/* ---------- NavLinkBtn for dropdown items ---------- */
 const NavLinkBtn = ({ to, children, closeMenu }) => {
   const theme = useTheme();
   const location = useLocation();
   const active = location.pathname === to;
+
   return (
-<<<<<<< HEAD
-    <>
-   
-    <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
-      <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1, color: theme.palette.primary.contrastText }}>
-          Learn4Dream
-        </Typography>
-
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-          <Button
-            component={Link}
-            to="/"
-            sx={{
-              color: location.pathname === '/' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Home
-          </Button>
-          <Button
-            component={Link}
-            to="/about"
-            sx={{
-              color: location.pathname === '/about' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            About
-          </Button>
-          <Button
-            component={Link}
-            to="/courses"
-            sx={{
-              color: location.pathname === '/courses' ? 'orange' : theme.palette.primary.contrastText,  // Orange for active state
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: 'orange',
-              },
-            }}
-          >
-            Courses
-          </Button>
-          <Button
-            component={Link}
-            to="/blogs"
-            sx={{
-              color: location.pathname === '/blogs' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Blogs
-          </Button>
-          <Button
-            component={Link}
-            to="/contact"
-            sx={{
-              color: location.pathname === '/contact' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Contact
-          </Button>
-          <Button
-            component={Link}
-            to="/Login"
-            sx={{
-              color: location.pathname === '/Login' ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-                color: theme.palette.secondary.main,
-              },
-            }}
-          >
-            Login
-          </Button>
-        </Box>
-
-        <IconButton
-          edge="end"
-          color="inherit"
-          aria-label="menu"
-          sx={{ display: { xs: 'flex', md: 'none' } }}
-          onClick={handleMenuClick}
-        >
-          <MenuIcon />
-        </IconButton>
-
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-          sx={{ display: { xs: 'flex', md: 'none' } }}
-        >
-          <MenuItem onClick={() => handleMenuClose()}>Home</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>About</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Courses</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Blogs</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Contact</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Login</MenuItem>
-          <MenuItem onClick={() => handleMenuClose()}>Sign-up</MenuItem>
-        </Menu>
-      </Toolbar>
-    </AppBar>
-    </>
-=======
     <MenuItem
       component={Link}
       to={to}
@@ -149,7 +33,6 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
     >
       {children}
     </MenuItem>
->>>>>>> 5660eee226b3b940203f888cb1b6eaffc1cccafd
   );
 };
 
@@ -158,7 +41,7 @@ export default function Navbar() {
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // anchor state for each dropdown
+  // anchor states for dropdowns
   const [anchorCourses, setAnchorCourses] = useState(null);
   const [anchorPages, setAnchorPages] = useState(null);
   const [anchorMobile, setAnchorMobile] = useState(null);
@@ -168,11 +51,15 @@ export default function Navbar() {
 
   const linkStyle = (path) => ({
     color:
-      location.pathname === path ? theme.palette.secondary.main : theme.palette.primary.contrastText,
-    '&:hover': { bgcolor: theme.palette.primary.dark, color: theme.palette.secondary.main },
+      location.pathname === path
+        ? theme.palette.secondary.main
+        : theme.palette.primary.contrastText,
+    '&:hover': {
+      bgcolor: theme.palette.primary.dark,
+      color: theme.palette.secondary.main,
+    },
   });
 
-  /* ----------  LAYOUT  ---------- */
   return (
     <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
       <Toolbar sx={{ gap: 2 }}>
@@ -180,14 +67,14 @@ export default function Navbar() {
           Learn4Dream
         </Typography>
 
-        {/* ------------ Desktop Menu ------------ */}
+        {/* ----------- Desktop Menu ----------- */}
         {!isMobile && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button component={Link} to="/" sx={linkStyle('/')}>
               Home
             </Button>
 
-            {/* Courses dropdown */}
+            {/* Courses Dropdown */}
             <Button
               endIcon={<ExpandMore />}
               onClick={open(setAnchorCourses)}
@@ -202,14 +89,14 @@ export default function Navbar() {
               MenuListProps={{ dense: true }}
             >
               <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>
-                All Courses
+                All Courses
               </NavLinkBtn>
               <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorCourses)}>
-                Course Detail
+                Course Detail
               </NavLinkBtn>
             </Menu>
 
-            {/* Pages dropdown */}
+            {/* Pages Dropdown */}
             <Button
               endIcon={<ExpandMore />}
               onClick={open(setAnchorPages)}
@@ -235,7 +122,7 @@ export default function Navbar() {
               Contact
             </Button>
 
-            {/* Accent auth buttons */}
+            {/* Auth Buttons */}
             <Button
               component={Link}
               to="/login"
@@ -257,7 +144,7 @@ export default function Navbar() {
           </Box>
         )}
 
-        {/* ------------ Mobile Hamburger ------------ */}
+        {/* ----------- Mobile Hamburger ----------- */}
         {isMobile && (
           <>
             <IconButton color="inherit" onClick={open(setAnchorMobile)}>
@@ -273,10 +160,10 @@ export default function Navbar() {
               </NavLinkBtn>
 
               <NavLinkBtn to="/courses" closeMenu={close(setAnchorMobile)}>
-                All Courses
+                All Courses
               </NavLinkBtn>
               <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorMobile)}>
-                Course Detail
+                Course Detail
               </NavLinkBtn>
 
               <NavLinkBtn to="/blogs" closeMenu={close(setAnchorMobile)}>
@@ -295,7 +182,7 @@ export default function Navbar() {
                 Login
               </NavLinkBtn>
               <NavLinkBtn to="/signup" closeMenu={close(setAnchorMobile)}>
-                Sign‑up
+                Sign-up
               </NavLinkBtn>
             </Menu>
           </>

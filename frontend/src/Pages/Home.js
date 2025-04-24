@@ -1,255 +1,93 @@
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import anime from 'animejs/lib/anime.es.js';
+// src/Pages/Home.js
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { TypeAnimation } from 'react-type-animation';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Styles/Home.css';
+import Footer from '../Components/Footer';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const Home = () => {
-  const heroRef = useRef(null);
-  const featuresRef = useRef(null);
-  const coursesRef = useRef(null);
-  const ctaRef = useRef(null);
-  const shapeRefs = useRef([]);
-
-  // Add shape to ref array
-  const addToShapeRefs = (el) => {
-    if (el && !shapeRefs.current.includes(el)) {
-      shapeRefs.current.push(el);
-    }
-  };
-
-  useEffect(() => {
-    // Hero animation
-    gsap.from(heroRef.current.querySelectorAll(".hero-content > *"), {
-      duration: 1,
-      y: 50,
-      opacity: 0,
-      stagger: 0.2,
-      ease: "power3.out"
-    });
-
-    // Floating shapes animation
-    shapeRefs.current.forEach((shape, i) => {
-      gsap.to(shape, {
-        y: Math.random() * 40 - 20,
-        x: Math.random() * 30 - 15,
-        rotation: Math.random() * 15 - 7.5,
-        duration: 8 + Math.random() * 5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: i * 0.3
-      });
-    });
-
-    // Features animation
-    gsap.from(featuresRef.current.querySelectorAll(".feature-card"), {
-      scrollTrigger: {
-        trigger: featuresRef.current,
-        start: "top 80%"
-      },
-      y: 50,
-      opacity: 0,
-      stagger: 0.15,
-      duration: 0.8,
-      ease: "back.out(1)"
-    });
-
-    // Courses animation
-    const courses = coursesRef.current.querySelectorAll(".course-card");
-    courses.forEach((course, i) => {
-      gsap.from(course, {
-        scrollTrigger: {
-          trigger: coursesRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none"
-        },
-        x: i % 2 === 0 ? -50 : 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        delay: i * 0.1
-      });
-    });
-
-    // CTA animation
-    anime({
-      targets: ctaRef.current.querySelectorAll(".cta-button"),
-      translateY: [10, -10],
-      duration: 2000,
-      direction: 'alternate',
-      loop: true,
-      easing: 'easeInOutSine'
-    });
-
-    // Background text animation
-    const bgText = document.querySelectorAll(".background-text");
-    bgText.forEach(text => {
-      gsap.to(text, {
-        scrollTrigger: {
-          trigger: text,
-          scrub: true
-        },
-        x: 100,
-        duration: 2
-      });
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      shapeRefs.current = [];
-    };
-  }, []);
-
+export default function Home() {
   return (
-    <div className="home-page">
-      {/* Floating background shapes */}
-      <div className="shape shape-1" ref={addToShapeRefs}></div>
-      <div className="shape shape-2" ref={addToShapeRefs}></div>
-      <div className="shape shape-3" ref={addToShapeRefs}></div>
-      <div className="shape shape-4" ref={addToShapeRefs}></div>
-      
-      {/* Hero Section */}
-      <section className="hero-section" ref={heroRef}>
-        <div className="container">
-          <div className="hero-content">
-            <h1 className="hero-title">
-              Transform Your Learning Experience
-            </h1>
-            <p className="hero-subtitle">
-              Access world-class courses from industry experts and take your skills to the next level
-            </p>
-            <div className="hero-buttons">
-              <button className="primary-button">Explore Courses</button>
-              <button className="secondary-button">Learn More</button>
+    <>
+      <div className="home-container">
+        {/* Hero Section */}
+        <motion.section
+          className="hero-section container py-5"
+          initial={{ opacity: 0, y: 80 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          <div className="row align-items-center">
+            <div className="col-lg-6 text-center text-lg-start">
+              <motion.h1
+                className="display-4 fw-bold text-primary mb-3"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                Level Up Your Career
+              </motion.h1>
+              <TypeAnimation
+                sequence={[
+                  'with Full Stack Development', 1500,
+                  'with Data Science', 1500,
+                  'with AI & Machine Learning', 1500
+                ]}
+                wrapper="span"
+                speed={50}
+                repeat={Infinity}
+                className="lead d-block mb-4 animated-text"
+              />
+              <Link to="/courses" className="btn btn-primary btn-lg mt-2">
+                Explore Courses
+              </Link>
+            </div>
+            <div className="col-lg-6 text-center">
+              <motion.img
+                src="https://dummyimage.com/600x400/007bff/fff&text=Learn4Dream"
+                alt="Learning Banner"
+                className="img-fluid rounded"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              />
             </div>
           </div>
-          <div className="hero-image">
-            <div className="image-wrapper">
-              <div className="floating-element"></div>
-              <div className="floating-element"></div>
+        </motion.section>
+
+        {/* Features Section */}
+        <motion.section
+          className="container py-5"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="row text-center">
+            <div className="col-md-4 mb-4">
+              <div className="card shadow border-0 p-4">
+                <h5 className="fw-bold text-primary">Expert Instructors</h5>
+                <p className="text-muted">Learn from industry professionals and educators.</p>
+              </div>
+            </div>
+            <div className="col-md-4 mb-4">
+              <div className="card shadow border-0 p-4">
+                <h5 className="fw-bold text-primary">Flexible Learning</h5>
+                <p className="text-muted">Access courses anytime, anywhere on any device.</p>
+              </div>
+            </div>
+            <div className="col-md-4 mb-4">
+              <div className="card shadow border-0 p-4">
+                <h5 className="fw-bold text-primary">Certification</h5>
+                <p className="text-muted">Earn certificates to showcase your skills.</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="background-text">LEARNING</div>
-      </section>
+        </motion.section>
+      </div>
 
-      {/* Features Section */}
-      <section className="features-section" ref={featuresRef}>
-        <div className="container">
-          <h2 className="section-title">Why Choose Our Platform</h2>
-          <p className="section-subtitle">Designed to help you achieve your learning goals</p>
-          
-          <div className="features-grid">
-            {[
-              {
-                icon: "📚",
-                title: "Comprehensive Courses",
-                desc: "Access hundreds of courses across various disciplines"
-              },
-              {
-                icon: "🎓",
-                title: "Expert Instructors",
-                desc: "Learn from industry professionals and academic experts"
-              },
-              {
-                icon: "⏱️",
-                title: "Flexible Learning",
-                desc: "Study at your own pace, anytime and anywhere"
-              },
-              {
-                icon: "📱",
-                title: "Mobile Friendly",
-                desc: "Access courses on any device with our responsive platform"
-              },
-              {
-                icon: "📈",
-                title: "Progress Tracking",
-                desc: "Monitor your learning journey with detailed analytics"
-              },
-              {
-                icon: "🏆",
-                title: "Certification",
-                desc: "Earn recognized certificates upon course completion"
-              }
-            ].map((feature, index) => (
-              <div className="feature-card" key={index}>
-                <div className="feature-icon">{feature.icon}</div>
-                <h3>{feature.title}</h3>
-                <p>{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="background-text">KNOWLEDGE</div>
-      </section>
-
-      {/* Courses Section */}
-      <section className="courses-section" ref={coursesRef}>
-        <div className="container">
-          <h2 className="section-title">Popular Courses</h2>
-          <p className="section-subtitle">Start learning with our most popular courses</p>
-          
-          <div className="courses-grid">
-            {[
-              {
-                title: "Web Development Bootcamp",
-                category: "Technology",
-                duration: "8 Weeks",
-                level: "Beginner"
-              },
-              {
-                title: "Data Science Fundamentals",
-                category: "Data",
-                duration: "10 Weeks",
-                level: "Intermediate"
-              },
-              {
-                title: "Digital Marketing Mastery",
-                category: "Marketing",
-                duration: "6 Weeks",
-                level: "Beginner"
-              },
-              {
-                title: "Mobile App Development",
-                category: "Technology",
-                duration: "12 Weeks",
-                level: "Advanced"
-              }
-            ].map((course, index) => (
-              <div className="course-card" key={index}>
-                <div className="course-badge">New</div>
-                <div className="course-image"></div>
-                <div className="course-content">
-                  <span className="course-category">{course.category}</span>
-                  <h3>{course.title}</h3>
-                  <div className="course-meta">
-                    <span>{course.duration}</span>
-                    <span>{course.level}</span>
-                  </div>
-                  <button className="course-button">Enroll Now</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="cta-section" ref={ctaRef}>
-        <div className="container">
-          <h2>Ready to Start Learning?</h2>
-          <p>Join thousands of students advancing their careers with our courses</p>
-          <div className="cta-buttons">
-            <button className="cta-button">Sign Up Free</button>
-            <button className="cta-button outline">Browse Courses</button>
-          </div>
-        </div>
-      </section>
-    </div>
+      {/* Footer Section */}
+      <Footer />
+    </>
   );
-};
-
-export default Home;
+}
