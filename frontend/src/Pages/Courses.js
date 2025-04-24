@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import "../Styles/Courses.css";
 import { IoIosSearch } from "react-icons/io";
 import { TypeAnimation } from "react-type-animation";
@@ -66,7 +65,6 @@ const Courses = () => {
 };
 
 export default Courses;
-=======
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import 'bootstrap/dist/css/bootstrap.min.css';

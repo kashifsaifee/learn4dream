@@ -6,17 +6,15 @@ import Home from './Pages/Home';
 import About from './Pages/About';
 import Courses from './Pages/Courses';
 import Contact from './Pages/Contact';
-<<<<<<< HEAD
 import Header from './Components/Header';
 import Login from './Pages/Login';
 import './App.css'; // Ensure you have global styles
-=======
-import Blogs from './Pages/Blogs';
->>>>>>> ced38c410f19d14c7ab11bc93d0af22d780b6ef2
+import Blogs from './Pages/Blogs'
 
 function App() {
   return (
     <Router>
+      <Header/>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

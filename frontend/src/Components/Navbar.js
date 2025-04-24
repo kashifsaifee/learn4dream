@@ -18,7 +18,7 @@ const Navbar = () => {
   };
 
   return (
-<<<<<<< HEAD
+    <>
     <nav>
       <ul>
         <li><Link to="/">Home</Link></li>
@@ -30,7 +30,6 @@ const Navbar = () => {
         <li> <Link to="/login">Login</Link> </li>
       </ul>
     </nav>
-=======
     <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1, color: theme.palette.primary.contrastText }}>
@@ -129,7 +128,7 @@ const Navbar = () => {
         </Menu>
       </Toolbar>
     </AppBar>
->>>>>>> ced38c410f19d14c7ab11bc93d0af22d780b6ef2
+    </>
   );
 };
 
