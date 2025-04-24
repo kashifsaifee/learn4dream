@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Typography, Grid, Paper } from '@mui/material';
 import { motion } from 'framer-motion';
-import Footer from '../Components/Footer';
 
 const About = () => {
   return (
