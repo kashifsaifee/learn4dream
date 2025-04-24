@@ -1,42 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-import  '../Styles/Login.css'
-import { FaGithub } from "react-icons/fa";
-import { FaGoogle } from "react-icons/fa";
-
-// import loginImage from './login.jpg'
-const Login = () => {
-  return (
-    <>
-    <div>
-      <h4 className='text-white text-center' >Welcome back</h4>
-      <h5 className='text-white text-center'>Login to your account </h5>
-    <form className='m-auto w-50' >
-  <div class="mb-3 m-5 mt-5">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" placeholder='xyz@gmail.com'ce class="form-control" id="exampleInputEmail1" />
-  </div>
-  <div class="mb-3 m-5">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" placeholder='xxxxxxx' class="form-control" id="exampleInputPassword1"/>
-  </div>
-  <button type="submit" class="btn btn-secondary d-grid gap-2 col-2 mt-3 mx-auto">Continue</button>
-
-  <p className='text-center' >or continue with </p>
-  <div className='flex justify-between pl-3' >
-  <button className='btn text-white  '> <FaGithub size={22}/>  Github</button>
-  <button className='btn text-white  '> <FaGoogle size={22} /> Google</button>
-  </div>
-</form>
-</div>
-
-
-     
-     
-    </>
-  )
-}
-=======
 import React, { useState } from 'react';
 import {
   Box,
@@ -51,19 +12,32 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import Footer from '../Components/Footer';
 
-export default function Login() {
+export default function Signup() {
   const [showPwd, setShowPwd] = useState(false);
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirm: '',
+  });
 
-  const togglePwd = () => setShowPwd((s) => !s);
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const togglePwd = () => setShowPwd((p) => !p);
+  const toggleConfirm = () => setShowConfirm((p) => !p);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Logging in with:', form);
-    // TODO: call login API
+    if (form.password !== form.confirm) {
+      alert('Passwords do not match');
+      return;
+    }
+    console.log('Signing up with:', form);
+    // TODO: call signup API
   };
 
   return (
@@ -82,33 +56,49 @@ export default function Login() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          style={{ width: '100%', maxWidth: 420 }}
+          style={{ width: '100%', maxWidth: 460 }}
         >
           <Card
             elevation={6}
             sx={{
               borderRadius: 4,
-              overflow: 'hidden',
               bgcolor: '#0f274a',
               color: 'white',
             }}
           >
             <CardContent sx={{ p: { xs: 4, md: 6 } }}>
               <Typography variant="h4" fontWeight="bold" mb={3} color="#FFA559">
-                Welcome Back
+                Create Account
               </Typography>
->>>>>>> 5660eee226b3b940203f888cb1b6eaffc1cccafd
 
               <form onSubmit={handleSubmit}>
+                <TextField
+                  fullWidth
+                  label="Full Name"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  variant="filled"
+                  required
+                  sx={{
+                    mb: 3,
+                    input: { color: 'white' },
+                    '.MuiFilledInput-root': {
+                      bgcolor: 'rgba(255,255,255,0.08)',
+                    },
+                  }}
+                  InputLabelProps={{ style: { color: '#ccc' } }}
+                />
+
                 <TextField
                   fullWidth
                   label="Email"
                   name="email"
                   type="email"
-                  variant="filled"
-                  required
                   value={form.email}
                   onChange={handleChange}
+                  variant="filled"
+                  required
                   sx={{
                     mb: 3,
                     input: { color: 'white' },
@@ -124,10 +114,38 @@ export default function Login() {
                   label="Password"
                   name="password"
                   type={showPwd ? 'text' : 'password'}
-                  variant="filled"
-                  required
                   value={form.password}
                   onChange={handleChange}
+                  variant="filled"
+                  required
+                  sx={{
+                    mb: 3,
+                    input: { color: 'white' },
+                    '.MuiFilledInput-root': {
+                      bgcolor: 'rgba(255,255,255,0.08)',
+                    },
+                  }}
+                  InputLabelProps={{ style: { color: '#ccc' } }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={togglePwd} sx={{ color: 'white' }}>
+                          {showPwd ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <TextField
+                  fullWidth
+                  label="Confirm Password"
+                  name="confirm"
+                  type={showConfirm ? 'text' : 'password'}
+                  value={form.confirm}
+                  onChange={handleChange}
+                  variant="filled"
+                  required
                   sx={{
                     mb: 4,
                     input: { color: 'white' },
@@ -140,11 +158,10 @@ export default function Login() {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
-                          onClick={togglePwd}
-                          edge="end"
+                          onClick={toggleConfirm}
                           sx={{ color: 'white' }}
                         >
-                          {showPwd ? <VisibilityOff /> : <Visibility />}
+                          {showConfirm ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -157,20 +174,16 @@ export default function Login() {
                   size="large"
                   variant="contained"
                   color="secondary"
-                  sx={{
-                    textTransform: 'none',
-                    fontWeight: 'bold',
-                    borderRadius: 3,
-                  }}
+                  sx={{ borderRadius: 3, fontWeight: 'bold' }}
                 >
-                  Log In
+                  Sign Up
                 </Button>
               </form>
 
               <Typography mt={3} textAlign="center" fontSize="0.9rem">
-                Don&rsquo;t have an account?{' '}
-                <Link to="/signup" style={{ color: '#FFA559' }}>
-                  Sign up
+                Already have an account?{' '}
+                <Link to="/login" style={{ color: '#FFA559' }}>
+                  Log in
                 </Link>
               </Typography>
             </CardContent>
@@ -178,6 +191,7 @@ export default function Login() {
         </motion.div>
       </Box>
 
+      <Footer />
     </>
   );
 }
