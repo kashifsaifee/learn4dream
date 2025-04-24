@@ -2,13 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
-// import Home from './Pages/Home';
 import Home from './Pages/Home';
 import About from './Pages/About';
 import Courses from './Pages/Courses';
 import Services from './Pages/Services';
 import Contact from './Pages/Contact';
 import './App.css'; // Ensure you have global styles
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (

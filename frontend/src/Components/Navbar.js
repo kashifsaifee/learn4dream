@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';  // Hamburger icon
+import Dropdown from 'react-bootstrap/Dropdown';
 import { useTheme } from '@mui/material/styles';  // To use the custom theme
 
 const Navbar = () => {
@@ -46,7 +47,7 @@ const Navbar = () => {
           >
             Home
           </Button>
-          <Button
+          {/* <Button
             component={Link}
             to="/about"
             onClick={() => handleLinkClick('/about')}
@@ -59,7 +60,17 @@ const Navbar = () => {
             }}
           >
             About
-          </Button>
+          </Button> */}
+          <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              Pages
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="/services">Services</Dropdown.Item>
+              <Dropdown.Item href="/about">About</Dropdown.Item>
+              {/* <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
+            </Dropdown.Menu>
+          </Dropdown>
           <Button
             component={Link}
             to="/courses"
@@ -74,7 +85,7 @@ const Navbar = () => {
           >
             Courses
           </Button>
-          <Button
+          {/* <Button
             component={Link}
             to="/services"
             onClick={() => handleLinkClick('/services')}
@@ -87,7 +98,7 @@ const Navbar = () => {
             }}
           >
             Services
-          </Button>
+          </Button> */}
           <Button
             component={Link}
             to="/contact"
