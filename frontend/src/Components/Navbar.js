@@ -46,8 +46,8 @@ export default function Navbar() {
   const [anchorPages, setAnchorPages] = useState(null);
   const [anchorMobile, setAnchorMobile] = useState(null);
 
-  const open = (setter) => (e) => setter(e.currentTarget);
-  const close = (setter) => () => setter(null);
+  const open = (set) => (e) => set(e.currentTarget);
+  const close = (set) => () => set(null);
 
   const linkStyle = (path) => ({
     color:
@@ -60,6 +60,7 @@ export default function Navbar() {
     },
   });
 
+  /* ---------- Layout ---------- */
   return (
     <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
       <Toolbar sx={{ gap: 2 }}>
@@ -67,7 +68,7 @@ export default function Navbar() {
           Learn4Dream
         </Typography>
 
-        {/* ----------- Desktop Menu ----------- */}
+        {/* ======= Desktop menu ======= */}
         {!isMobile && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button component={Link} to="/" sx={linkStyle('/')}>
@@ -86,7 +87,6 @@ export default function Navbar() {
               anchorEl={anchorCourses}
               open={Boolean(anchorCourses)}
               onClose={close(setAnchorCourses)}
-              MenuListProps={{ dense: true }}
             >
               <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>
                 All Courses
@@ -108,7 +108,6 @@ export default function Navbar() {
               anchorEl={anchorPages}
               open={Boolean(anchorPages)}
               onClose={close(setAnchorPages)}
-              MenuListProps={{ dense: true }}
             >
               <NavLinkBtn to="/blogs" closeMenu={close(setAnchorPages)}>
                 Blogs
@@ -122,13 +121,13 @@ export default function Navbar() {
               Contact
             </Button>
 
-            {/* Auth Buttons */}
+            {/* Auth buttons */}
             <Button
               component={Link}
               to="/login"
               variant="outlined"
               color="secondary"
-              sx={{ borderRadius: 2, ml: 1 }}
+              sx={{ borderRadius: 2 }}
             >
               Login
             </Button>
@@ -139,12 +138,12 @@ export default function Navbar() {
               color="secondary"
               sx={{ borderRadius: 2 }}
             >
-              Sign&nbsp;up
+              Sign Up
             </Button>
           </Box>
         )}
 
-        {/* ----------- Mobile Hamburger ----------- */}
+        {/* ======= Mobile hamburger ======= */}
         {isMobile && (
           <>
             <IconButton color="inherit" onClick={open(setAnchorMobile)}>
@@ -158,31 +157,27 @@ export default function Navbar() {
               <NavLinkBtn to="/" closeMenu={close(setAnchorMobile)}>
                 Home
               </NavLinkBtn>
-
               <NavLinkBtn to="/courses" closeMenu={close(setAnchorMobile)}>
                 All Courses
               </NavLinkBtn>
               <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorMobile)}>
                 Course Detail
               </NavLinkBtn>
-
               <NavLinkBtn to="/blogs" closeMenu={close(setAnchorMobile)}>
                 Blogs
               </NavLinkBtn>
               <NavLinkBtn to="/about" closeMenu={close(setAnchorMobile)}>
                 About
               </NavLinkBtn>
-
               <NavLinkBtn to="/contact" closeMenu={close(setAnchorMobile)}>
                 Contact
               </NavLinkBtn>
-
               <Divider />
               <NavLinkBtn to="/login" closeMenu={close(setAnchorMobile)}>
                 Login
               </NavLinkBtn>
               <NavLinkBtn to="/signup" closeMenu={close(setAnchorMobile)}>
-                Sign-up
+                Sign Up
               </NavLinkBtn>
             </Menu>
           </>
