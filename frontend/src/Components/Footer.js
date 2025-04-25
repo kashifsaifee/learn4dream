@@ -74,11 +74,11 @@ const Footer = () => {
             </Typography>
             <Box component="ul" sx={{ listStyle: 'none', pl: 0, m: 0 }}>
               {[
-                { text: 'Courses', to: '/courses' },
-                { text: 'About Us', to: '/about' },
-                { text: 'Blog', to: '/blog' },
-                { text: 'Contact', to: '/contact' },
-                { text: 'Privacy Policy', to: '/privacy' }
+                { text: 'Courses', to: './courses' },
+                { text: 'About Us', to: './about' },
+                { text: 'Blog', to: './blog' },
+                { text: 'Contact', to: './contact' },
+                { text: 'Privacy Policy', to: './privacy' }
               ].map(({ text, to }) => (
                 <li key={text}>
                   <Link

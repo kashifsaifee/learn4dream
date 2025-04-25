@@ -1,4 +1,3 @@
-// src/Components/CourseHeader.js
 import "../Styles/Courses.css";
 import { IoIosSearch } from "react-icons/io";
 import { TypeAnimation } from "react-type-animation";
