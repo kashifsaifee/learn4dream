@@ -10,30 +10,106 @@ import {
   Typography,
   Divider,
   Stack,
+  Snackbar,
+  CircularProgress,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
+import { Link, useNavigate } from 'react-router-dom';
+import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 
 export default function Login() {
   const [showPwd, setShowPwd] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const navigate = useNavigate();
 
   const togglePwd = () => setShowPwd(!showPwd);
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  // Validate email format
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+
+  // Validate password (basic check for length)
+  const isValidPassword = (password) => password.length >= 6;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with:', form);
-    // TODO: call login API
+
+    if (!isValidEmail(form.email)) {
+      setError('Please enter a valid email address.');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (!isValidPassword(form.password)) {
+      setError('Password must be at least 6 characters long.');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        setOpenSnackbar(true);
+        navigate('./home');
+      } else {
+        if (data.message === 'Incorrect password') {
+          setError('Incorrect password. Please try again.');
+        } else {
+          setError(data.message || 'Something went wrong. Try again later.');
+        }
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Something went wrong. Try again later.');
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSocialLogin = (provider) => {
     console.log(`Logging in with ${provider}`);
-    // TODO: Trigger OAuth flow (e.g., Firebase or Auth0)
+    // TODO: Setup social login later
   };
+
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+
+  const SocialButton = ({ provider, onClick, icon }) => (
+    <Button
+      fullWidth
+      variant="outlined"
+      onClick={onClick}
+      startIcon={icon}
+      sx={{
+        color: 'white',
+        borderColor: '#ccc',
+        textTransform: 'none',
+        '&:hover': {
+          borderColor: '#FFA559',
+          backgroundColor: 'rgba(255,165,89,0.05)',
+        },
+      }}
+    >
+      Continue with {provider}
+    </Button>
+  );
 
   return (
     <Box
@@ -79,11 +155,9 @@ export default function Login() {
                 sx={{
                   mb: 3,
                   input: { color: 'white' },
-                  '.MuiFilledInput-root': {
-                    bgcolor: 'rgba(255,255,255,0.08)',
-                  },
+                  '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
-                InputLabelProps={{ style: { color: '#ccc' } }}
+                slotProps={{ inputLabel: { style: { color: '#ccc' } } }}
               />
 
               <TextField
@@ -98,23 +172,23 @@ export default function Login() {
                 sx={{
                   mb: 4,
                   input: { color: 'white' },
-                  '.MuiFilledInput-root': {
-                    bgcolor: 'rgba(255,255,255,0.08)',
-                  },
+                  '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
                 InputLabelProps={{ style: { color: '#ccc' } }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={togglePwd}
-                        edge="end"
-                        sx={{ color: 'white' }}
-                      >
-                        {showPwd ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={togglePwd}
+                          edge="end"
+                          sx={{ color: 'white' }}
+                        >
+                          {showPwd ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
                 }}
               />
 
@@ -129,8 +203,9 @@ export default function Login() {
                   fontWeight: 'bold',
                   borderRadius: 3,
                 }}
+                disabled={loading}
               >
-                Log In
+                {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Log In'}
               </Button>
             </form>
 
@@ -139,41 +214,16 @@ export default function Login() {
             </Divider>
 
             <Stack spacing={2}>
-              <Button
-                fullWidth
-                variant="outlined"
+              <SocialButton
+                provider="Google"
                 onClick={() => handleSocialLogin('Google')}
-                startIcon={<FaGoogle />}
-                sx={{
-                  color: 'white',
-                  borderColor: '#ccc',
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: '#FFA559',
-                    backgroundColor: 'rgba(255,165,89,0.05)',
-                  },
-                }}
-              >
-                Continue with Google
-              </Button>
-
-              <Button
-                fullWidth
-                variant="outlined"
+                icon={<FaGoogle />}
+              />
+              <SocialButton
+                provider="Microsoft"
                 onClick={() => handleSocialLogin('Microsoft')}
-                startIcon={<FaMicrosoft />}
-                sx={{
-                  color: 'white',
-                  borderColor: '#ccc',
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: '#FFA559',
-                    backgroundColor: 'rgba(255,165,89,0.05)',
-                  },
-                }}
-              >
-                Continue with Microsoft
-              </Button>
+                icon={<FaMicrosoft />}
+              />
             </Stack>
 
             <Typography mt={4} textAlign="center" fontSize="0.9rem">
@@ -185,6 +235,14 @@ export default function Login() {
           </CardContent>
         </Card>
       </motion.div>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={successMessage || error}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      />
     </Box>
   );
 }
