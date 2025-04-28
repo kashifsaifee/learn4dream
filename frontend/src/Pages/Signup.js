@@ -8,11 +8,13 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  Divider,
+  Stack,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import Footer from '../Components/Footer';
+import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 
 export default function Signup() {
   const [showPwd, setShowPwd] = useState(false);
@@ -38,6 +40,11 @@ export default function Signup() {
     }
     console.log('Signing up with:', form);
     // TODO: call signup API
+  };
+
+  const handleSocialSignup = (provider) => {
+    console.log(`Signing up with ${provider}`);
+    // TODO: handle OAuth logic
   };
 
   return (
@@ -180,7 +187,49 @@ export default function Signup() {
                 </Button>
               </form>
 
-              <Typography mt={3} textAlign="center" fontSize="0.9rem">
+              <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>
+                OR
+              </Divider>
+
+              <Stack spacing={2}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => handleSocialSignup('Google')}
+                  startIcon={<FaGoogle />}
+                  sx={{
+                    color: 'white',
+                    borderColor: '#ccc',
+                    textTransform: 'none',
+                    '&:hover': {
+                      borderColor: '#FFA559',
+                      backgroundColor: 'rgba(255,165,89,0.05)',
+                    },
+                  }}
+                >
+                  Sign Up with Google
+                </Button>
+
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => handleSocialSignup('Microsoft')}
+                  startIcon={<FaMicrosoft />}
+                  sx={{
+                    color: 'white',
+                    borderColor: '#ccc',
+                    textTransform: 'none',
+                    '&:hover': {
+                      borderColor: '#FFA559',
+                      backgroundColor: 'rgba(255,165,89,0.05)',
+                    },
+                  }}
+                >
+                  Sign Up with Microsoft
+                </Button>
+              </Stack>
+
+              <Typography mt={4} textAlign="center" fontSize="0.9rem">
                 Already have an account?{' '}
                 <Link to="/login" style={{ color: '#FFA559' }}>
                   Log in
@@ -190,8 +239,6 @@ export default function Signup() {
           </Card>
         </motion.div>
       </Box>
-
-      <Footer />
     </>
   );
 }

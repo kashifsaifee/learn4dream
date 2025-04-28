@@ -13,9 +13,13 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+<<<<<<< HEAD
 // import Footer from '../Components/Footer';
+=======
+>>>>>>> 9f548c7ce07d85dcc11af9436a9ef8fcb8259100
 
 const MotionPaper = motion(Paper);
+const MotionBox = motion(Box);
 
 const blogs = [
   {
@@ -25,7 +29,7 @@ const blogs = [
       'Discover the most in-demand skills for the future and how Learn4Dream can help you master them.',
     link: '/blogs/top-skills-2025',
     image:
-      'https://dummyimage.com/400x250/007bff/fff&text=Skills+2025', // Example image
+      'https://dummyimage.com/400x250/007bff/fff&text=Skills+2025',
   },
   {
     id: 2,
@@ -34,7 +38,7 @@ const blogs = [
       'Data Science is booming. Learn how to start your journey and land a job in this exciting field.',
     link: '/blogs/data-science-career',
     image:
-      'https://dummyimage.com/400x250/28a745/fff&text=Data+Science', // Example image
+      'https://dummyimage.com/400x250/28a745/fff&text=Data+Science',
   },
   {
     id: 3,
@@ -43,15 +47,17 @@ const blogs = [
       'Step-by-step roadmap to becoming a professional web developer in 2025.',
     link: '/blogs/web-development-roadmap',
     image:
-      'https://dummyimage.com/400x250/ffc107/000&text=Web+Dev', // Example image
+      'https://dummyimage.com/400x250/ffc107/000&text=Web+Dev',
   },
 ];
 
 const Blogs = () => {
   return (
     <Box sx={{ overflowX: 'hidden' }}>
-      {/* Hero Section */}
-      <Box
+      <MotionBox
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
         sx={{
           bgcolor: 'primary.main',
           color: 'primary.contrastText',
@@ -71,17 +77,19 @@ const Blogs = () => {
             Start Learning
           </Button>
         </Container>
-      </Box>
+      </MotionBox>
 
-      {/* Blog Cards Section */}
       <Box sx={{ py: 12, bgcolor: 'background.default' }}>
         <Container>
           <Grid container spacing={4}>
-            {blogs.map((blog) => (
+            {blogs.map((blog, index) => (
               <Grid item xs={12} md={4} key={blog.id}>
                 <MotionPaper
+                  initial={{ opacity: 0, y: 60 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
                   whileHover={{ scale: 1.05 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
                   elevation={6}
                   sx={{
                     display: 'flex',

@@ -1,32 +1,73 @@
-/* Home.css */
 .home-container {
-  background-color: #f9f9f9;
-  padding-top: 30px;
+  overflow-x: hidden;
 }
 
 .hero-section {
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
 }
 
 .animated-text {
-  font-size: 1.25rem;
-  color: #555;
+  font-size: 1.5rem;
   font-weight: 500;
+  color: #555;
 }
 
-.card {
-  transition: transform 0.3s ease-in-out;
-  border-radius: 15px;
+/* Cards Section */
+.cards-section {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
 }
 
-.card:hover {
-  transform: translateY(-8px);
+.card-title {
+  color: #007bff;
+  font-weight: bold;
 }
 
-.btn-lg {
-  padding: 12px 30px;
-  font-size: 1.1rem;
-  border-radius: 50px;
+.card-text {
+  color: #555;
+}
+
+/* WHY US Section */
+.whyus-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+}
+
+.slider-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.slides-wrapper {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.whyus-slide {
+  min-width: 100%;
+  padding: 3rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.slide-title {
+  font-size: 2rem;
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+.slide-description {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Smooth scrolling */
+html, body {
+  scroll-behavior: smooth;
 }
