@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Styles/Home.css';
 import Footer from '../Components/Footer';
 
-export default function Home() {
+const Home = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isSliderActive, setIsSliderActive] = useState(false);
   const sliderRef = useRef(null);
@@ -50,7 +50,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [isSliderActive, scrollPosition, handleScroll]); // Added handleScroll here
+  }, [isSliderActive, scrollPosition, handleScroll]);
 
   return (
     <>
@@ -160,4 +160,6 @@ export default function Home() {
       </div>
     </>
   );
-}
+};
+
+export default Home;

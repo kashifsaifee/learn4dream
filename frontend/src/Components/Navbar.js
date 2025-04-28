@@ -14,6 +14,7 @@ import {
 import { Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
+import { CgProfile } from "react-icons/cg";
 
 /* ---------- NavLinkBtn for dropdown items ---------- */
 const NavLinkBtn = ({ to, children, closeMenu }) => {
@@ -36,7 +37,7 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
   );
 };
 
-export default function Navbar() {
+export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const theme = useTheme();
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -59,6 +60,10 @@ export default function Navbar() {
       color: theme.palette.secondary.main,
     },
   });
+
+  const handleLogout = () => {
+    setIsLoggedIn(false); // set logged out
+  };
 
   /* ---------- Layout ---------- */
   return (
@@ -121,25 +126,45 @@ export default function Navbar() {
               Contact
             </Button>
 
-            {/* Auth buttons */}
-            <Button
-              component={Link}
-              to="/login"
-              variant="outlined"
-              color="secondary"
-              sx={{ borderRadius: 2 }}
-            >
-              Login
-            </Button>
-            <Button
-              component={Link}
-              to="/signup"
-              variant="contained"
-              color="secondary"
-              sx={{ borderRadius: 2 }}
-            >
-              Sign Up
-            </Button>
+            {/* Auth buttons (only shown if not logged in) */}
+            {!isLoggedIn ? (
+              <>
+                <Button
+                  component={Link}
+                  to="/login"
+                  variant="outlined"
+                  color="secondary"
+                  sx={{ borderRadius: 2 }}
+                >
+                  Login
+                </Button>
+                <Button
+                  component={Link}
+                  to="/signup"
+                  variant="contained"
+                  color="secondary"
+                  sx={{ borderRadius: 2 }}
+                >
+                  Sign Up
+                </Button>
+              </>
+            ) : (
+              <Button
+                component={Link}
+                to="/profile"
+                variant="contained"
+                sx={{ borderRadius: 25 }}
+              >
+                <CgProfile size={22} />
+              </Button>
+            )}
+
+            {/* Logout button (only shown if logged in) */}
+            {isLoggedIn && (
+              <Button onClick={handleLogout} variant="outlined" color="secondary">
+                Logout
+              </Button>
+            )}
           </Box>
         )}
 
@@ -173,12 +198,20 @@ export default function Navbar() {
                 Contact
               </NavLinkBtn>
               <Divider />
-              <NavLinkBtn to="/login" closeMenu={close(setAnchorMobile)}>
-                Login
-              </NavLinkBtn>
-              <NavLinkBtn to="/signup" closeMenu={close(setAnchorMobile)}>
-                Sign Up
-              </NavLinkBtn>
+              {!isLoggedIn ? (
+                <>
+                  <NavLinkBtn to="/login" closeMenu={close(setAnchorMobile)}>
+                    Login
+                  </NavLinkBtn>
+                  <NavLinkBtn to="/signup" closeMenu={close(setAnchorMobile)}>
+                    Sign Up
+                  </NavLinkBtn>
+                </>
+              ) : (
+                <NavLinkBtn to="/profile" closeMenu={close(setAnchorMobile)}>
+                  Profile
+                </NavLinkBtn>
+              )}
             </Menu>
           </>
         )}
@@ -186,3 +219,4 @@ export default function Navbar() {
     </AppBar>
   );
 }
+ 
