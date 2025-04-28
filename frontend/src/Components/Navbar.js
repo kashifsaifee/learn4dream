@@ -14,6 +14,8 @@ import {
 import { Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
+import { CgProfile } from "react-icons/cg";
+
 
 /* ---------- NavLinkBtn for dropdown items ---------- */
 const NavLinkBtn = ({ to, children, closeMenu }) => {
@@ -140,6 +142,14 @@ export default function Navbar() {
             >
               Sign Up
             </Button>
+            <Button
+              component={Link}
+              to="/profile"
+              variant="contained"
+              sx={{ borderRadius: 25 }}
+            >
+            <CgProfile size={22} />
+            </Button>
           </Box>
         )}
 
@@ -179,6 +189,10 @@ export default function Navbar() {
               <NavLinkBtn to="/signup" closeMenu={close(setAnchorMobile)}>
                 Sign Up
               </NavLinkBtn>
+              <NavLinkBtn to="/profile" closeMenu={close(setAnchorMobile)}>
+                Profile
+              </NavLinkBtn>
+
             </Menu>
           </>
         )}
