@@ -1,0 +1,16 @@
+.block{
+   width: 500px;
+   height: 500px;
+   margin-left: 35%;
+   margin-top: 10%;
+   border: 2px solid slategray;
+   border-radius: 25px;
+   background-color:azure;
+}
+.block h2{
+    text-align: center;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+form{
+    color: slategray;
+}

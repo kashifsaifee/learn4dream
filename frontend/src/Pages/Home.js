@@ -1,164 +1,254 @@
-import React from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Grid,
-  Paper,
-  TextField,
-} from '@mui/material';
-import { motion } from 'framer-motion';
-// import Navbar from '../Components/Navbar';
-import Footer from '../Components/Footer';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import anime from 'animejs/lib/anime.es.js';
+import '../Styles/Home.css';
 
-const MotionBox = motion(Box);
-const MotionPaper = motion(Paper);
+gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
+  const heroRef = useRef(null);
+  const featuresRef = useRef(null);
+  const coursesRef = useRef(null);
+  const ctaRef = useRef(null);
+  const shapeRefs = useRef([]);
+
+  // Add shape to ref array
+  const addToShapeRefs = (el) => {
+    if (el && !shapeRefs.current.includes(el)) {
+      shapeRefs.current.push(el);
+    }
+  };
+
+  useEffect(() => {
+    // Hero animation
+    gsap.from(heroRef.current.querySelectorAll(".hero-content > *"), {
+      duration: 1,
+      y: 50,
+      opacity: 0,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+
+    // Floating shapes animation
+    shapeRefs.current.forEach((shape, i) => {
+      gsap.to(shape, {
+        y: Math.random() * 40 - 20,
+        x: Math.random() * 30 - 15,
+        rotation: Math.random() * 15 - 7.5,
+        duration: 8 + Math.random() * 5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: i * 0.3
+      });
+    });
+
+    // Features animation
+    gsap.from(featuresRef.current.querySelectorAll(".feature-card"), {
+      scrollTrigger: {
+        trigger: featuresRef.current,
+        start: "top 80%"
+      },
+      y: 50,
+      opacity: 0,
+      stagger: 0.15,
+      duration: 0.8,
+      ease: "back.out(1)"
+    });
+
+    // Courses animation
+    const courses = coursesRef.current.querySelectorAll(".course-card");
+    courses.forEach((course, i) => {
+      gsap.from(course, {
+        scrollTrigger: {
+          trigger: coursesRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none"
+        },
+        x: i % 2 === 0 ? -50 : 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: i * 0.1
+      });
+    });
+
+    // CTA animation
+    anime({
+      targets: ctaRef.current.querySelectorAll(".cta-button"),
+      translateY: [10, -10],
+      duration: 2000,
+      direction: 'alternate',
+      loop: true,
+      easing: 'easeInOutSine'
+    });
+
+    // Background text animation
+    const bgText = document.querySelectorAll(".background-text");
+    bgText.forEach(text => {
+      gsap.to(text, {
+        scrollTrigger: {
+          trigger: text,
+          scrub: true
+        },
+        x: 100,
+        duration: 2
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      shapeRefs.current = [];
+    };
+  }, []);
+
   return (
-    <Box sx={{ overflowX: 'hidden' }}>
-      {/* Navbar
-      <Navbar /> */}
-
+    <div className="home-page">
+      {/* Floating background shapes */}
+      <div className="shape shape-1" ref={addToShapeRefs}></div>
+      <div className="shape shape-2" ref={addToShapeRefs}></div>
+      <div className="shape shape-3" ref={addToShapeRefs}></div>
+      <div className="shape shape-4" ref={addToShapeRefs}></div>
+      
       {/* Hero Section */}
-      <MotionBox
-        sx={{
-          bgcolor: 'primary.main',
-          color: 'primary.contrastText',
-          py: { xs: 12, md: 16 },
-          textAlign: 'center',
-        }}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <Container>
-          <Typography variant="h2" gutterBottom fontWeight="bold">
-            Learn. Grow. Transform.
-          </Typography>
-          <Typography variant="h6" paragraph>
-            Join Learn4Dream and unlock your future with high-quality, practical courses designed by experts.
-          </Typography>
-          <Button
-           href = 'Courses'
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{
-              mt: 3,
-              px: 4,
-              '&:hover': {
-                bgcolor: '#FF4C4C',
-              },
-            }}
-          >
-            Explore Courses
-          </Button>
-        </Container>
-      </MotionBox>
+      <section className="hero-section" ref={heroRef}>
+        <div className="container">
+          <div className="hero-content">
+            <h1 className="hero-title">
+              Transform Your Learning Experience
+            </h1>
+            <p className="hero-subtitle">
+              Access world-class courses from industry experts and take your skills to the next level
+            </p>
+            <div className="hero-buttons">
+              <button className="primary-button">Explore Courses</button>
+              <button className="secondary-button">Learn More</button>
+            </div>
+          </div>
+          <div className="hero-image">
+            <div className="image-wrapper">
+              <div className="floating-element"></div>
+              <div className="floating-element"></div>
+            </div>
+          </div>
+        </div>
+        <div className="background-text">LEARNING</div>
+      </section>
 
-      {/* Highlights Section */}
-      <Box sx={{ py: 10, textAlign: 'center', bgcolor: 'background.paper' }}>
-        <Typography variant="h4" gutterBottom fontWeight="medium">
-          Why Learn4Dream?
-        </Typography>
-        <Container>
-          <Grid container spacing={4}>
+      {/* Features Section */}
+      <section className="features-section" ref={featuresRef}>
+        <div className="container">
+          <h2 className="section-title">Why Choose Our Platform</h2>
+          <p className="section-subtitle">Designed to help you achieve your learning goals</p>
+          
+          <div className="features-grid">
             {[
               {
-                title: 'Industry-Relevant Curriculum',
-                desc: 'Stay ahead with content designed by top educators & tech leaders.',
+                icon: "📚",
+                title: "Comprehensive Courses",
+                desc: "Access hundreds of courses across various disciplines"
               },
               {
-                title: 'Flexible Learning',
-                desc: 'Access courses anytime, anywhere, at your own pace.',
+                icon: "🎓",
+                title: "Expert Instructors",
+                desc: "Learn from industry professionals and academic experts"
               },
               {
-                title: 'Live Doubt Sessions',
-                desc: 'Interact with mentors in real time and get your doubts cleared.',
+                icon: "⏱️",
+                title: "Flexible Learning",
+                desc: "Study at your own pace, anytime and anywhere"
               },
-            ].map((item, i) => (
-              <Grid item xs={12} md={4} key={i}>
-                <MotionPaper
-                  elevation={4}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                  sx={{
-                    p: 4,
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    bgcolor: 'primary.light',
-                    color: 'text.primary',
-                    borderRadius: 3,
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold">
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body1" mt={1}>
-                    {item.desc}
-                  </Typography>
-                </MotionPaper>
-              </Grid>
+              {
+                icon: "📱",
+                title: "Mobile Friendly",
+                desc: "Access courses on any device with our responsive platform"
+              },
+              {
+                icon: "📈",
+                title: "Progress Tracking",
+                desc: "Monitor your learning journey with detailed analytics"
+              },
+              {
+                icon: "🏆",
+                title: "Certification",
+                desc: "Earn recognized certificates upon course completion"
+              }
+            ].map((feature, index) => (
+              <div className="feature-card" key={index}>
+                <div className="feature-icon">{feature.icon}</div>
+                <h3>{feature.title}</h3>
+                <p>{feature.desc}</p>
+              </div>
             ))}
-          </Grid>
-        </Container>
-      </Box>
+          </div>
+        </div>
+        <div className="background-text">KNOWLEDGE</div>
+      </section>
 
-      {/* Newsletter Section */}
-      <Box
-        sx={{
-          bgcolor: 'secondary.main',
-          color: 'secondary.contrastText',
-          py: 8,
-          textAlign: 'center',
-        }}
-      >
-        <Container>
-          <Typography variant="h5" gutterBottom fontWeight="medium">
-            Stay Updated With Our Latest Courses
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Subscribe to our newsletter and never miss out on new content and offers.
-          </Typography>
-          <Box
-            component="form"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              mt: 3,
-              maxWidth: 500,
-              mx: 'auto',
-              borderRadius: 2,
-              overflow: 'hidden',
-              bgcolor: '#fff',
-            }}
-          >
-            <TextField
-              type="email"
-              placeholder="Your email address"
-              variant="outlined"
-              fullWidth
-              sx={{ borderRadius: 0, border: 'none' }}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ borderRadius: 0, px: 4 }}
-            >
-              Subscribe
-            </Button>
-          </Box>
-        </Container>
-      </Box>
+      {/* Courses Section */}
+      <section className="courses-section" ref={coursesRef}>
+        <div className="container">
+          <h2 className="section-title">Popular Courses</h2>
+          <p className="section-subtitle">Start learning with our most popular courses</p>
+          
+          <div className="courses-grid">
+            {[
+              {
+                title: "Web Development Bootcamp",
+                category: "Technology",
+                duration: "8 Weeks",
+                level: "Beginner"
+              },
+              {
+                title: "Data Science Fundamentals",
+                category: "Data",
+                duration: "10 Weeks",
+                level: "Intermediate"
+              },
+              {
+                title: "Digital Marketing Mastery",
+                category: "Marketing",
+                duration: "6 Weeks",
+                level: "Beginner"
+              },
+              {
+                title: "Mobile App Development",
+                category: "Technology",
+                duration: "12 Weeks",
+                level: "Advanced"
+              }
+            ].map((course, index) => (
+              <div className="course-card" key={index}>
+                <div className="course-badge">New</div>
+                <div className="course-image"></div>
+                <div className="course-content">
+                  <span className="course-category">{course.category}</span>
+                  <h3>{course.title}</h3>
+                  <div className="course-meta">
+                    <span>{course.duration}</span>
+                    <span>{course.level}</span>
+                  </div>
+                  <button className="course-button">Enroll Now</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Footer */}
-      <Footer />
-    </Box>
+      {/* CTA Section */}
+      <section className="cta-section" ref={ctaRef}>
+        <div className="container">
+          <h2>Ready to Start Learning?</h2>
+          <p>Join thousands of students advancing their careers with our courses</p>
+          <div className="cta-buttons">
+            <button className="cta-button">Sign Up Free</button>
+            <button className="cta-button outline">Browse Courses</button>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 

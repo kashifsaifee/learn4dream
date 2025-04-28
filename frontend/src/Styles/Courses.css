@@ -7,7 +7,7 @@
   .courses-container h1 {
     font-size: 3rem;
     color: #333;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   
   .course-card {
@@ -27,4 +27,18 @@
     font-size: 1rem;
     color: #555;
   }
-  
+  .search{
+    padding: 7px;
+    border: 2px solid slategray;
+    width: 250px;
+    height: 45px;
+    border-radius: 50px;
+    margin-left: 75%;
+    margin-top: 0px;
+  }
+  .cart{
+   color: #007BFF;
+  }
+  .courses{
+    padding: 25px;
+  }
