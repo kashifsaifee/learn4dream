@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 // import "../Styles/Courses.css";
 // import { IoIosSearch } from "react-icons/io";
 // import { TypeAnimation } from "react-type-animation";
@@ -172,17 +172,17 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CourseHeader from "../Components/CourseHeader";
-=======
+
 // src/Pages/Courses.js
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 import { IoIosSearch } from 'react-icons/io';
 import { IoBagOutline } from 'react-icons/io5';
 import { TypeAnimation } from 'react-type-animation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Styles/Courses.css';
->>>>>>> 5660eee226b3b940203f888cb1b6eaffc1cccafd
+
 
 const courses = [
   {
@@ -226,8 +226,8 @@ export default function Courses() {
     }
   };
 
-  return (
-<<<<<<< HEAD
+  return(
+
     <>
       <CourseHeader />
       <motion.div
@@ -282,8 +282,7 @@ export default function Courses() {
           ))}
         </div>
       </motion.div>
-    </>
-=======
+  
     <motion.div
       className="container py-5"
       initial={{ opacity: 0, y: 50 }}
@@ -388,6 +387,6 @@ export default function Courses() {
         </Link>
       </div>
     </motion.div>
->>>>>>> 5660eee226b3b940203f888cb1b6eaffc1cccafd
+</>
   );
 }
