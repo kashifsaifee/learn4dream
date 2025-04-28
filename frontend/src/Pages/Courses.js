@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // import "../Styles/Courses.css";
 // import { IoIosSearch } from "react-icons/io";
@@ -173,6 +174,8 @@ import { motion } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CourseHeader from "../Components/CourseHeader";
 
+=======
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
 // src/Pages/Courses.js
 // import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -182,7 +185,11 @@ import { IoBagOutline } from 'react-icons/io5';
 import { TypeAnimation } from 'react-type-animation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Styles/Courses.css';
+<<<<<<< HEAD
 
+=======
+import Footer from '../Components/Footer';
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
 
 const courses = [
   {
@@ -226,10 +233,14 @@ export default function Courses() {
     }
   };
 
+<<<<<<< HEAD
   return(
 
+=======
+  return (
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
     <>
-      <CourseHeader />
+      {/* Hero Header */}
       <motion.div
         className="container py-5"
         initial={{ opacity: 0, y: 50 }}
@@ -245,6 +256,43 @@ export default function Courses() {
           </p>
         </div>
 
+        {/* Dropdown Menu */}
+        <div className="dropdown-center mb-4 text-center">
+          <button
+            className="btn btn-primary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+          >
+            Browse Categories
+          </button>
+          <ul className="dropdown-menu">
+            <li><Link className="dropdown-item" to="/courses/data">Data Science</Link></li>
+            <li><Link className="dropdown-item" to="/courses/ml">Machine Learning</Link></li>
+            <li><Link className="dropdown-item" to="/courses/ai">Artificial Intelligence</Link></li>
+          </ul>
+        </div>
+
+        {/* Search and Cart */}
+        <div className="d-flex justify-content-between align-items-center mb-4 px-3 flex-wrap">
+          <div className="search d-flex align-items-center">
+            <IoIosSearch size={20} />
+            <TypeAnimation
+              sequence={["Search Courses", 1000, "Data Science", 1000, "Machine Learning", 1000, "AI", 1000]}
+              wrapper="span"
+              speed={50}
+              repeat={Infinity}
+              style={{ marginLeft: '10px', color: '#666' }}
+            />
+          </div>
+          <div className="cart">
+            <Link to="/mycourses" className="btn btn-outline-dark d-flex align-items-center">
+              <IoBagOutline size={22} className="me-2" />
+              Your Courses
+            </Link>
+          </div>
+        </div>
+
+        {/* Course Cards */}
         <div className="row">
           {courses.map((course) => (
             <div key={course.id} className="col-12 col-md-6 col-lg-4 mb-4">
@@ -257,9 +305,7 @@ export default function Courses() {
                 />
                 <div className="card-body d-flex flex-column">
                   <h5 className="card-title text-dark fw-bold">{course.title}</h5>
-                  <p className="card-text text-muted flex-grow-1">
-                    {course.description}
-                  </p>
+                  <p className="card-text text-muted flex-grow-1">{course.description}</p>
                   <div className="d-flex justify-content-between align-items-center mt-3">
                     <span className="h5 text-success mb-0">{course.price}</span>
                     <button
@@ -268,10 +314,7 @@ export default function Courses() {
                       disabled={loading === course.id}
                     >
                       {loading === course.id && (
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          role="status"
-                        />
+                        <span className="spinner-border spinner-border-sm me-2" role="status" />
                       )}
                       {loading === course.id ? "Enrolling..." : "Enroll Now"}
                     </button>
@@ -282,6 +325,7 @@ export default function Courses() {
           ))}
         </div>
       </motion.div>
+<<<<<<< HEAD
   
     <motion.div
       className="container py-5"
@@ -388,5 +432,11 @@ export default function Courses() {
       </div>
     </motion.div>
 </>
+=======
+
+      {/* Footer */}
+      <Footer />
+    </>
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
   );
 }

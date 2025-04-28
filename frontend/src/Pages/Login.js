@@ -8,24 +8,120 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  Divider,
+  Stack,
+  Snackbar,
+  CircularProgress,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
+// import { FaGithub, FaGoogle } from 'react-icons/fa'; // social buttons
+import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
+
+=======
+import { Link, useNavigate} from 'react-router-dom';
+import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
+>>>>>>> 3c27642aac4912823e2c44dc5b99e55b03847844
 
 export default function Login() {
   const [showPwd, setShowPwd] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const navigate = useNavigate();
 
-  const togglePwd = () => setShowPwd((s) => !s);
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const togglePwd = () => setShowPwd(!showPwd);
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  // Validate email format
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+
+  // Validate password (basic check for length)
+  const isValidPassword = (password) => password.length >= 6;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     console.log('Logging in with:', form);
     // TODO: Add login API call
+=======
+
+    if (!isValidEmail(form.email)) {
+      setError('Please enter a valid email address.');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (!isValidPassword(form.password)) {
+      setError('Password must be at least 6 characters long.');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        setOpenSnackbar(true);
+        navigate('./home');
+      } else {
+        if (data.message === 'Incorrect password') {
+          setError('Incorrect password. Please try again.');
+        } else {
+          setError(data.message || 'Something went wrong. Try again later.');
+        }
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Something went wrong. Try again later.');
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
+    }
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
   };
+
+  const handleSocialLogin = (provider) => {
+    console.log(`Logging in with ${provider}`);
+    // TODO: Setup social login later
+  };
+
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+
+  const SocialButton = ({ provider, onClick, icon }) => (
+    <Button
+      fullWidth
+      variant="outlined"
+      onClick={onClick}
+      startIcon={icon}
+      sx={{
+        color: 'white',
+        borderColor: '#ccc',
+        textTransform: 'none',
+        '&:hover': {
+          borderColor: '#FFA559',
+          backgroundColor: 'rgba(255,165,89,0.05)',
+        },
+      }}
+    >
+      Continue with {provider}
+    </Button>
+  );
 
   return (
     <Box
@@ -71,11 +167,17 @@ export default function Login() {
                 sx={{
                   mb: 3,
                   input: { color: 'white' },
+<<<<<<< HEAD
                   '.MuiFilledInput-root': {
                     bgcolor: 'rgba(255,255,255,0.08)',
                   },
                 }}
                 InputLabelProps={{ style: { color: '#ccc' } }}
+=======
+                  '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
+                }}
+                slotProps={{ inputLabel: { style: { color: '#ccc' } } }}
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
               />
 
               <TextField
@@ -90,6 +192,7 @@ export default function Login() {
                 sx={{
                   mb: 4,
                   input: { color: 'white' },
+<<<<<<< HEAD
                   '.MuiFilledInput-root': {
                     bgcolor: 'rgba(255,255,255,0.08)',
                   },
@@ -107,6 +210,25 @@ export default function Login() {
                       </IconButton>
                     </InputAdornment>
                   ),
+=======
+                  '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
+                }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={togglePwd}
+                          edge="end"
+                          sx={{ color: 'white' }}
+                        >
+                          {showPwd ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
                 }}
               />
 
@@ -121,6 +243,7 @@ export default function Login() {
                   fontWeight: 'bold',
                   borderRadius: 3,
                 }}
+<<<<<<< HEAD
               >
                 Log In
               </Button>
@@ -128,6 +251,33 @@ export default function Login() {
 
             <Typography mt={3} textAlign="center" fontSize="0.9rem">
               Don’t have an account?{' '}
+=======
+                disabled={loading}
+              >
+                {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Log In'}
+              </Button>
+            </form>
+
+            <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>
+              OR
+            </Divider>
+
+            <Stack spacing={2}>
+              <SocialButton
+                provider="Google"
+                onClick={() => handleSocialLogin('Google')}
+                icon={<FaGoogle />}
+              />
+              <SocialButton
+                provider="Microsoft"
+                onClick={() => handleSocialLogin('Microsoft')}
+                icon={<FaMicrosoft />}
+              />
+            </Stack>
+
+            <Typography mt={4} textAlign="center" fontSize="0.9rem">
+              Don&rsquo;t have an account?{' '}
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
               <Link to="/signup" style={{ color: '#FFA559' }}>
                 Sign up
               </Link>
@@ -135,6 +285,17 @@ export default function Login() {
           </CardContent>
         </Card>
       </motion.div>
+<<<<<<< HEAD
+=======
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={successMessage || error}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      />
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
     </Box>
   );
 }
