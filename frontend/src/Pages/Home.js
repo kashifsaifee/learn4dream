@@ -50,7 +50,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [isSliderActive, scrollPosition]);
+  }, [isSliderActive, scrollPosition, handleScroll]); // Added handleScroll here
 
   return (
     <>
