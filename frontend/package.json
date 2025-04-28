@@ -14,11 +14,11 @@
     "animejs": "^3.2.2",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.5",
-    "framer-motion": "^12.7.4",
+    "framer-motion": "^12.9.2",
     "gsap": "^3.12.7",
     "node-modules": "^1.0.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.1",
     "react-scripts": "5.0.1",
@@ -49,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.3"
   }
 }
