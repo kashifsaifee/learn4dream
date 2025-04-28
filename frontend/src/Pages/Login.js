@@ -14,11 +14,9 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-<<<<<<< HEAD
 // import { FaGithub, FaGoogle } from 'react-icons/fa'; // social buttons
-=======
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
->>>>>>> 9f548c7ce07d85dcc11af9436a9ef8fcb8259100
+
 
 export default function Login() {
   const [showPwd, setShowPwd] = useState(false);
