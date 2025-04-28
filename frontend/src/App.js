@@ -8,6 +8,7 @@ import Contact from './Pages/Contact';
 import Login from './Pages/Login';
 import Blogs from './Pages/Blogs';
 import Signup from './Pages/Signup';
+import Profile from './Pages/Profile';
 import './App.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

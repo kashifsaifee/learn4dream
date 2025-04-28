@@ -12,7 +12,7 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FaGithub, FaGoogle } from 'react-icons/fa'; // social buttons
+// import { FaGithub, FaGoogle } from 'react-icons/fa'; // social buttons
 
 export default function Login() {
   const [showPwd, setShowPwd] = useState(false);
