@@ -13,6 +13,10 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+<<<<<<< HEAD
+// import Footer from '../Components/Footer';
+=======
+>>>>>>> 3c27642aac4912823e2c44dc5b99e55b03847844
 
 const MotionPaper = motion(Paper);
 const MotionBox = motion(Box);

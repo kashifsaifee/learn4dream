@@ -1,26 +1,86 @@
-import React from 'react'
+import React from "react";
 import { CgProfile } from "react-icons/cg";
-import '../Styles/Profile.css'
+import "../Styles/Profile.css";
 const Profile = () => {
   return (
     <>
-        <div className='profile' >
-              <div className='p-bar' >
-              <h4 className='flex justify-start m-2' >Welcome, User</h4>
-              <h3 className='mt-2' > < CgProfile size={30} /> Profile</h3>
+      <section>
+        <div className=" text-bg-light p-3 my-4 mx-5 px-4 text-center rounded border border-5  ">
+          <CgProfile size={28} /> Profile
+          <hr />
+
+          <div className="p-2 rounded-circle  " >
+              <div className="u-p  bg-secondary-subtle" >
+                image
               </div>
-              <div className=' flex items-center gap-2 row-2  ' >
-                  <label>Name : </label>
-                  <br/>
-                  <input type="text" style={{'width':'250px'}}/>
-                  <input type="text" className=' p-col' style={{'width':'250px'}}/>
+              <label> upload image</label>
+          </div>
 
+          <div
+            style={{ "grid-template-columns": "1fr 1fr" }} class="d-grid gap-0 column-gap-3" >
 
-              </div>  
-         </div>
-
+            
+            <div class="p-2">
+              <label> Name : </label>
+              <input
+                type="text"
+                name="name"
+                placeholder="First Name"
+                className="form-control"
+              />
+            </div>
+            <div class="p-2">
+              <input
+                type="text"
+                name="name"
+                placeholder="Last Name"
+                className="form-control mt-4"
+                required
+              />
+            </div>
+            <div class="p-2">
+              <label>Email : </label>
+              <input
+                type="text"
+                name="email"
+                placeholder="xyz@gmail.com"
+                className="form-control  "
+              />
+            </div>
+            <div class="p-2">
+              Contact :
+              <input
+                type="number"
+                name="number"
+                placeholder="XXXXX-XXXXX"
+                className="form-control "
+              />
+            </div>
+            <div class="p-2">
+              <label>Address : </label>
+              <input
+                type="text"
+                name="address"
+                placeholder="street name, landmark, locality"
+                className="form-control "
+              />
+            </div>
+            <div class="p-2">
+              <input
+                type="text"
+                name="name"
+                placeholder="Last Name"
+                className="form-control mt-4"
+              />
+            </div>
+            <button className="mt-5 mx-auto flex justify-center ">
+              Update Profile
+            </button>
+          </div>
+        </div>
+      </section>
     </>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

@@ -15,8 +15,15 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
+import { Link } from 'react-router-dom';
+// import { FaGithub, FaGoogle } from 'react-icons/fa'; // social buttons
+import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
+
+=======
 import { Link, useNavigate} from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
+>>>>>>> 3c27642aac4912823e2c44dc5b99e55b03847844
 
 export default function Login() {
   const [showPwd, setShowPwd] = useState(false);
@@ -39,6 +46,10 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
+    console.log('Logging in with:', form);
+    // TODO: Add login API call
+=======
 
     if (!isValidEmail(form.email)) {
       setError('Please enter a valid email address.');
@@ -82,6 +93,7 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
   };
 
   const handleSocialLogin = (provider) => {
@@ -155,9 +167,17 @@ export default function Login() {
                 sx={{
                   mb: 3,
                   input: { color: 'white' },
+<<<<<<< HEAD
+                  '.MuiFilledInput-root': {
+                    bgcolor: 'rgba(255,255,255,0.08)',
+                  },
+                }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
+=======
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
                 slotProps={{ inputLabel: { style: { color: '#ccc' } } }}
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
               />
 
               <TextField
@@ -172,6 +192,25 @@ export default function Login() {
                 sx={{
                   mb: 4,
                   input: { color: 'white' },
+<<<<<<< HEAD
+                  '.MuiFilledInput-root': {
+                    bgcolor: 'rgba(255,255,255,0.08)',
+                  },
+                }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={togglePwd}
+                        edge="end"
+                        sx={{ color: 'white' }}
+                      >
+                        {showPwd ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+=======
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
                 InputLabelProps={{ style: { color: '#ccc' } }}
@@ -189,6 +228,7 @@ export default function Login() {
                       </InputAdornment>
                     ),
                   },
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
                 }}
               />
 
@@ -203,6 +243,15 @@ export default function Login() {
                   fontWeight: 'bold',
                   borderRadius: 3,
                 }}
+<<<<<<< HEAD
+              >
+                Log In
+              </Button>
+            </form>
+
+            <Typography mt={3} textAlign="center" fontSize="0.9rem">
+              Don’t have an account?{' '}
+=======
                 disabled={loading}
               >
                 {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Log In'}
@@ -228,6 +277,7 @@ export default function Login() {
 
             <Typography mt={4} textAlign="center" fontSize="0.9rem">
               Don&rsquo;t have an account?{' '}
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
               <Link to="/signup" style={{ color: '#FFA559' }}>
                 Sign up
               </Link>
@@ -235,6 +285,8 @@ export default function Login() {
           </CardContent>
         </Card>
       </motion.div>
+<<<<<<< HEAD
+=======
 
       <Snackbar
         open={openSnackbar}
@@ -243,6 +295,7 @@ export default function Login() {
         message={successMessage || error}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       />
+>>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
     </Box>
   );
 }
