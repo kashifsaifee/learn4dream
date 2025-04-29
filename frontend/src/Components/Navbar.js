@@ -12,7 +12,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { CgProfile } from "react-icons/cg";
 
@@ -40,6 +40,7 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const theme = useTheme();
   const location = useLocation();
+  const navigate = useNavigate(); // Added to handle redirection
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // anchor states for dropdowns
@@ -63,6 +64,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
   const handleLogout = () => {
     setIsLoggedIn(false); // set logged out
+    navigate('/'); // Redirect to home page (with lowercase "h")
   };
 
   /* ---------- Layout ---------- */
@@ -219,4 +221,3 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     </AppBar>
   );
 }
- 

@@ -12,7 +12,7 @@ app.config["MONGO_URI"] = "mongodb://localhost:27017/learn4dream"
 mongo = PyMongo(app)
 
 # JWT Config
-app.config["JWT_SECRET_KEY"] = "4a1f9031cb19df4bea7639bde7ed031dface7a9ffd14ad14f2acd06ebda86c21"  # Change this to a real secret key!
+app.config["JWT_SECRET_KEY"] = "4f74d8ef8bf11cbe2811609c31309e3b63ceca3534c63181c3b022892889701a6"  # Change this to a real secret key!
 jwt = JWTManager(app)
 
 # Root route (handle requests to /)
@@ -21,7 +21,7 @@ def root():
     return jsonify({"message": "Flask Backend Running!"})
 
 # Home route (protected route)
-@app.route("/home", methods=["GET"])
+@app.route("/Home", methods=["GET"])
 @jwt_required()  # Protect this route with JWT
 def home():
     current_user = get_jwt_identity()  # Get the current user's identity from the token
@@ -106,6 +106,26 @@ def login():
         return jsonify({"status": "success", "message": "Login successful!", "access_token": access_token}), 200
     else:
         return jsonify({"status": "error", "message": "Invalid email or password"}), 401
+
+
+
+@app.route("/profile", methods=["GET"])
+@jwt_required()  
+def profile():
+    current_user = get_jwt_identity()  # Get the current user's identity from the token
+    # Find the user in the database using the email (or any other unique identifier)
+    user = mongo.db.users.find_one({"email": current_user["email"]})
+
+    if user:
+        # Return the user's name and email
+        return jsonify({
+            "name": user["name"],
+            "email": user["email"]
+        })
+    else:
+        return jsonify({"status": "error", "message": "User not found"}), 404
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

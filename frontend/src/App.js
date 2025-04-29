@@ -12,7 +12,7 @@ import Profile from './Pages/Profile';
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // state to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
   return (
     <Router>
@@ -21,7 +21,7 @@ function App() {
 
       {/* Routes */}
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} /> {/* Changed /home to / */}
         <Route path="/about" element={<About />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/blogs" element={<Blogs />} />

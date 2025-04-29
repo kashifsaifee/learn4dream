@@ -25,32 +25,33 @@ const Home = () => {
     { title: 'AI & ML Expert', description: 'Master Artificial Intelligence and Machine Learning.', img: 'https://dummyimage.com/300x200/ffc107/fff&text=AI+%26+ML' }
   ];
 
-  const handleScroll = (event) => {
-    if (sliderRef.current && isSliderActive) {
-      const delta = event.deltaY;
-      if (delta > 0) {
-        if (scrollPosition < slides.length - 1) {
-          setScrollPosition(prev => prev + 1);
-        }
-      } else {
-        if (scrollPosition > 0) {
-          setScrollPosition(prev => prev - 1);
-        }
-      }
-      event.preventDefault();
-    }
-  };
-
   useEffect(() => {
+    const handleScroll = (event) => {
+      if (sliderRef.current && isSliderActive) {
+        const delta = event.deltaY;
+        if (delta > 0) {
+          if (scrollPosition < slides.length - 1) {
+            setScrollPosition(prev => prev + 1);
+          }
+        } else {
+          if (scrollPosition > 0) {
+            setScrollPosition(prev => prev - 1);
+          }
+        }
+        event.preventDefault();
+      }
+    };
+
     const handleWheel = (event) => {
       handleScroll(event);
     };
+
     window.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [isSliderActive, scrollPosition, handleScroll]);
+  }, [isSliderActive, scrollPosition, slides.length]);
 
   return (
     <>
