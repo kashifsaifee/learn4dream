@@ -15,15 +15,10 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-<<<<<<< HEAD
-import { Link } from 'react-router-dom';
 // import { FaGithub, FaGoogle } from 'react-icons/fa'; // social buttons
-import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
 
-=======
 import { Link, useNavigate} from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
->>>>>>> 3c27642aac4912823e2c44dc5b99e55b03847844
 
 export default function Login() {
   const [showPwd, setShowPwd] = useState(false);
