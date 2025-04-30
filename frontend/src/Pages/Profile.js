@@ -1,107 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { CgProfile } from "react-icons/cg";
-import { TextField, Button } from '@mui/material';
-import '../Styles/Profile.css';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Avatar, Grid, Paper, Chip, Divider } from '@mui/material';
+import axios from 'axios';
 
 const Profile = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [user, setUser] = useState(null); // State to store user data
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const [error, setError] = useState(null); // State to track error status
 
+  // Fetch user data from backend API
   useEffect(() => {
-    // Get the JWT token from localStorage (or wherever you're storing it)
-    const token = localStorage.getItem('access_token'); 
-
-    if (!token) {
-      setError('You must be logged in to view your profile');
-      setLoading(false);
-      return;
-    }
-
-    // Fetch profile data from the backend
-    const fetchProfileData = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await fetch('/profile', {
-          method: 'GET',
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No token found, please log in');
+        }
+
+        // Make API request to backend
+        const response = await axios.get('http://localhost:5000/api/user', {
           headers: {
-            Authorization: `Bearer ${token}`, // Send the token with the request
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        const data = await response.json();
-
-        if (response.ok) {
-          setName(data.name);
-          setEmail(data.email);
-        } else {
-          setError(data.message || 'Failed to fetch profile data');
-        }
-      } catch (err) {
-        setError('An error occurred while fetching profile data');
-      } finally {
-        setLoading(false);
+        setUser(response.data); // Store user data in state
+        setLoading(false); // Stop loading
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setError(error.message); // Set error if any
+        setLoading(false); // Stop loading
       }
     };
 
-    fetchProfileData();
+    fetchUserData();
   }, []);
 
-  const handleSave = () => {
-    // Handle saving user profile (could be an API call to update the user info)
-    alert('Profile Saved!');
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // Display loading or error messages
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error: {error}</Typography>;
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <h4>Welcome, User</h4>
-        <h3>
-          <CgProfile size={30} /> Profile
-        </h3>
-      </div>
+    <Box sx={{ background: '#f7f9fc', minHeight: '100vh', py: 5 }}>
+      {/* Hero Section */}
+      <Typography variant="h3" fontWeight="bold" textAlign="center" mb={6}>
+        Hello, {user ? user.name : 'User'}
+      </Typography>
 
-      <div className="profile-form">
-        {error && <div className="error">{error}</div>}
-        
-        <div className="profile-input">
-          <label htmlFor="name">Name:</label>
-          <TextField
-            id="name"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ width: '250px' }}
-            size="small"
-          />
-        </div>
+      {/* Profile Card */}
+      <Grid container justifyContent="center">
+        <Grid item xs={10} md={6}>
+          <Paper sx={{ p: 4, borderRadius: '2xl', background: '#fff' }} elevation={6}>
+            <Avatar
+              src={user && user.avatar ? user.avatar : 'https://i.pravatar.cc/300'}
+              sx={{ width: 120, height: 120, mx: 'auto', mb: 2 }}
+            />
+            <Typography variant="h5" fontWeight="bold">
+              {user ? user.name : 'No Name'}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              {user ? user.email : 'No Email'}
+            </Typography>
+            <Box sx={{ mt: 2 }}>
+              {user && user.skills && user.skills.map(skill => (
+                <Chip key={skill} label={skill} color="primary" sx={{ mr: 1 }} />
+              ))}
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
 
-        <div className="profile-input">
-          <label htmlFor="email">Email:</label>
-          <TextField
-            id="email"
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: '250px' }}
-            size="small"
-          />
-        </div>
-
-        <Button
-          variant="contained"
-          color="primary"
-          className="save-button"
-          onClick={handleSave}
-        >
-          Save Profile
-        </Button>
-      </div>
-    </div>
+      {/* Contact Info */}
+      <Box sx={{ textAlign: 'center', mt: 10, pb: 6 }}>
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
+          Let's Connect!
+        </Typography>
+        <Typography variant="body2" mb={2}>
+          I’m open to freelance work, collaborations, and new opportunities.
+        </Typography>
+        <Chip label={user ? user.email : 'No Email'} variant="outlined" color="primary" sx={{ mr: 1 }} />
+        <Chip label={user ? user.phone : 'No Phone'} variant="outlined" color="success" />
+      </Box>
+    </Box>
   );
 };
 

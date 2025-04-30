@@ -1,13 +1,14 @@
 // src/Pages/Courses.js
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { IoIosSearch } from 'react-icons/io';
-import { IoBagOutline } from 'react-icons/io5';
-import { TypeAnimation } from 'react-type-animation';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Styles/Courses.css';
-import Footer from '../Components/Footer';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { IoIosSearch } from "react-icons/io";
+import { IoBagOutline } from "react-icons/io5";
+import { TypeAnimation } from "react-type-animation";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../Styles/Courses.css";
+import Footer from "../Components/Footer";
+
 
 const courses = [
   {
@@ -53,7 +54,6 @@ export default function Courses() {
 
   return (
     <>
-      {/* Hero Header */}
       <motion.div
         className="container py-5"
         initial={{ opacity: 0, y: 50 }}
@@ -69,7 +69,6 @@ export default function Courses() {
           </p>
         </div>
 
-        {/* Dropdown Menu */}
         <div className="dropdown-center mb-4 text-center">
           <button
             className="btn btn-primary dropdown-toggle"
@@ -85,7 +84,6 @@ export default function Courses() {
           </ul>
         </div>
 
-        {/* Search and Cart */}
         <div className="d-flex justify-content-between align-items-center mb-4 px-3 flex-wrap">
           <div className="search d-flex align-items-center">
             <IoIosSearch size={20} />
@@ -94,7 +92,7 @@ export default function Courses() {
               wrapper="span"
               speed={50}
               repeat={Infinity}
-              style={{ marginLeft: '10px', color: '#666' }}
+              style={{ marginLeft: "10px", color: "#666" }}
             />
           </div>
           <div className="cart">
@@ -105,7 +103,6 @@ export default function Courses() {
           </div>
         </div>
 
-        {/* Course Cards */}
         <div className="row">
           {courses.map((course) => (
             <div key={course.id} className="col-12 col-md-6 col-lg-4 mb-4">
@@ -138,8 +135,6 @@ export default function Courses() {
           ))}
         </div>
       </motion.div>
-
-      {/* Footer */}
       <Footer />
     </>
   );

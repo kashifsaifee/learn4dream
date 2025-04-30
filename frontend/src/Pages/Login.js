@@ -61,16 +61,17 @@ export default function Login({ setIsLoggedIn }) {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem('token', data.access_token); // ✅ Store JWT token
         setSuccessMessage(data.message);
         setOpenSnackbar(true);
-        setIsLoggedIn(true); // Mark the user as logged in
-        navigate('/Home'); // Redirect to homepage after successful login
+        setIsLoggedIn(true);
+        navigate('/');
       } else {
         setError(data.message || 'Something went wrong. Try again later.');
         setOpenSnackbar(true);
       }
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch (err) {
+      console.error('Login error:', err);
       setError('Something went wrong. Try again later.');
       setOpenSnackbar(true);
     } finally {
@@ -80,7 +81,7 @@ export default function Login({ setIsLoggedIn }) {
 
   const handleSocialLogin = (provider) => {
     console.log(`Logging in with ${provider}`);
-    // Implement social login here
+    // Add real social login logic here
   };
 
   const handleCloseSnackbar = () => setOpenSnackbar(false);
@@ -143,7 +144,7 @@ export default function Login({ setIsLoggedIn }) {
                   input: { color: 'white' },
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
-                slotProps={{ inputLabel: { style: { color: '#ccc' } } }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
               />
 
               <TextField
@@ -161,16 +162,14 @@ export default function Login({ setIsLoggedIn }) {
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
                 InputLabelProps={{ style: { color: '#ccc' } }}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
-                          {showPwd ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  },
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
+                        {showPwd ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
               />
 
@@ -180,7 +179,11 @@ export default function Login({ setIsLoggedIn }) {
                 size="large"
                 variant="contained"
                 color="secondary"
-                sx={{ textTransform: 'none', fontWeight: 'bold', borderRadius: 3 }}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 'bold',
+                  borderRadius: 3,
+                }}
                 disabled={loading}
               >
                 {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Log In'}

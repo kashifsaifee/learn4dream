@@ -12,7 +12,7 @@ app.config["MONGO_URI"] = "mongodb://localhost:27017/learn4dream"
 mongo = PyMongo(app)
 
 # JWT Config
-app.config["JWT_SECRET_KEY"] = "4f74d8ef8bf11cbe2811609c31309e3b63ceca3534c63181c3b022892889701a6"  # Change this to a real secret key!
+app.config["JWT_SECRET_KEY"] = "f74d8ef8bf11cbe2811609c31309e3b63ceca3534c63181c3b022892889701a6"  # Change this to a real secret key!
 jwt = JWTManager(app)
 
 # Root route (handle requests to /)
@@ -108,7 +108,7 @@ def login():
         return jsonify({"status": "error", "message": "Invalid email or password"}), 401
 
 
-
+# Profile route (fetch user details)
 @app.route("/profile", methods=["GET"])
 @jwt_required()  
 def profile():
@@ -124,7 +124,6 @@ def profile():
         })
     else:
         return jsonify({"status": "error", "message": "User not found"}), 404
-
 
 
 if __name__ == '__main__':

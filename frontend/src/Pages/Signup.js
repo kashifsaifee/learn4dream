@@ -69,10 +69,16 @@ export default function Signup() {
       });
 
       console.log('Signup response:', res.data);
+
+      // Save JWT token in localStorage
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+
       setSuccess('Account created successfully!');
       setForm({ name: '', email: '', password: '', confirm: '' });
 
-      setTimeout(() => navigate('./Home'), 1000);
+      setTimeout(() => navigate('./'), 1000);
     } catch (err) {
       console.error('Signup error:', err.response?.data || err.message);
       setError(err.response?.data?.message || 'Something went wrong.');
