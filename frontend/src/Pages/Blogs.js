@@ -15,6 +15,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 // import Footer from '../Components/Footer';
 
+
 const MotionPaper = motion(Paper);
 const MotionBox = motion(Box);
 

@@ -20,7 +20,9 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate} from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa'
 
-export default function Login() {
+
+
+export default function Login({ setIsLoggedIn }) {
   const [showPwd, setShowPwd] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -33,10 +35,7 @@ export default function Login() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Validate email format
   const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
-
-  // Validate password (basic check for length)
   const isValidPassword = (password) => password.length >= 6;
 
   const handleSubmit = async (e) => {
@@ -66,19 +65,17 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem('token', data.access_token); // ✅ Store JWT token
         setSuccessMessage(data.message);
         setOpenSnackbar(true);
-        navigate('./home');
+        setIsLoggedIn(true);
+        navigate('/');
       } else {
-        if (data.message === 'Incorrect password') {
-          setError('Incorrect password. Please try again.');
-        } else {
-          setError(data.message || 'Something went wrong. Try again later.');
-        }
+        setError(data.message || 'Something went wrong. Try again later.');
         setOpenSnackbar(true);
       }
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch (err) {
+      console.error('Login error:', err);
       setError('Something went wrong. Try again later.');
       setOpenSnackbar(true);
     } finally {
@@ -88,7 +85,7 @@ export default function Login() {
 
   const handleSocialLogin = (provider) => {
     console.log(`Logging in with ${provider}`);
-    // TODO: Setup social login later
+    // Add real social login logic here
   };
 
   const handleCloseSnackbar = () => setOpenSnackbar(false);
@@ -130,15 +127,7 @@ export default function Login() {
         transition={{ duration: 0.6 }}
         style={{ width: '100%', maxWidth: 420 }}
       >
-        <Card
-          elevation={6}
-          sx={{
-            borderRadius: 4,
-            overflow: 'hidden',
-            bgcolor: '#0f274a',
-            color: 'white',
-          }}
-        >
+        <Card elevation={6} sx={{ borderRadius: 4, bgcolor: '#0f274a', color: 'white' }}>
           <CardContent sx={{ p: { xs: 4, md: 6 } }}>
             <Typography variant="h4" fontWeight="bold" mb={3} color="#FFA559">
               Welcome Back
@@ -159,7 +148,7 @@ export default function Login() {
                   input: { color: 'white' },
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
-                slotProps={{ inputLabel: { style: { color: '#ccc' } } }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
               />
 
               <TextField
@@ -177,20 +166,14 @@ export default function Login() {
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
                 InputLabelProps={{ style: { color: '#ccc' } }}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={togglePwd}
-                          edge="end"
-                          sx={{ color: 'white' }}
-                        >
-                          {showPwd ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  },
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
+                        {showPwd ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
               />
 
@@ -211,21 +194,11 @@ export default function Login() {
               </Button>
             </form>
 
-            <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>
-              OR
-            </Divider>
+            <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>OR</Divider>
 
             <Stack spacing={2}>
-              <SocialButton
-                provider="Google"
-                onClick={() => handleSocialLogin('Google')}
-                icon={<FaGoogle />}
-              />
-              <SocialButton
-                provider="Microsoft"
-                onClick={() => handleSocialLogin('Microsoft')}
-                icon={<FaMicrosoft />}
-              />
+              <SocialButton provider="Google" onClick={() => handleSocialLogin('Google')} icon={<FaGoogle />} />
+              <SocialButton provider="Microsoft" onClick={() => handleSocialLogin('Microsoft')} icon={<FaMicrosoft />} />
             </Stack>
 
             <Typography mt={4} textAlign="center" fontSize="0.9rem">

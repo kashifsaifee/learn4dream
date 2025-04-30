@@ -15,10 +15,10 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
-import axios from 'axios'; 
+import axios from 'axios';
 
 export default function Signup() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -30,6 +30,7 @@ export default function Signup() {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -40,11 +41,23 @@ export default function Signup() {
   const togglePwd = () => setShowPwd((prev) => !prev);
   const toggleConfirm = () => setShowConfirm((prev) => !prev);
 
+  // Email validation regex
+  const isValidEmail = /\S+@\S+\.\S+/.test(form.email);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
+    // Password mismatch check
     if (form.password !== form.confirm) {
       setError('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
+
+    if (!isValidEmail) {
+      setError('Please enter a valid email address.');
+      setLoading(false);
       return;
     }
 
@@ -56,14 +69,21 @@ export default function Signup() {
       });
 
       console.log('Signup response:', res.data);
+
+      // Save JWT token in localStorage
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+
       setSuccess('Account created successfully!');
       setForm({ name: '', email: '', password: '', confirm: '' });
 
-      setTimeout(() => navigate('./home'), 1000);
-
+      setTimeout(() => navigate('./'), 1000);
     } catch (err) {
       console.error('Signup error:', err.response?.data || err.message);
       setError(err.response?.data?.message || 'Something went wrong.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -202,7 +222,7 @@ export default function Signup() {
                 size="large"
                 variant="contained"
                 color="secondary"
-                disabled={isFormInvalid}
+                disabled={isFormInvalid || loading}
                 sx={{
                   borderRadius: 3,
                   fontWeight: 'bold',
@@ -210,7 +230,7 @@ export default function Signup() {
                   mb: 3,
                 }}
               >
-                Sign Up
+                {loading ? 'Signing Up...' : 'Sign Up'}
               </Button>
             </form>
 
