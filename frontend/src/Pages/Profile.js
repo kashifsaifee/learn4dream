@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Avatar, Grid, Paper, Chip, Divider } from '@mui/material';
+import { Box, Typography, Avatar, Grid, Paper, Chip } from '@mui/material';
 import axios from 'axios';
 
 const Profile = () => {

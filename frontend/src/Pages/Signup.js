@@ -10,12 +10,13 @@ import {
   Typography,
   Divider,
   Stack,
+  CircularProgress,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google'; // Import GoogleLogin
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function Signup() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Track form submission state
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -41,36 +43,54 @@ export default function Signup() {
   const togglePwd = () => setShowPwd((prev) => !prev);
   const toggleConfirm = () => setShowConfirm((prev) => !prev);
 
-  // Email validation regex
   const isValidEmail = /\S+@\S+\.\S+/.test(form.email);
+  const isValidPassword = form.password.length >= 6;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Avoid submitting if already in progress
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     setLoading(true);
 
-    // Password mismatch check
-    if (form.password !== form.confirm) {
-      setError('Passwords do not match.');
+    // Basic form validation
+    if (!form.name.trim() || !form.email.trim() || !form.password || !form.confirm) {
+      setError('Please fill in all fields.');
+      setIsSubmitting(false);
       setLoading(false);
       return;
     }
 
     if (!isValidEmail) {
-      setError('Please enter a valid email address.');
+      setError('Invalid email format.');
+      setIsSubmitting(false);
+      setLoading(false);
+      return;
+    }
+
+    if (!isValidPassword) {
+      setError('Password must be at least 6 characters.');
+      setIsSubmitting(false);
+      setLoading(false);
+      return;
+    }
+
+    if (form.password !== form.confirm) {
+      setError('Passwords do not match.');
+      setIsSubmitting(false);
       setLoading(false);
       return;
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/signup', {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
         name: form.name,
         email: form.email,
         password: form.password,
       });
 
-      console.log('Signup response:', res.data);
-
-      // Save JWT token in localStorage
       if (res.data.token) {
         localStorage.setItem('token', res.data.token);
       }
@@ -78,9 +98,29 @@ export default function Signup() {
       setSuccess('Account created successfully!');
       setForm({ name: '', email: '', password: '', confirm: '' });
 
-      setTimeout(() => navigate('./'), 1000);
+      // Redirect after successful signup
+      setTimeout(() => navigate('/'), 1000);
     } catch (err) {
-      console.error('Signup error:', err.response?.data || err.message);
+      setError(err.response?.data?.message || 'Something went wrong.');
+    } finally {
+      setIsSubmitting(false);
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = async (response) => {
+    setLoading(true);
+    try {
+      const { credential } = response;
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/google-signup`, { token: credential });
+
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+
+      setSuccess('Account created successfully!');
+      setTimeout(() => navigate('/'), 1000);
+    } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
@@ -89,10 +129,12 @@ export default function Signup() {
 
   const handleSocialSignup = (provider) => {
     console.log(`Signing up with ${provider}`);
-    // Implement your OAuth flow here
+    if (provider === 'google') {
+      console.log('Initiating Google OAuth');
+    }
   };
 
-  const isFormInvalid = !form.name || !form.email || !form.password || !form.confirm;
+  const isFormInvalid = !form.name || !form.email || !form.password || !form.confirm || !isValidEmail || !isValidPassword;
 
   const inputStyles = {
     mb: 3,
@@ -138,6 +180,7 @@ export default function Signup() {
                 onChange={handleChange}
                 sx={inputStyles}
                 InputLabelProps={inputLabelProps}
+                aria-label="Full Name"
               />
 
               <TextField
@@ -151,6 +194,7 @@ export default function Signup() {
                 onChange={handleChange}
                 sx={inputStyles}
                 InputLabelProps={inputLabelProps}
+                aria-label="Email"
               />
 
               <TextField
@@ -177,6 +221,7 @@ export default function Signup() {
                     </InputAdornment>
                   ),
                 }}
+                aria-label="Password"
               />
 
               <TextField
@@ -203,6 +248,7 @@ export default function Signup() {
                     </InputAdornment>
                   ),
                 }}
+                aria-label="Confirm Password"
               />
 
               {error && (
@@ -222,7 +268,7 @@ export default function Signup() {
                 size="large"
                 variant="contained"
                 color="secondary"
-                disabled={isFormInvalid || loading}
+                disabled={isFormInvalid || isSubmitting || loading}
                 sx={{
                   borderRadius: 3,
                   fontWeight: 'bold',
@@ -230,48 +276,21 @@ export default function Signup() {
                   mb: 3,
                 }}
               >
-                {loading ? 'Signing Up...' : 'Sign Up'}
+                {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Sign Up'}
               </Button>
             </form>
 
             <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>OR</Divider>
 
             <Stack spacing={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={() => handleSocialSignup('Google')}
-                startIcon={<FaGoogle />}
-                sx={{
-                  color: 'white',
-                  borderColor: '#ccc',
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: '#FFA559',
-                    backgroundColor: 'rgba(255,165,89,0.05)',
-                  },
-                }}
-              >
-                Sign Up with Google
-              </Button>
-
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={() => handleSocialSignup('Microsoft')}
-                startIcon={<FaMicrosoft />}
-                sx={{
-                  color: 'white',
-                  borderColor: '#ccc',
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: '#FFA559',
-                    backgroundColor: 'rgba(255,165,89,0.05)',
-                  },
-                }}
-              >
-                Sign Up with Microsoft
-              </Button>
+              <GoogleLogin
+                onSuccess={handleGoogleSignup}
+                onError={() => setError('Google login failed.')}
+                useOneTap
+                theme="filled_blue"
+                size="large"
+                aria-label="Sign up with Google"
+              />
             </Stack>
 
             <Typography mt={4} textAlign="center" fontSize="0.9rem">
