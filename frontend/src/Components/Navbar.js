@@ -1,216 +1,220 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
   Box,
+  Button,
+  Card,
+  CardContent,
   IconButton,
-  Menu,
-  MenuItem,
+  InputAdornment,
+  TextField,
+  Typography,
   Divider,
-  useMediaQuery
+  Stack,
+  Snackbar,
+  CircularProgress,
 } from '@mui/material';
-import { Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
-import { useTheme } from '@mui/material/styles';
-import { CgProfile } from "react-icons/cg";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 
-const Navbar = () => {
-  const theme = useTheme();
-  const location = useLocation();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  
-  // State for dropdown menus
-  const [anchorCourses, setAnchorCourses] = useState(null);
-  const [anchorPages, setAnchorPages] = useState(null);
-  const [anchorMobile, setAnchorMobile] = useState(null);
+export default function Login({ setIsLoggedIn }) {
+  const [showPwd, setShowPwd] = useState(false);
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const navigate = useNavigate();
 
-  // Helper functions for dropdowns
-  const open = (set) => (e) => set(e.currentTarget);
-  const close = (set) => () => set(null);
+  const togglePwd = () => setShowPwd(!showPwd);
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Style for active links
-  const linkStyle = (path) => ({
-    color: location.pathname === path 
-      ? theme.palette.secondary.main 
-      : theme.palette.primary.contrastText,
-    '&:hover': {
-      bgcolor: theme.palette.primary.dark,
-      color: theme.palette.secondary.main,
-    },
-  });
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const isValidPassword = (password) => password.length >= 6;
 
-  // Component for dropdown menu items
-  const NavLinkBtn = ({ to, children, closeMenu }) => {
-    const active = location.pathname === to;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    return (
-      <MenuItem
-        component={Link}
-        to={to}
-        onClick={closeMenu}
-        sx={{
-          color: active ? theme.palette.secondary.main : 'text.primary',
-          fontWeight: active ? 'bold' : 'normal',
-        }}
-      >
-        {children}
-      </MenuItem>
-    );
+    if (!isValidEmail(form.email)) {
+      setError('Please enter a valid email address.');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (!isValidPassword(form.password)) {
+      setError('Password must be at least 6 characters long.');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.access_token);
+        setSuccessMessage(data.message);
+        setIsLoggedIn?.(true);
+        navigate('/');
+      } else {
+        setError(data.message || 'Something went wrong. Try again later.');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Something went wrong. Try again later.');
+    } finally {
+      setOpenSnackbar(true);
+      setLoading(false);
+    }
   };
 
-  // Check if the current page is Profile
-  const isProfilePage = location.pathname === '/profile';
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+
+  const handleSocialLogin = (provider) => {
+    console.log(`Logging in with ${provider}`);
+    // TODO: Add social login integration
+  };
+
+  const SocialButton = ({ provider, onClick, icon }) => (
+    <Button
+      fullWidth
+      variant="outlined"
+      onClick={onClick}
+      startIcon={icon}
+      sx={{
+        color: 'white',
+        borderColor: '#ccc',
+        textTransform: 'none',
+        '&:hover': {
+          borderColor: '#FFA559',
+          backgroundColor: 'rgba(255,165,89,0.05)',
+        },
+      }}
+    >
+      Continue with {provider}
+    </Button>
+  );
 
   return (
-    <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
-      <Toolbar sx={{ gap: 2 }}>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Learn4Dream
-        </Typography>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        bgcolor: 'primary.main',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 2,
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{ width: '100%', maxWidth: 420 }}
+      >
+        <Card elevation={6} sx={{ borderRadius: 4, bgcolor: '#0f274a', color: 'white' }}>
+          <CardContent sx={{ p: { xs: 4, md: 6 } }}>
+            <Typography variant="h4" fontWeight="bold" mb={3} color="#FFA559">
+              Welcome Back
+            </Typography>
 
-        {/* Desktop Menu */}
-        {!isMobile && (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button component={Link} to="/" sx={linkStyle('/')}>
-              Home
-            </Button>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                variant="filled"
+                required
+                value={form.email}
+                onChange={handleChange}
+                sx={{
+                  mb: 3,
+                  input: { color: 'white' },
+                  '.MuiFilledInput-root': {
+                    bgcolor: 'rgba(255,255,255,0.08)',
+                  },
+                }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
+              />
 
-            {/* Courses Dropdown */}
-            <Button
-              endIcon={<ExpandMore />}
-              onClick={open(setAnchorCourses)}
-              sx={linkStyle('/courses')}
-            >
-              Courses
-            </Button>
-            <Menu
-              anchorEl={anchorCourses}
-              open={Boolean(anchorCourses)}
-              onClose={close(setAnchorCourses)}
-            >
-              <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>
-                All Courses
-              </NavLinkBtn>
-              <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorCourses)}>
-                Course Detail
-              </NavLinkBtn>
-            </Menu>
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                type={showPwd ? 'text' : 'password'}
+                variant="filled"
+                required
+                value={form.password}
+                onChange={handleChange}
+                sx={{
+                  mb: 4,
+                  input: { color: 'white' },
+                  '.MuiFilledInput-root': {
+                    bgcolor: 'rgba(255,255,255,0.08)',
+                  },
+                }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
+                        {showPwd ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-            {/* Pages Dropdown */}
-            <Button
-              endIcon={<ExpandMore />}
-              onClick={open(setAnchorPages)}
-              sx={linkStyle('/blogs')}
-            >
-              Pages
-            </Button>
-            <Menu
-              anchorEl={anchorPages}
-              open={Boolean(anchorPages)}
-              onClose={close(setAnchorPages)}
-            >
-              <NavLinkBtn to="/blogs" closeMenu={close(setAnchorPages)}>
-                Blogs
-              </NavLinkBtn>
-              <NavLinkBtn to="/about" closeMenu={close(setAnchorPages)}>
-                About
-              </NavLinkBtn>
-            </Menu>
+              <Button
+                type="submit"
+                fullWidth
+                size="large"
+                variant="contained"
+                color="secondary"
+                disabled={loading}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 'bold',
+                  borderRadius: 3,
+                }}
+              >
+                {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Log In'}
+              </Button>
+            </form>
 
-            <Button component={Link} to="/contact" sx={linkStyle('/contact')}>
-              Contact
-            </Button>
+            <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>OR</Divider>
 
-            {/* Conditional rendering for Login and SignUp */}
-            {/* These buttons will not show when we are on Profile page */}
-            {!isProfilePage && (
-              <>
-                <Button
-                  component={Link}
-                  to="/login"
-                  variant="outlined"
-                  color="secondary"
-                  sx={{ borderRadius: 2 }}
-                >
-                  Login
-                </Button>
-                <Button
-                  component={Link}
-                  to="/signup"
-                  variant="contained"
-                  color="secondary"
-                  sx={{ borderRadius: 2 }}
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
+            <Stack spacing={2}>
+              <SocialButton provider="Google" onClick={() => handleSocialLogin('Google')} icon={<FaGoogle />} />
+              <SocialButton provider="Microsoft" onClick={() => handleSocialLogin('Microsoft')} icon={<FaMicrosoft />} />
+            </Stack>
 
-            <Button
-              component={Link}
-              to="/profile"
-              variant="contained"
-              sx={{ borderRadius: 25 }}
-            >
-              <CgProfile size={22} />
-            </Button>
-          </Box>
-        )}
+            <Typography mt={4} textAlign="center" fontSize="0.9rem">
+              Don’t have an account?{' '}
+              <Link to="/signup" style={{ color: '#FFA559' }}>
+                Sign up
+              </Link>
+            </Typography>
+          </CardContent>
+        </Card>
+      </motion.div>
 
-        {/* Mobile Menu */}
-        {isMobile && (
-          <>
-            <IconButton color="inherit" onClick={open(setAnchorMobile)}>
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorMobile}
-              open={Boolean(anchorMobile)}
-              onClose={close(setAnchorMobile)}
-            >
-              <NavLinkBtn to="/" closeMenu={close(setAnchorMobile)}>
-                Home
-              </NavLinkBtn>
-              <NavLinkBtn to="/courses" closeMenu={close(setAnchorMobile)}>
-                All Courses
-              </NavLinkBtn>
-              <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorMobile)}>
-                Course Detail
-              </NavLinkBtn>
-              <NavLinkBtn to="/blogs" closeMenu={close(setAnchorMobile)}>
-                Blogs
-              </NavLinkBtn>
-              <NavLinkBtn to="/about" closeMenu={close(setAnchorMobile)}>
-                About
-              </NavLinkBtn>
-              <NavLinkBtn to="/contact" closeMenu={close(setAnchorMobile)}>
-                Contact
-              </NavLinkBtn>
-              <Divider />
-              {/* Conditional rendering for Login and SignUp */}
-              {/* These buttons will not show when we are on Profile page */}
-              {!isProfilePage && (
-                <>
-                  <NavLinkBtn to="/login" closeMenu={close(setAnchorMobile)}>
-                    Login
-                  </NavLinkBtn>
-                  <NavLinkBtn to="/profile" closeMenu={close(setAnchorMobile)}>
-                    Sign Up
-                  </NavLinkBtn>
-                </>
-              )}
-              <NavLinkBtn to="/profile" closeMenu={close(setAnchorMobile)}>
-                Profile
-              </NavLinkBtn>
-            </Menu>
-          </>
-        )}
-      </Toolbar>
-    </AppBar>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={successMessage || error}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      />
+    </Box>
   );
-};
-
-export default Navbar;
-  
+}
