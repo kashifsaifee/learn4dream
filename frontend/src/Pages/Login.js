@@ -235,21 +235,21 @@ import {
   Snackbar,
   CircularProgress,
   Stack,
+  useTheme,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
-
 export default function Login({ setIsLoggedIn }) {
   const [showPwd, setShowPwd] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false)
   const navigate = useNavigate();
-
+  const theme = useTheme()
   const togglePwd = () => setShowPwd(!showPwd);
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -349,22 +349,33 @@ export default function Login({ setIsLoggedIn }) {
           }}
         >
           <CardContent>
-            <Typography variant="h5" fontWeight={600} color="text.secondary"  textAlign="center" gutterBottom>
+            {/* <Typography variant="h5" fontWeight={600} textAlign="center" gutterBottom>
               Welcome Back to Learn4Dream
-            </Typography>
-            <Typography fontSize="0.95rem" color="text.secondary" textAlign="center" mb={3}>
-              Empower your learning journey — log in to continue
-            </Typography>
+            </Typography> */}
+             <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 700,
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                      }}
 
-            <form onSubmit={handleSubmit}>
+                      component={Link}
+                      to="/"
+                    >
+                     Welcome back to Learn<span style={{ color: theme.palette.secondary.main }}>4</span>Dream
+                    </Typography>
+                    <br/>
+            <form onSubmit={handleSubmit}  >
               <TextField
                 label="Email"
                 name="email"
                 fullWidth
                 variant="outlined"
-                value={form.email}
+                value={form.email} 
                 onChange={handleChange}
                 sx={{
+                  mt :2,
                   mb: 2,
                   '& .MuiOutlinedInput-root.Mui-focused': {
                     boxShadow: '0 0 0 2px #1976d230',

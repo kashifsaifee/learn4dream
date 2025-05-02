@@ -6,7 +6,16 @@ import About from './Pages/About';
 import Courses from './Pages/Courses';
 import Contact from './Pages/Contact';
 import Login from './Pages/Login';
-import Blogs from './Pages/Blogs';
+
+
+import './App.css'; 
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+import Blogs from './Pages/Blogs'
+
+
 import Signup from './Pages/Signup';
 import Profile from './Pages/Profile';
 import './App.css';
