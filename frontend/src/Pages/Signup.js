@@ -20,6 +20,7 @@ import axios from 'axios';
 export default function Signup() {
   const navigate = useNavigate(); 
 
+  // === State Management ===
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [form, setForm] = useState({
@@ -31,6 +32,7 @@ export default function Signup() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // === Handlers ===
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setError('');
@@ -59,7 +61,7 @@ export default function Signup() {
       setSuccess('Account created successfully!');
       setForm({ name: '', email: '', password: '', confirm: '' });
 
-      setTimeout(() => navigate('./home'), 1000);
+      setTimeout(() => navigate('/profile'), 1000);
 
     } catch (err) {
       console.error('Signup error:', err.response?.data || err.message);
@@ -69,11 +71,13 @@ export default function Signup() {
 
   const handleSocialSignup = (provider) => {
     console.log(`Signing up with ${provider}`);
-    // Implement your OAuth flow here
+    // Here, integrate your OAuth logic (Google/Microsoft)
   };
 
+  // === Validation ===
   const isFormInvalid = !form.name || !form.email || !form.password || !form.confirm;
 
+  // === Styling Constants ===
   const inputStyles = {
     mb: 3,
     input: { color: 'white' },
@@ -103,11 +107,15 @@ export default function Signup() {
       >
         <Card elevation={6} sx={{ borderRadius: 4, bgcolor: '#0f274a', color: 'white' }}>
           <CardContent sx={{ p: { xs: 4, md: 6 } }}>
+            
+            {/* === Title === */}
             <Typography variant="h4" fontWeight="bold" mb={3} color="#FFA559">
               Create Account
             </Typography>
 
+            {/* === Signup Form === */}
             <form onSubmit={handleSubmit}>
+              {/* Full Name */}
               <TextField
                 fullWidth
                 label="Full Name"
@@ -120,6 +128,7 @@ export default function Signup() {
                 InputLabelProps={inputLabelProps}
               />
 
+              {/* Email */}
               <TextField
                 fullWidth
                 label="Email"
@@ -133,6 +142,7 @@ export default function Signup() {
                 InputLabelProps={inputLabelProps}
               />
 
+              {/* Password */}
               <TextField
                 fullWidth
                 label="Password"
@@ -159,6 +169,7 @@ export default function Signup() {
                 }}
               />
 
+              {/* Confirm Password */}
               <TextField
                 fullWidth
                 label="Confirm Password"
@@ -185,6 +196,7 @@ export default function Signup() {
                 }}
               />
 
+              {/* Error / Success Messages */}
               {error && (
                 <Typography color="error" variant="body2" mb={2}>
                   {error}
@@ -196,6 +208,7 @@ export default function Signup() {
                 </Typography>
               )}
 
+              {/* Submit Button */}
               <Button
                 type="submit"
                 fullWidth
@@ -214,8 +227,10 @@ export default function Signup() {
               </Button>
             </form>
 
+            {/* OR Divider */}
             <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>OR</Divider>
 
+            {/* Social Signups */}
             <Stack spacing={2}>
               <Button
                 fullWidth
@@ -254,12 +269,14 @@ export default function Signup() {
               </Button>
             </Stack>
 
+            {/* Login Redirect */}
             <Typography mt={4} textAlign="center" fontSize="0.9rem">
               Already have an account?{' '}
               <Link to="/login" style={{ color: '#FFA559', textDecoration: 'none' }}>
                 Log in
               </Link>
             </Typography>
+
           </CardContent>
         </Card>
       </motion.div>

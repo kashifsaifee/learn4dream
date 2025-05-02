@@ -9,7 +9,6 @@ import About from './Pages/About';
 import Courses from './Pages/Courses';
 import Contact from './Pages/Contact';
 import Login from './Pages/Login';
-<<<<<<< HEAD
 
 import './App.css'; // Ensure you have global styles
 
@@ -19,9 +18,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Blogs from './Pages/Blogs'
 
 // import Blogs from './Pages/Blogs';
-=======
-import Blogs from './Pages/Blogs';
->>>>>>> c7073628714e4fcd0b3393ac8bead425296a2a6a
+
+// import Blogs from './Pages/Blogs';
+
 import Signup from './Pages/Signup';
 import Profile from './Pages/Profile';
 import './App.css';
