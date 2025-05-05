@@ -1,39 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
 import { TextField, Button } from '@mui/material';
 import '../Styles/Profile.css';
 
 const Profile = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [user, setUser] = useState(null);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Get the JWT token from localStorage (or wherever you're storing it)
-    const token = localStorage.getItem('access_token'); 
+    const token = localStorage.getItem("access_token");
 
     if (!token) {
       setError('You must be logged in to view your profile');
       setLoading(false);
+      navigate("/login");
       return;
     }
 
-    // Fetch profile data from the backend
-    const fetchProfileData = async () => {
+    const fetchProfile = async () => {
       try {
         const response = await fetch('/profile', {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`, // Send the token with the request
+            Authorization: `Bearer ${token}`,
           },
         });
 
         const data = await response.json();
 
         if (response.ok) {
-          setName(data.name);
-          setEmail(data.email);
+          setUser({ name: data.name, email: data.email });
+          // Optionally fetch courses or set dummy data
+          setCourses([
+            { id: 1, title: "React for Beginners" },
+            { id: 2, title: "Full Stack Web Dev" },
+            { id: 3, title: "Node.js & Express" },
+          ]);
         } else {
           setError(data.message || 'Failed to fetch profile data');
         }
@@ -44,65 +50,111 @@ const Profile = () => {
       }
     };
 
-    fetchProfileData();
-  }, []);
+    fetchProfile();
+  }, [navigate]);
 
   const handleSave = () => {
-    // Handle saving user profile (could be an API call to update the user info)
     alert('Profile Saved!');
+    // Optionally call update API here
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <h4>Welcome, User</h4>
-        <h3>
-          <CgProfile size={30} /> Profile
-        </h3>
-      </div>
-
-      <div className="profile-form">
-        {error && <div className="error">{error}</div>}
-        
-        <div className="profile-input">
-          <label htmlFor="name">Name:</label>
-          <TextField
-            id="name"
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ width: '250px' }}
-            size="small"
-          />
+    <section style={styles.container}>
+      <div style={styles.card}>
+        <div style={styles.header}>
+          <CgProfile size={40} />
+          <h2>Profile</h2>
         </div>
 
-        <div className="profile-input">
-          <label htmlFor="email">Email:</label>
-          <TextField
-            id="email"
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: '250px' }}
-            size="small"
-          />
-        </div>
+        {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
 
-        <Button
-          variant="contained"
-          color="primary"
-          className="save-button"
-          onClick={handleSave}
-        >
-          Save Profile
-        </Button>
+        {user && (
+          <>
+            <div style={styles.form}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                value={user.name}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
+                fullWidth
+                margin="normal"
+                size="small"
+              />
+              <TextField
+                label="Email"
+                variant="outlined"
+                value={user.email}
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                fullWidth
+                margin="normal"
+                size="small"
+              />
+              <Button variant="contained" color="primary" onClick={handleSave}>
+                Save Profile
+              </Button>
+            </div>
+
+            <div style={styles.courseSection}>
+              <h3>Enrolled Courses</h3>
+              {courses.length > 0 ? (
+                <ul style={styles.courseList}>
+                  {courses.map((course) => (
+                    <li key={course.id} style={styles.courseItem}>
+                      {course.title}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No enrolled courses.</p>
+              )}
+            </div>
+          </>
+        )}
       </div>
-    </div>
+    </section>
   );
+};
+
+const styles = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "2rem",
+    backgroundColor: "#f5f5f5",
+    minHeight: "100vh",
+  },
+  card: {
+    backgroundColor: "#fff",
+    padding: "2rem",
+    borderRadius: "10px",
+    maxWidth: "600px",
+    width: "100%",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+  },
+  header: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    marginBottom: "1rem",
+  },
+  form: {
+    marginBottom: "2rem",
+  },
+  courseSection: {
+    borderTop: "1px solid #ccc",
+    paddingTop: "1rem",
+  },
+  courseList: {
+    listStyleType: "none",
+    padding: 0,
+    marginTop: "0.5rem",
+  },
+  courseItem: {
+    padding: "0.5rem",
+    borderBottom: "1px solid #eee",
+  },
 };
 
 export default Profile;

@@ -10,8 +10,7 @@ import {
   CardMedia,
   useTheme,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import { motion, useAnimation, AnimatePresence } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs";
@@ -23,7 +22,7 @@ gsap.registerPlugin(ScrollTrigger);
 const HomePage = () => {
   const theme = useTheme();
   const controls = useAnimation();
-  const [ref, inView] = useInView({ threshold: 0.1 });
+  const [ref] = useInView({ threshold: 0.1 });
   const heroRef = useRef(null);
   const marqueeRef = useRef(null);
   const cardsRef = useRef([]);

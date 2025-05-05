@@ -16,7 +16,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google'; // Import GoogleLogin
+import { GoogleLogin } from '@react-oauth/google'; 
 
 export default function Signup() {
   const navigate = useNavigate();

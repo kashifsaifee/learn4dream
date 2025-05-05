@@ -8,10 +8,9 @@ import {
   InputAdornment,
   TextField,
   Typography,
-  Divider,
-  Stack,
   Snackbar,
   CircularProgress,
+  Stack
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -29,7 +28,9 @@ export default function Login({ setIsLoggedIn }) {
 
   const togglePwd = () => setShowPwd(!showPwd);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
   const isValidPassword = (password) => password.length >= 6;
@@ -44,7 +45,7 @@ export default function Login({ setIsLoggedIn }) {
     }
 
     if (!isValidPassword(form.password)) {
-      setError('Password must be at least 6 characters long.');
+      setError('Password must be at least 6 characters.');
       setOpenSnackbar(true);
       return;
     }
@@ -52,35 +53,34 @@ export default function Login({ setIsLoggedIn }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
+      const res = await fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok) {
+      if (res.ok) {
+        localStorage.setItem('token', data.access_token);
         setSuccessMessage(data.message);
-        setOpenSnackbar(true);
-        setIsLoggedIn(true); // Mark the user as logged in
-        navigate('/Home'); // Redirect to homepage after successful login
+        setIsLoggedIn(true);
+        navigate('/');
       } else {
-        setError(data.message || 'Something went wrong. Try again later.');
-        setOpenSnackbar(true);
+        setError(data.message || 'Login failed.');
       }
     } catch (error) {
       console.error('Login error:', error);
       setError('Something went wrong. Try again later.');
-      setOpenSnackbar(true);
     } finally {
+      setOpenSnackbar(true);
       setLoading(false);
     }
   };
 
   const handleSocialLogin = (provider) => {
     console.log(`Logging in with ${provider}`);
-    // Implement social login here
+    // Implement actual social login logic here
   };
 
   const handleCloseSnackbar = () => setOpenSnackbar(false);
@@ -143,7 +143,7 @@ export default function Login({ setIsLoggedIn }) {
                   input: { color: 'white' },
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
-                slotProps={{ inputLabel: { style: { color: '#ccc' } } }}
+                InputLabelProps={{ style: { color: '#ccc' } }}
               />
 
               <TextField
@@ -161,16 +161,14 @@ export default function Login({ setIsLoggedIn }) {
                   '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
                 }}
                 InputLabelProps={{ style: { color: '#ccc' } }}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
-                          {showPwd ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  },
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
+                        {showPwd ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
               />
 
@@ -180,19 +178,16 @@ export default function Login({ setIsLoggedIn }) {
                 size="large"
                 variant="contained"
                 color="secondary"
-                sx={{ textTransform: 'none', fontWeight: 'bold', borderRadius: 3 }}
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 'bold',
+                  borderRadius: 3,
+                }}
                 disabled={loading}
               >
                 {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Log In'}
               </Button>
             </form>
-
-            <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }}>OR</Divider>
-
-            <Stack spacing={2}>
-              <SocialButton provider="Google" onClick={() => handleSocialLogin('Google')} icon={<FaGoogle />} />
-              <SocialButton provider="Microsoft" onClick={() => handleSocialLogin('Microsoft')} icon={<FaMicrosoft />} />
-            </Stack>
 
             <Typography mt={4} textAlign="center" fontSize="0.9rem">
               Don&rsquo;t have an account?{' '}
@@ -200,6 +195,11 @@ export default function Login({ setIsLoggedIn }) {
                 Sign up
               </Link>
             </Typography>
+
+            <Stack spacing={2} mt={4}>
+              <SocialButton provider="Google" icon={<FaGoogle />} onClick={() => handleSocialLogin('Google')} />
+              <SocialButton provider="Microsoft" icon={<FaMicrosoft />} onClick={() => handleSocialLogin('Microsoft')} />
+            </Stack>
           </CardContent>
         </Card>
       </motion.div>

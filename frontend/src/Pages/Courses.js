@@ -1,5 +1,7 @@
 // src/Pages/Courses.js
+
 import React, { useState } from "react";
+// import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
@@ -8,6 +10,7 @@ import { TypeAnimation } from "react-type-animation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Styles/Courses.css";
 import Footer from "../Components/Footer";
+
 
 
 const courses = [
@@ -43,7 +46,7 @@ export default function Courses() {
   const enrollCourse = async (courseId) => {
     setLoading(courseId);
     try {
-      await new Promise((r) => setTimeout(r, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       alert("Successfully enrolled!");
     } catch {
       alert("Error enrolling in course");
@@ -109,13 +112,13 @@ export default function Courses() {
               <div className="card h-100 shadow-lg border-0">
                 <img
                   src={course.image}
-                  className="card-img-top rounded-top"
                   alt={course.title}
-                  style={{ height: "200px", objectFit: "cover" }}
+                  className="card-img-top"
+                  style={{ height: 200, objectFit: "cover" }}
                 />
                 <div className="card-body d-flex flex-column">
-                  <h5 className="card-title text-dark fw-bold">{course.title}</h5>
-                  <p className="card-text text-muted flex-grow-1">{course.description}</p>
+                  <h5 className="fw-bold">{course.title}</h5>
+                  <p className="text-muted flex-grow-1">{course.description}</p>
                   <div className="d-flex justify-content-between align-items-center mt-3">
                     <span className="h5 text-success mb-0">{course.price}</span>
                     <button
@@ -135,6 +138,11 @@ export default function Courses() {
           ))}
         </div>
       </motion.div>
+
+
+      {/* Footer Section */}
+
+
       <Footer />
     </>
   );
