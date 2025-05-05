@@ -1,114 +1,64 @@
-// import React from "react";
-// import { CgProfile } from "react-icons/cg";
-// import "../Styles/Profile.css";
-// const Profile = () => {
-//   return (
-//     <>
-//       <section>
-//         <div className=" text-bg-light p-3 my-4 mx-5 px-4 text-center rounded border border-5  ">
-//           <CgProfile size={28} /> Profile
-//           <hr />
-
-//           <div className="p-2 rounded-circle  " >
-//               <div className="u-p  bg-secondary-subtle" >
-//                 image
-//               </div>  
-//               <label> upload image</label>
-//           </div>
-
-//           <div
-//             style={{ "grid-template-columns": "1fr 1fr" }} class="d-grid gap-0 column-gap-3" >
-
-            
-//             <div class="p-2">
-//               <label> Name : </label>
-//               <input
-//                 type="text"
-//                 name="name"
-//                 placeholder="First Name"
-//                 className="form-control"
-//               />
-//             </div>
-//             <div class="p-2">
-//               <input
-//                 type="text"
-//                 name="name"
-//                 placeholder="Last Name"
-//                 className="form-control mt-4"
-//                 required
-//               />
-//             </div>
-//             <div class="p-2">
-//               <label>Email : </label>
-//               <input
-//                 type="text"
-//                 name="email"
-//                 placeholder="xyz@gmail.com"
-//                 className="form-control  "
-//               />
-//             </div>
-//             <div class="p-2">
-//               Contact :
-//               <input
-//                 type="number"
-//                 name="number"
-//                 placeholder="XXXXX-XXXXX"
-//                 className="form-control "
-//               />
-//             </div>
-//             <div class="p-2">
-//               <label>Address : </label>
-//               <input
-//                 type="text"
-//                 name="address"
-//                 placeholder="street name, landmark, locality"
-//                 className="form-control "
-//               />
-//             </div>
-//             <div class="p-2">
-//               <input
-//                 type="text"
-//                 name="name"
-//                 placeholder="Last Name"
-//                 className="form-control mt-4"
-//               />
-//             </div>
-//             <button className="mt-5 mx-auto flex justify-center ">
-//               Update Profile
-//             </button>
-//           </div>
-//         </div>
-//       </section>
-//     </>
-//   );
-// };
-
-// export default Profile;
-//======================================================================================================
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
+import { TextField, Button } from '@mui/material';
+import '../Styles/Profile.css';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
 
     if (!token) {
+      setError('You must be logged in to view your profile');
+      setLoading(false);
       navigate("/login");
-    } else {
-      // Simulated fetch for user and courses
-      setUser({ name: "John Doe", email: "john@example.com" });
-      setCourses([
-        { id: 1, title: "React for Beginners" },
-        { id: 2, title: "Full Stack Web Dev" },
-        { id: 3, title: "Node.js & Express" },
-      ]);
+      return;
     }
+
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch('/profile', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setUser({ name: data.name, email: data.email });
+          // Optionally fetch courses or set dummy data
+          setCourses([
+            { id: 1, title: "React for Beginners" },
+            { id: 2, title: "Full Stack Web Dev" },
+            { id: 3, title: "Node.js & Express" },
+          ]);
+        } else {
+          setError(data.message || 'Failed to fetch profile data');
+        }
+      } catch (err) {
+        setError('An error occurred while fetching profile data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
   }, [navigate]);
+
+  const handleSave = () => {
+    alert('Profile Saved!');
+    // Optionally call update API here
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <section style={styles.container}>
@@ -117,11 +67,33 @@ const Profile = () => {
           <CgProfile size={40} />
           <h2>Profile</h2>
         </div>
+
+        {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
+
         {user && (
           <>
-            <div style={styles.userInfo}>
-              <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
+            <div style={styles.form}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                value={user.name}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
+                fullWidth
+                margin="normal"
+                size="small"
+              />
+              <TextField
+                label="Email"
+                variant="outlined"
+                value={user.email}
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                fullWidth
+                margin="normal"
+                size="small"
+              />
+              <Button variant="contained" color="primary" onClick={handleSave}>
+                Save Profile
+              </Button>
             </div>
 
             <div style={styles.courseSection}>
@@ -167,8 +139,8 @@ const styles = {
     gap: "10px",
     marginBottom: "1rem",
   },
-  userInfo: {
-    marginBottom: "1.5rem",
+  form: {
+    marginBottom: "2rem",
   },
   courseSection: {
     borderTop: "1px solid #ccc",

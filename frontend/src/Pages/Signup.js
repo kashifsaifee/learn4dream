@@ -308,7 +308,7 @@
 // }
 //==================================================================================================
 // //========================================================
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -320,27 +320,25 @@ import {
   Typography,
   Divider,
   Stack,
+  CircularProgress,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
-import { FaGoogle, FaMicrosoft } from "react-icons/fa";
-import axios from "axios";
-
+import {FaMicrosoft } from "react-icons/fa";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';
+import { useState } from "react";
 export default function Signup() {
   const navigate = useNavigate();
 
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirm: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -351,98 +349,104 @@ export default function Signup() {
   const togglePwd = () => setShowPwd((prev) => !prev);
   const toggleConfirm = () => setShowConfirm((prev) => !prev);
 
-  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
-  const isFormInvalid =
-    !form.name || !form.email || !form.password || !form.confirm;
+  const isValidEmail = /\S+@\S+\.\S+/.test(form.email);
+  const isValidPassword = form.password.length >= 6;
+  const isFormInvalid = !form.name || !form.email || !form.password || !form.confirm || !isValidEmail || !isValidPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     setLoading(true);
 
-    if (form.password !== form.confirm) {
-      setError("Passwords do not match.");
-      setLoading(false);
-      return;
-    }
-
-    if (!isValidEmail(form.email)) {
-      setError("Please enter a valid email address.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/signup`,
-        {
+    if (!form.name.trim() || !form.email.trim() || !form.password || !form.confirm) {
+      setError('Please fill in all fields.');
+    } else if (!isValidEmail) {
+      setError('Invalid email format.');
+    } else if (!isValidPassword) {
+      setError('Password must be at least 6 characters.');
+    } else if (form.password !== form.confirm) {
+      setError('Passwords do not match.');
+    } else {
+      try {
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
           name: form.name,
           email: form.email,
           password: form.password,
+        });
+
+        if (res.data.token) {
+          localStorage.setItem("token", res.data.token);
         }
-      );
+
+        setSuccess("Account created successfully!");
+        setForm({ name: "", email: "", password: "", confirm: "" });
+        setTimeout(() => navigate("/profile"), 1000);
+        return;
+      } catch (err) {
+        setError(err.response?.data?.message || "Something went wrong.");
+      }
+    }
+
+    setIsSubmitting(false);
+    setLoading(false);
+  };
+
+  const handleGoogleSignup = async (response) => {
+    setLoading(true);
+    try {
+      const { credential } = response;
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/google-signup`, { token: credential });
 
       if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem('token', res.data.token);
       }
 
-      setSuccess("Account created successfully!");
-      setForm({ name: "", email: "", password: "", confirm: "" });
-
-      setTimeout(() => navigate("/profile"), 1000);
+      setSuccess('Account created successfully!');
+      setTimeout(() => navigate('/profile'), 1000);
     } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong.");
+      setError(err.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialSignup = (provider) => {
-    console.log(`Signing up with ${provider}`);
+  const inputStyles = {
+    mb: 3,
+    input: { color: 'white' },
+    '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
+  };
+
+  const inputLabelProps = {
+    style: { color: '#ccc' },
   };
 
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: '100vh',
         background: 'linear-gradient(to right, #f2f6fa, #e0ecf3)',
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         px: 3,
+        bgcolor: '#FFB6C1',
+        p: 2,
       }}
     >
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        style={{ width: "100%", maxWidth: 460 }}
+        style={{ width: '100%', maxWidth: 460 }}
       >
-        <Card
-          elevation={10}
-          sx={{
-            borderRadius: 4,
-            p: { xs: 3, sm: 4 },
-            m : 5,
-            bgcolor: "white",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-          }}
-        >
+        <Card elevation={10} sx={{ borderRadius: 4, p: { xs: 3, sm: 4 }, m: 5, bgcolor: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
           <CardContent>
-            <Typography
-              variant="h4"
-              fontWeight="bold"
-              mb={2}
-              textAlign="center"
-              color="primary"
-            >
+            <Typography variant="h4" fontWeight="bold" mb={2} textAlign="center" color="primary">
               Create Your Account
             </Typography>
-            <Typography
-              variant="body2"
-              mb={3}
-              textAlign="center"
-              color="text.secondary"
-            >
+            <Typography variant="body2" mb={3} textAlign="center" color="text.secondary">
               Start using our services by creating your account below.
             </Typography>
 
@@ -454,7 +458,8 @@ export default function Signup() {
                 variant="outlined"
                 value={form.name}
                 onChange={handleChange}
-                sx={{ mb: 3 }}
+                sx={inputStyles}
+                InputLabelProps={inputLabelProps}
               />
 
               <TextField
@@ -465,7 +470,8 @@ export default function Signup() {
                 variant="outlined"
                 value={form.email}
                 onChange={handleChange}
-                sx={{ mb: 3 }}
+                sx={inputStyles}
+                InputLabelProps={inputLabelProps}
               />
 
               <TextField
@@ -476,7 +482,8 @@ export default function Signup() {
                 variant="outlined"
                 value={form.password}
                 onChange={handleChange}
-                sx={{ mb: 3 }}
+                sx={inputStyles}
+                InputLabelProps={inputLabelProps}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -496,7 +503,8 @@ export default function Signup() {
                 variant="outlined"
                 value={form.confirm}
                 onChange={handleChange}
-                sx={{ mb: 3 }}
+                sx={inputStyles}
+                InputLabelProps={inputLabelProps}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -508,25 +516,16 @@ export default function Signup() {
                 }}
               />
 
-              {/* Error/Success Message */}
-              {error && (
-                <Typography color="error" variant="body2" sx={{ mb: 2, textAlign: "center" }}>
-                  {error}
-                </Typography>
-              )}
-              {success && (
-                <Typography color="success.main" variant="body2" sx={{ mb: 2, textAlign: "center" }}>
-                  {success}
-                </Typography>
-              )}
+              {error && <Typography color="error" variant="body2" sx={{ mb: 2, textAlign: "center" }}>{error}</Typography>}
+              {success && <Typography color="success.main" variant="body2" sx={{ mb: 2, textAlign: "center" }}>{success}</Typography>}
 
               <Button
                 type="submit"
                 fullWidth
                 size="large"
                 variant="contained"
-                color="primary"
-                disabled={isFormInvalid || loading}
+                color="secondary"
+                disabled={isFormInvalid || isSubmitting || loading}
                 sx={{
                   mb: 3,
                   textTransform: "none",
@@ -534,49 +533,30 @@ export default function Signup() {
                   borderRadius: 30,
                 }}
               >
-                {loading ? "Signing Up..." : "Create Account"}
+                {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Create Account'}
               </Button>
             </form>
 
-            <Divider
-              sx={{
-                my: 3,
-                color: "gray",
-                "&::before, &::after": {
-                  borderColor: "gray",
-                },
-              }}
-            >
-              OR
-            </Divider>
+            <Divider sx={{ my: 3, borderColor: 'rgba(0,0,0,0.1)' }}>OR</Divider>
 
             <Stack spacing={2}>
-              <Button
-                variant="outlined"
-                fullWidth
-                startIcon={<FaGoogle />}
-                onClick={() => handleSocialSignup("Google")}
-                sx={{
-                  textTransform: "none",
-                  borderColor: "#ccc",
-                  "&:hover": {
-                    borderColor: "#1976d2",
-                    backgroundColor: "rgba(25, 118, 210, 0.05)",
-                  },
-                }}
-              >
-                Sign Up with Google
-              </Button>
+              <GoogleLogin
+                onSuccess={handleGoogleSignup}
+                onError={() => setError('Google login failed.')}
+                useOneTap
+                theme="filled_blue"
+                size="large"
+              />
 
               <Button
                 variant="outlined"
                 fullWidth
                 startIcon={<FaMicrosoft />}
-                onClick={() => handleSocialSignup("Microsoft")}
+                onClick={() => alert('Microsoft signup not implemented')}
                 sx={{
                   textTransform: "none",
                   borderColor: "#ccc",
-                  "&:hover": {
+                  '&:hover': {
                     borderColor: "#1976d2",
                     backgroundColor: "rgba(25, 118, 210, 0.05)",
                   },
@@ -587,17 +567,8 @@ export default function Signup() {
             </Stack>
 
             <Typography mt={4} textAlign="center" fontSize="0.9rem">
-              <Box component="span" sx={{ color: "text.secondary" }}>
-                Already have an account?{" "}
-              </Box>
-              <Link
-                to="/login"
-                style={{
-                  color: "#1976d2",
-                  textDecoration: "none",
-                  fontWeight: 500,
-                }}
-              >
+              <Box component="span" sx={{ color: "text.secondary" }}>Already have an account? </Box>
+              <Link to="/login" style={{ color: "#1976d2", textDecoration: "none", fontWeight: 500 }}>
                 Log in
               </Link>
             </Typography>

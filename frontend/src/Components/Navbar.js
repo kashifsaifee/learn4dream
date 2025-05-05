@@ -413,7 +413,6 @@ import {
   MenuItem,
   Divider,
   useMediaQuery,
-  Paper,
   Grow,
 } from '@mui/material';
 import { Menu as MenuIcon, ExpandMore } from '@mui/icons-material';
