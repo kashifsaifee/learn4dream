@@ -251,11 +251,11 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
       to={to}
       onClick={closeMenu}
       sx={{
-        color: active ? theme.palette.secondary.main : 'text.primary',
+        color: active ? theme.palette.secondary.main : theme.palette.text.primary,
         fontWeight: active ? 'bold' : 'normal',
         '&:hover': {
           backgroundColor: theme.palette.action.hover,
-        }
+        },
       }}
     >
       {children}
@@ -272,7 +272,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const [anchorCourses, setAnchorCourses] = useState(null);
   const [anchorPages, setAnchorPages] = useState(null);
   const [anchorMobile, setAnchorMobile] = useState(null);
-  const [anchorProfile, setAnchorProfile] = useState(null); // Profile dropdown
+  const [anchorProfile, setAnchorProfile] = useState(null);
 
   const open = (set) => (e) => set(e.currentTarget);
   const close = (set) => () => set(null);
@@ -285,7 +285,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     fontWeight: location.pathname === path ? 'bold' : 'normal',
     textTransform: 'none',
     '&:hover': {
-      bgcolor: theme.palette.primary.dark,
+      backgroundColor: theme.palette.primary.dark,
       color: theme.palette.secondary.main,
     },
   });
@@ -296,23 +296,28 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   };
 
   return (
-    <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main, boxShadow: 3 }}>
+    <AppBar
+      position="sticky"
+      sx={{
+        bgcolor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+        boxShadow: 3,
+      }}
+    >
       <Toolbar sx={{ gap: 2, justifyContent: 'space-between' }}>
-        {/* Logo */}
         <Typography
           variant="h5"
-          sx={{
-            fontWeight: 700,
-            color: 'white',
-            textDecoration: 'none',
-          }}
           component={Link}
           to="/"
+          sx={{
+            fontWeight: 700,
+            color: theme.palette.primary.contrastText,
+            textDecoration: 'none',
+          }}
         >
-          Learn<span style={{ color: theme.palette.secondary.main }}>4</span>Dream
+          Learn<span style={{ color: theme.palette.warning.main }}>4</span>Dream
         </Typography>
 
-        {/* Desktop Menu */}
         {!isMobile && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button component={Link} to="/" sx={linkStyle('/')}>Home</Button>
@@ -333,23 +338,32 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               <NavLinkBtn to="/about" closeMenu={close(setAnchorPages)}>About</NavLinkBtn>
             </Menu>
 
-            <Button component={Link} to="/contact" sx={linkStyle('/contact')}>
-              Contact
-            </Button>
+            <Button component={Link} to="/contact" sx={linkStyle('/contact')}>Contact</Button>
 
-            {/* Auth */}
             {!isLoggedIn ? (
               <>
-                <Button component={Link} to="/login" variant="outlined" color="secondary" sx={{ borderRadius: 3 }}>
+                <Button
+                  component={Link}
+                  to="/login"
+                  variant="outlined"
+                  color="secondary"
+                  sx={{ borderRadius: 3, fontWeight: 'bold' }}
+                >
                   Login
                 </Button>
-                <Button component={Link} to="/signup" variant="contained" color="secondary" sx={{ borderRadius: 3 }}>
+                <Button
+                  component={Link}
+                  to="/signup"
+                  variant="contained"
+                  color="secondary"
+                  sx={{ borderRadius: 3, fontWeight: 'bold' }}
+                >
                   Sign Up
                 </Button>
               </>
             ) : (
               <>
-                <IconButton onClick={open(setAnchorProfile)} sx={{ color: 'white' }}>
+                <IconButton onClick={open(setAnchorProfile)} sx={{ color: theme.palette.primary.contrastText }}>
                   <CgProfile size={24} />
                 </IconButton>
                 <Menu anchorEl={anchorProfile} open={Boolean(anchorProfile)} onClose={close(setAnchorProfile)}>
@@ -364,7 +378,6 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
           </Box>
         )}
 
-        {/* Mobile Menu */}
         {isMobile && (
           <>
             <IconButton color="inherit" onClick={open(setAnchorMobile)}>

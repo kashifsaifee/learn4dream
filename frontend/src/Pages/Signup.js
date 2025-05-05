@@ -16,7 +16,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google'; 
+import { GoogleLogin } from '@react-oauth/google'; // For Google OAuth
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -127,13 +127,6 @@ export default function Signup() {
     }
   };
 
-  const handleSocialSignup = (provider) => {
-    console.log(`Signing up with ${provider}`);
-    if (provider === 'google') {
-      console.log('Initiating Google OAuth');
-    }
-  };
-
   const isFormInvalid = !form.name || !form.email || !form.password || !form.confirm || !isValidEmail || !isValidPassword;
 
   const inputStyles = {
@@ -150,7 +143,7 @@ export default function Signup() {
     <Box
       sx={{
         minHeight: '100vh',
-        bgcolor: 'primary.main',
+        bgcolor: '#FFB6C1', // Baby pink background
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -274,6 +267,7 @@ export default function Signup() {
                   fontWeight: 'bold',
                   textTransform: 'none',
                   mb: 3,
+                  backgroundColor: '#FFB6C1', // Baby pink button color
                 }}
               >
                 {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Sign Up'}
