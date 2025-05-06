@@ -1,5 +1,3 @@
-// src/Pages/Courses.js
-
 import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -147,8 +145,9 @@ export default function Courses() {
     </>
   );
 }
-// ```javascript
-// // src/Pages/Courses.js
+
+
+
 // import React, { useState, useEffect } from "react";
 // import { motion } from "framer-motion";
 // import { Link } from "react-router-dom";
@@ -313,4 +312,3 @@ export default function Courses() {
 //     </>
 //   );
 // }
-// ```

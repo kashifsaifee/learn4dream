@@ -16,7 +16,6 @@
 // // import { useTheme } from '@mui/material/styles';
 // // import { CgProfile } from "react-icons/cg";
 
-// // /* ---------- NavLinkBtn for dropdown items ---------- */
 // // const NavLinkBtn = ({ to, children, closeMenu }) => {
 // //   const theme = useTheme();
 // //   const location = useLocation();
@@ -67,7 +66,6 @@
 // //     navigate('/'); // Redirect to home page (with lowercase "h")
 // //   };
 
-// //   /* ---------- Layout ---------- */
 // //   return (
 // //     <AppBar position="sticky" sx={{ bgcolor: theme.palette.primary.main }}>
 // //       <Toolbar sx={{ gap: 2 }}>
@@ -221,7 +219,9 @@
 // //     </AppBar>
 // //   );
 // // }
-// // ====================================================================================
+
+
+
 // import React, { useState } from 'react';
 // import {
 //   AppBar,
@@ -400,7 +400,9 @@
 //     </AppBar>
 //   );
 // }
-//============================================================================================
+
+
+
 import React, { useState } from 'react';
 import {
   AppBar,

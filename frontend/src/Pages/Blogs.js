@@ -158,16 +158,21 @@ import {
   Typography,
   Grid,
   Button,
-  Card,
   CardContent,
   CardMedia,
-  Divider,
-  useTheme,
+  Paper,
+  Divider
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 // Sample blogs
+// import Footer from '../Components/Footer';
+
+
+const MotionPaper = motion(Paper);
+const MotionBox = motion(Box);
+
 const blogs = [
   {
     id: 1,
@@ -192,13 +197,12 @@ const blogs = [
   },
 ];
 
-const MotionCard = motion(Card);
 
 const Blogs = () => {
   return (
     <Box sx={{ bgcolor: '#0e0e10', minHeight: '100vh', pb: 10 }}>
       {/* Hero Section */}
-      <Box
+      <MotionBox
         sx={{
           background: 'linear-gradient(to right, #1e3c72, #2a5298)',
           py: 12,
@@ -217,14 +221,14 @@ const Blogs = () => {
             Start Learning
           </Button>
         </Container>
-      </Box>
+      </MotionBox>
 
       {/* Blog Grid */}
       <Container sx={{ mt: 4 }}>
         <Grid container spacing={4}>
           {blogs.map((blog, index) => (
             <Grid item xs={12} md={4} key={blog.id}>
-              <MotionCard
+              <MotionPaper
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -275,7 +279,7 @@ const Blogs = () => {
                     Read More
                   </Button>
                 </Box>
-              </MotionCard>
+              </MotionPaper>
             </Grid>
           ))}
         </Grid>
