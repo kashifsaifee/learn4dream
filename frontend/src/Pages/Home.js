@@ -11,12 +11,16 @@ import {
   CardMedia,
   useTheme,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import { motion, useAnimation, AnimatePresence } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs";
 import { useInView } from "react-intersection-observer";
+import DotHoverButton from "../Components/DotHoverButton";
+import { Favorite, BeachAccess, Forest, BeachAccessRounded } from "@mui/icons-material";
+import AnimatedCard from "../Components/AnimatedCard";
+
+
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -70,28 +74,27 @@ const HomePage = () => {
     },
   ];
 
-  // Features data
-  const features = [
+
+  // Animated cards data
+
+  const cardData = [
     {
-      title: "Interactive Learning",
-      description: "Engage with hands-on projects and real-world scenarios.",
-      icon: "📚",
+      id: 1,
+      icon: <Favorite />,
+      title: "Data Science",
+      description: "Data science is the study of data to extract meaningful insights for business",
     },
     {
-      title: "Expert Mentors",
-      description:
-        "Learn from industry professionals with years of experience.",
-      icon: "👨‍🏫",
+      id: 2,
+      icon: <BeachAccessRounded />,
+      title: "Web Development",
+      description: "Build responsive and interactive websites using modern technologies.",
     },
     {
-      title: "Community Support",
-      description: "Join a vibrant community of learners and professionals.",
-      icon: "👥",
-    },
-    {
-      title: "Career Growth",
-      description: "Get the skills you need to advance in your career.",
-      icon: "📈",
+      id: 3,
+      a: <Forest />,
+      title: "AI & Machine Learning",
+      description: "Learn how to build intelligent systems that learn from data and improve over time.",
     },
   ];
 
@@ -282,7 +285,7 @@ const HomePage = () => {
         </Box>
 
         {/* Floating elements */}
-        <Box
+        {/* <Box
           className="floating-element"
           sx={{
             position: "absolute",
@@ -304,14 +307,14 @@ const HomePage = () => {
             width: 150,
             height: 150,
             background:
-              "radial-gradient(circle, rgba(255, 100, 200, 0.6) 0%, rgba(85, 87, 52, 0) 70%)",
+              "radial-gradient(circle,rgb(220, 183, 150), rgba(85, 87, 52, 0) 70%)",
             borderRadius: "50%",
             bottom: "15%",
             right: "10%",
             filter: "blur(25px)",
             zIndex: 0,
           }}
-        />
+        /> */}
 
         {/* Hero content */}
         <Container>
@@ -335,13 +338,14 @@ const HomePage = () => {
                   fontWeight: 800,
                   lineHeight: 1.2,
                   mb: 3,
-                  background: "linear-gradient(90deg,rgb(3, 88, 216), rgb(0, 0, 0))",
+                  background:
+                    "linear-gradient(90deg,rgb(78, 133, 185), rgba(0, 0, 0, 0.65))",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",
                 }}
               >
-                Transform Your Career With Cutting-Edge Skills
+                Learn4Dream
               </Typography>
 
               <Typography
@@ -354,42 +358,13 @@ const HomePage = () => {
                   fontSize: { xs: "1rem", md: "1.25rem" },
                 }}
               >
-                Join thousands of professionals who have accelerated their
-                careers with our industry-leading programs and mentorship.
+                Join a community of learners and professionals who are
+                passionate about advancing their careers.
               </Typography>
 
               <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  sx={{
-                    borderRadius: "50px",
-                    padding: "12px 32px",
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    boxShadow: "0 4px 20px rgba(0, 150, 255, 0.3)",
-                  }}
-                >
-                  Get Started
-                </Button>
-
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  size="large"
-                  sx={{
-                    borderRadius: "50px",
-                    padding: "12px 32px",
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    boxShadow: "0 4px 20px rgba(0, 150, 255, 0.3)",
-                    borderWidth: "2px",
-                    "&:hover": { borderWidth: "2px" },
-                  }}
-                >
-                  Explore Programs
-                </Button>
+                <DotHoverButton text="Get Started" />
+                <DotHoverButton text="Explore Programs" />
               </Box>
             </Box>
           </motion.div>
@@ -399,8 +374,8 @@ const HomePage = () => {
       {/* Features Section */}
       <Box
         sx={{
-          py: 10,
-          backgroundColor: theme.palette.background.paper,
+          py: 8,
+          background: "linear-gradient(to right, #ffffff, #e6f0f6)", // White background with a soft gradient
         }}
       >
         <Container>
@@ -409,82 +384,43 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.25 }}
-            transition={{ dduration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
           >
             <Typography
               variant="h3"
               sx={{
                 textAlign: "center",
                 mb: 8,
-                fontWeight: 700,
+                fontWeight: 800,
+                fontSize: "2.5rem",
+                background: "linear-gradient(90deg, #496580, #8ca7b9)", // Gradient text
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
               Why Choose Us?
             </Typography>
           </motion.div>
 
-          <Grid container spacing={4}>
-            {features.map((feature, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <motion.div
-                  className="scroll-trigger"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Card
-                    sx={{
-                      height: "100%",
-                      borderRadius: "16px",
-                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        transform: "translateY(-8px)",
-                        boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
-                      },
-                    }}
-                  >
-                    <CardContent
-                      sx={{
-                        padding: "2rem",
-                        textAlign: "center",
-                      }}
-                    >
-                      <Typography
-                        variant="h2"
-                        sx={{
-                          mb: 3,
-                          fontSize: "2rem",
-                        }}
-                      >
-                        {feature.icon}
-                      </Typography>
-
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          mb: 2,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {feature.title}
-                      </Typography>
-
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          color: theme.palette.text.secondary,
-                        }}
-                      >
-                        {feature.description}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </Grid>
+          {/* Animated cards */}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: 4,
+            }}
+          >
+            {cardData.map((card, index) => (
+              <AnimatedCard
+                key={index}
+                image={card.image}
+                title={card.title}
+                subheader={card.subheader}
+                description={card.description}
+              />
             ))}
-          </Grid>
+          </Box>
         </Container>
       </Box>
 
@@ -542,7 +478,7 @@ const HomePage = () => {
                       height: "100%",
                       width: "100%",
                       borderRadius: "20px",
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.8)",
                       backdropFilter: "blur(10px)",
                       WebkitBackdropFilter: "blur(10px)",
                       boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
@@ -769,9 +705,9 @@ const HomePage = () => {
 
       <Box
         sx={{
-          pt: 1,
+          pt: 2,
           pb: 2,
-          backgroundColor: "white",
+          backgroundColor: "rgb(223, 223, 223)",
           position: "relative",
           overflow: "hidden",
           display: "flex",
@@ -785,15 +721,6 @@ const HomePage = () => {
             zIndex: 2,
             pointerEvents: "none",
           },
-          "&:before": {
-            left: 0,
-            background: "linear-gradient(to right, white, transparent)",
-          },
-          "&:after": {
-            right: 0,
-            background: "linear-gradient(to left, white, transparent)",
-          },
-          borderBottom: "3px solid #2196F3", // blue line at the bottom
         }}
       >
         <Box
