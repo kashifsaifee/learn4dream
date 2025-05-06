@@ -12,7 +12,7 @@ const DotHoverButton = ({ text = "Hover this link" }) => {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        backgroundColor: hovered ? "#000" : "#e5e5e5", // Button background color changes on hover
+        backgroundColor: hovered ? "#000" : "#000000", // Button baround color changes on hover
         borderRadius: "999px",
         padding: "10px 20px",
         cursor: "pointer",
@@ -29,7 +29,7 @@ const DotHoverButton = ({ text = "Hover this link" }) => {
         }}
         transition={{ duration: 0.3 }}
         style={{
-          backgroundColor: hovered ? "#fff" : "#000", // Dot changes to white on hover
+          backgroundColor: hovered ? "#fff" : "#fff", // Dot changes to white on hover
           borderRadius: "50%",
           display: "flex",
           alignItems: "center",
@@ -47,7 +47,7 @@ const DotHoverButton = ({ text = "Hover this link" }) => {
         sx={{
           fontSize: "1rem",
           fontWeight: 500,
-          color: hovered ? "#fff" : "#000", // Text changes to white on hover
+          color: hovered ? "#fff" : "#fff", // Text changes to white on hover
         }}
       >
         {text}

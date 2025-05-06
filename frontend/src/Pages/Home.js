@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import {
   Box,
   Button,
@@ -8,7 +7,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
   useTheme,
 } from "@mui/material";
 import { motion, useAnimation } from "framer-motion";
@@ -17,11 +15,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs";
 import { useInView } from "react-intersection-observer";
 import DotHoverButton from "../Components/DotHoverButton";
-import { Favorite, BeachAccess, Forest, BeachAccessRounded } from "@mui/icons-material";
+import { Favorite, Forest, BeachAccessRounded } from "@mui/icons-material";
 import AnimatedCard from "../Components/AnimatedCard";
-
-
-
+import Footer from '../Components/Footer'; 
+import {
+  CodeIcon,
+  DesignServicesIcon,
+  LanguageIcon,
+  SchoolIcon,
+} from "../utils/icon";
+import CountUp from "react-countup";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
@@ -74,7 +77,6 @@ const HomePage = () => {
     },
   ];
 
-
   // Animated cards data
 
   const cardData = [
@@ -82,44 +84,59 @@ const HomePage = () => {
       id: 1,
       icon: <Favorite />,
       title: "Data Science",
-      description: "Data science is the study of data to extract meaningful insights for business",
+      description:
+        "Data science is the study of data to extract meaningful insights for business",
     },
     {
       id: 2,
       icon: <BeachAccessRounded />,
       title: "Web Development",
-      description: "Build responsive and interactive websites using modern technologies.",
+      description:
+        "Build responsive and interactive websites using modern technologies.",
     },
     {
       id: 3,
       a: <Forest />,
       title: "AI & Machine Learning",
-      description: "Learn how to build intelligent systems that learn from data and improve over time.",
+      description:
+        "Learn how to build intelligent systems that learn from data and improve over time.",
     },
   ];
 
   // Programs data
   const programs = [
     {
-      title: "Web Development",
-      description: "Master HTML, CSS, JavaScript, and modern frameworks.",
-      image: "https://source.unsplash.com/400x300/?web,development",
-    },
-    {
-      title: "Data Science",
-      description: "Learn data analysis, visualization, and machine learning.",
-      image: "https://source.unsplash.com/400x300/?data,science",
+      title: "Web Dev",
+      description: "Master front-end and back-end development skills.",
+      image: "webdev.jpg",
+      icon: <CodeIcon sx={{ color: "#1976d2", mr: 1 }} />,
     },
     {
       title: "UI/UX Design",
       description: "Craft intuitive and aesthetic digital experiences.",
-      image: "https://source.unsplash.com/400x300/?design,ui",
+      image: "design.jpg",
+      icon: <DesignServicesIcon sx={{ color: "#9c27b0", mr: 1 }} />,
     },
     {
-      title: "Cloud Computing",
-      description: "Explore AWS, Azure, and cloud architecture best practices.",
-      image: "https://source.unsplash.com/400x300/?cloud,computing",
+      title: "AI-ML",
+      description: "Build intelligent systems using AI and machine learning.",
+      image: "languages.jpg",
+      icon: <LanguageIcon sx={{ color: "#ff9800", mr: 1 }} />,
     },
+    {
+      title: "Data Science",
+      description: "Analyze and visualize data to drive business decisions.",
+      image: "support.jpg",
+      icon: <SchoolIcon sx={{ color: "#2e7d32", mr: 1 }} />,
+    },
+  ];
+
+  // Statistics data
+  const stats = [
+    { label: "Happy Clients", value: 10, suffix: "+" },
+    { label: "Projects Completed", value: 35, suffix: "+" },
+    { label: "Team Members", value: 12, suffix: "+" },
+    { label: "Years of Experience", value: 5, suffix: "+" },
   ];
 
   // Initialize animations only after component mounts
@@ -241,7 +258,7 @@ const HomePage = () => {
   }, [isMounted]);
 
   return (
-    <Box sx={{ overflowX: "hidden" }}>
+    <Box sx={{ overflowX: "auto", width: "100%" }}>
       {/* Hero Section */}
       <Box
         ref={heroRef}
@@ -393,7 +410,7 @@ const HomePage = () => {
                 mb: 8,
                 fontWeight: 800,
                 fontSize: "2.5rem",
-                background: "linear-gradient(90deg, #496580, #8ca7b9)", // Gradient text
+                background: "linear-gradient(90deg,rgb(0, 0, 0),rgb(0, 0, 0))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -424,139 +441,197 @@ const HomePage = () => {
         </Container>
       </Box>
 
-      {/* Programs Section */}
 
+      {/* Statistics Section */}
       <Box
+      sx={{
+        minHeight: "70vh",
+        py: 10,
+        background: "linear-gradient(90deg, rgb(255, 255, 255), rgb(255, 255, 255))",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Grid container spacing={4} justifyContent="center">
+        {stats.map((stat, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", stiffness: 60, damping: 15, delay: index * 0.2 }}
+
+            >
+              <Card
+                sx={{
+                  borderRadius: 4,
+                  background: "rgba(255, 255, 255, 0.8)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
+                  p: 4,
+                  textAlign: "center",
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h3" sx={{ fontWeight: "bold", mb: 1 }}>
+                    <CountUp start={0} end={stat.value} duration={4} suffix={stat.suffix} />
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: theme.palette.text.secondary,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {stat.label}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+
+      {/* Programs Section */}
+<Box
+  sx={{
+    minHeight: "60vh",
+    py: 10,
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: theme.palette.background.default,
+    background: "linear-gradient(90deg,rgb(227, 221, 210),rgb(255, 255, 255))",
+  }}
+>
+  <Container>
+    <motion.div
+      className="scroll-trigger"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.25 }}
+      transition={{ duration: 0.8, delay: 0.1 }}
+    >
+      <Typography
+        variant="h3"
         sx={{
-          minHeight: "100vh",
-          py: 10,
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: theme.palette.background.default,
+          textAlign: "center",
+          mb: 8,
+          fontWeight: 800,
+          fontSize: "2.5rem",
+          background: "linear-gradient(90deg,rgb(0, 0, 0),rgb(0, 0, 0))",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
         }}
       >
-        <Container>
+        Our Programs
+      </Typography>
+    </motion.div>
+
+    <Grid container spacing={4} justifyContent="center" alignItems="stretch" wrap="nowrap">
+      {programs.map((program, index) => (
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={3}
+          key={index}
+          sx={{ display: "flex" }}
+        >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            style={{ width: "100%", display: "flex" }}
           >
-            <Typography
-              variant="h3"
+            <Card
               sx={{
-                textAlign: "center",
-                mb: 8,
-                fontWeight: 700,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: "100%",
+                width: "100%",
+                borderRadius: 4,
+                background: "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                overflow: "hidden",
+                padding: 0,
+                "&:hover": {
+                  transform: "translateY(-8px)",
+                  boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+                },
               }}
             >
-              Our Programs
-            </Typography>
-          </motion.div>
-
-          <Grid container spacing={4} justifyContent="center">
-            {programs.map((program, index) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={3}
-                key={index}
-                sx={{ display: "flex" }}
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexGrow: 1,
+                  p: 3,
+                  textAlign: "center",
+                }}
               >
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  style={{ width: "100%" }}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 1.5,
+                    flexGrow: 1,
+                    justifyContent: "center",
+                  }}
                 >
-                  <Card
+                  <Box sx={{ fontSize: "2rem" }}>{program.icon}</Box>
+
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    {program.title}
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      height: "100%",
-                      width: "100%",
-                      borderRadius: "20px",
-                      background: "rgba(255, 255, 255, 0.8)",
-                      backdropFilter: "blur(10px)",
-                      WebkitBackdropFilter: "blur(10px)",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                      overflow: "hidden",
+                      color: theme.palette.text.secondary,
+                      px: 1,
+                    }}
+                  >
+                    {program.description}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ mt: 3 }}>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      borderRadius: "30px",
+                      fontWeight: 600,
+                      textTransform: "none",
+                      transition: "all 0.3s ease",
                       "&:hover": {
-                        transform: "translateY(-8px)",
-                        boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+                        backgroundColor: theme.palette.primary.main,
+                        color: "#fff",
                       },
                     }}
                   >
-                    <CardMedia
-                      component="img"
-                      image={program.image}
-                      alt={program.title}
-                      sx={{
-                        height: 0,
-                        paddingTop: "56.25%", // 16:9
-                        transition: "transform 0.4s ease",
-                        "&:hover": {
-                          transform: "scale(1.05)",
-                        },
-                      }}
-                    />
+                    Learn More
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </Grid>
+      ))}
+    </Grid>
+  </Container>
+</Box>
 
-                    <CardContent
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        flexGrow: 1,
-                        p: 3,
-                      }}
-                    >
-                      <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                        {program.title}
-                      </Typography>
-
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: theme.palette.text.secondary,
-                          mb: 2,
-                          display: "-webkit-box",
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {program.description}
-                      </Typography>
-
-                      <Box sx={{ mt: "auto" }}>
-                        <Button
-                          variant="outlined"
-                          fullWidth
-                          sx={{
-                            borderRadius: "30px",
-                            fontWeight: 600,
-                            textTransform: "none",
-                            transition: "all 0.3s ease",
-                            "&:hover": {
-                              backgroundColor: theme.palette.primary.main,
-                              color: "#fff",
-                            },
-                          }}
-                        >
-                          Learn More
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
 
       {/* Testimonials Section */}
       <Box
@@ -773,8 +848,8 @@ const HomePage = () => {
                   sx={{
                     fontWeight: 800,
                     color: "black",
-                    fontSize: { xs: "1rem", md: "1rem" }, // smaller font size
-                    transition: "all 0.3s ease",
+                    fontSize: { xs: "1rem", md: "1rem" },
+                    transition: "all 0.2s ease",
                     lineHeight: 1,
                     "&:hover": {
                       color: "primary.main",
@@ -794,8 +869,8 @@ const HomePage = () => {
       <Box
         sx={{
           py: 15,
-          background: "linear-gradient(135deg, #0066ff 0%, #00ccff 100%)",
-          color: "white",
+          background: "linear-gradient(to bottom, #fff7f1, #e0f2ff)",
+          color: "black",
           position: "relative",
           overflow: "hidden",
         }}
@@ -815,7 +890,6 @@ const HomePage = () => {
 
         <Container>
           <motion.div
-            className="scroll-trigger"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -853,31 +927,17 @@ const HomePage = () => {
                 careers with our industry-leading programs.
               </Typography>
 
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                sx={{
-                  borderRadius: "50px",
-                  padding: "16px 48px",
-                  fontSize: "1.1rem",
-                  fontWeight: 700,
-                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)",
-                  "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 12px 28px rgba(0, 0, 0, 0.25)",
-                  },
-                  transition: "all 0.3s ease",
-                }}
-              >
-                Enroll Now
-              </Button>
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+                <DotHoverButton text="Enroll Now" />
+              </Box>
             </Box>
           </motion.div>
         </Container>
       </Box>
+      <Footer />
     </Box>
   );
 };
+
 
 export default HomePage;
