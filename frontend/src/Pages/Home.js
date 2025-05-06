@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import {
   Box,
   Button,
@@ -10,7 +11,8 @@ import {
   CardMedia,
   useTheme,
 } from "@mui/material";
-import { motion, useAnimation } from "framer-motion";
+import { styled } from "@mui/system";
+import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs";
@@ -40,6 +42,32 @@ const HomePage = () => {
     "Adobe",
     "IBM",
     "Intel",
+  ];
+
+  // Testimonials data
+
+  const testimonials = [
+    {
+      id: 1,
+      quote:
+        "This program completely transformed my career. The hands-on projects and expert mentorship gave me the confidence and skills to land my dream job at a top tech company.",
+      name: "Sarah Johnson",
+      role: "Software Engineer at Google",
+    },
+    {
+      id: 2,
+      quote:
+        "Amet minim mollit non deserunt ullam co est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat.",
+      name: "Mark Tanker",
+      role: "California",
+    },
+    {
+      id: 3,
+      quote:
+        "The curriculum was perfectly balanced between theory and practice. I went from beginner to job-ready in just six months, and now I'm working remotely for an international company.",
+      name: "Alex Chen",
+      role: "Frontend Developer at Shopify",
+    },
   ];
 
   // Features data
@@ -217,7 +245,7 @@ const HomePage = () => {
         sx={{
           minHeight: "100vh",
           background:
-            "radial-gradient(circle at center, #1a1a1a 0%, #000 100%)",
+            "radial-gradient(circle at center,rgb(255, 255, 255) 0%, #ffffff 80%)",
           position: "relative",
           display: "flex",
           alignItems: "center",
@@ -246,7 +274,7 @@ const HomePage = () => {
               key={i}
               className="grid-item"
               sx={{
-                border: "1px solid rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(22, 92, 154, 0.05)",
                 transition: "all 0.3s ease",
               }}
             />
@@ -261,7 +289,7 @@ const HomePage = () => {
             width: 100,
             height: 100,
             background:
-              "radial-gradient(circle, rgba(100, 200, 255, 0.8) 0%, rgba(100, 200, 255, 0) 70%)",
+              "radial-gradient(circle, rgba(15, 112, 165, 0.8) 0%, rgba(160, 128, 32, 0) 70%)",
             borderRadius: "50%",
             top: "20%",
             left: "10%",
@@ -276,7 +304,7 @@ const HomePage = () => {
             width: 150,
             height: 150,
             background:
-              "radial-gradient(circle, rgba(255, 100, 200, 0.6) 0%, rgba(255, 100, 200, 0) 70%)",
+              "radial-gradient(circle, rgba(255, 100, 200, 0.6) 0%, rgba(85, 87, 52, 0) 70%)",
             borderRadius: "50%",
             bottom: "15%",
             right: "10%",
@@ -307,7 +335,7 @@ const HomePage = () => {
                   fontWeight: 800,
                   lineHeight: 1.2,
                   mb: 3,
-                  background: "linear-gradient(90deg, #fff, #aaa)",
+                  background: "linear-gradient(90deg,rgb(3, 88, 216), rgb(0, 0, 0))",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",
@@ -322,7 +350,7 @@ const HomePage = () => {
                   maxWidth: "800px",
                   margin: "0 auto",
                   mb: 4,
-                  color: "rgba(255, 255, 255, 0.8)",
+                  color: "rgba(0, 0, 0, 0.8)",
                   fontSize: { xs: "1rem", md: "1.25rem" },
                 }}
               >
@@ -355,6 +383,7 @@ const HomePage = () => {
                     padding: "12px 32px",
                     fontSize: "1rem",
                     fontWeight: 600,
+                    boxShadow: "0 4px 20px rgba(0, 150, 255, 0.3)",
                     borderWidth: "2px",
                     "&:hover": { borderWidth: "2px" },
                   }}
@@ -366,8 +395,6 @@ const HomePage = () => {
           </motion.div>
         </Container>
       </Box>
-
-     
 
       {/* Features Section */}
       <Box
@@ -381,8 +408,8 @@ const HomePage = () => {
             className="scroll-trigger"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ dduration: 0.8, delay: 0.1 }}
           >
             <Typography
               variant="h3"
@@ -428,7 +455,7 @@ const HomePage = () => {
                         variant="h2"
                         sx={{
                           mb: 3,
-                          fontSize: "3rem",
+                          fontSize: "2rem",
                         }}
                       >
                         {feature.icon}
@@ -461,150 +488,149 @@ const HomePage = () => {
         </Container>
       </Box>
 
-      
+      {/* Programs Section */}
 
-     {/* Programs Section */}
-<Box
-  sx={{
-    minHeight: "100vh",
-    py: 10,
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: theme.palette.background.default,
-  }}
->
-  <Container>
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-    >
-      <Typography
-        variant="h3"
+      <Box
         sx={{
-          textAlign: "center",
-          mb: 8,
-          fontWeight: 700,
+          minHeight: "100vh",
+          py: 10,
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: theme.palette.background.default,
         }}
       >
-        Our Programs
-      </Typography>
-    </motion.div>
-
-    <Grid container spacing={4} justifyContent="center">
-      {programs.map((program, index) => (
-        <Grid item xs={12} sm={6} md={3} key={index} sx={{ display: "flex" }}>
+        <Container>
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            style={{ width: "100%" }}
+            transition={{ duration: 0.8 }}
           >
-            <Card
+            <Typography
+              variant="h3"
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                width: "100%",
-                borderRadius: "20px",
-                background: "rgba(255, 255, 255, 0.1)",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                overflow: "hidden",
-                "&:hover": {
-                  transform: "translateY(-8px)",
-                  boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
-                },
+                textAlign: "center",
+                mb: 8,
+                fontWeight: 700,
               }}
             >
-              <CardMedia
-                component="img"
-                image={program.image}
-                alt={program.title}
-                sx={{
-                  height: 0,
-                  paddingTop: "56.25%", // 16:9
-                  transition: "transform 0.4s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-              />
+              Our Programs
+            </Typography>
+          </motion.div>
 
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  flexGrow: 1,
-                  p: 3,
-                }}
+          <Grid container spacing={4} justifyContent="center">
+            {programs.map((program, index) => (
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={3}
+                key={index}
+                sx={{ display: "flex" }}
               >
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: 700, mb: 1 }}
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  style={{ width: "100%" }}
                 >
-                  {program.title}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: theme.palette.text.secondary,
-                    mb: 2,
-                    display: "-webkit-box",
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {program.description}
-                </Typography>
-
-                <Box sx={{ mt: "auto" }}>
-                  <Button
-                    variant="outlined"
-                    fullWidth
+                  <Card
                     sx={{
-                      borderRadius: "30px",
-                      fontWeight: 600,
-                      textTransform: "none",
-                      transition: "all 0.3s ease",
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                      width: "100%",
+                      borderRadius: "20px",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                      overflow: "hidden",
                       "&:hover": {
-                        backgroundColor: theme.palette.primary.main,
-                        color: "#fff",
+                        transform: "translateY(-8px)",
+                        boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
                       },
                     }}
                   >
-                    Learn More
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </Grid>
-      ))}
-    </Grid>
-  </Container>
-</Box>
+                    <CardMedia
+                      component="img"
+                      image={program.image}
+                      alt={program.title}
+                      sx={{
+                        height: 0,
+                        paddingTop: "56.25%", // 16:9
+                        transition: "transform 0.4s ease",
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                        },
+                      }}
+                    />
 
+                    <CardContent
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        flexGrow: 1,
+                        p: 3,
+                      }}
+                    >
+                      <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+                        {program.title}
+                      </Typography>
 
-      
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: theme.palette.text.secondary,
+                          mb: 2,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {program.description}
+                      </Typography>
+
+                      <Box sx={{ mt: "auto" }}>
+                        <Button
+                          variant="outlined"
+                          fullWidth
+                          sx={{
+                            borderRadius: "30px",
+                            fontWeight: 600,
+                            textTransform: "none",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              backgroundColor: theme.palette.primary.main,
+                              color: "#fff",
+                            },
+                          }}
+                        >
+                          Learn More
+                        </Button>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
 
       {/* Testimonials Section */}
       <Box
         sx={{
           py: 10,
-          backgroundColor: theme.palette.background.paper,
+          backgroundColor: "background.paper",
         }}
       >
         <Container>
           <motion.div
-            className="scroll-trigger"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -623,10 +649,9 @@ const HomePage = () => {
           </motion.div>
 
           <Grid container spacing={4}>
-            {[1, 2, 3].map((item, index) => (
-              <Grid item xs={12} md={4} key={index}>
+            {testimonials.map((testimonial, index) => (
+              <Grid item xs={12} md={4} key={testimonial.id}>
                 <motion.div
-                  className="scroll-trigger"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -662,7 +687,7 @@ const HomePage = () => {
                         mb: 2,
                         fontSize: "4rem",
                         lineHeight: 1,
-                        color: theme.palette.primary.main,
+                        color: "primary.main",
                         opacity: 0.2,
                       }}
                     >
@@ -678,10 +703,7 @@ const HomePage = () => {
                         fontStyle: "italic",
                       }}
                     >
-                      This program completely transformed my career. The
-                      hands-on projects and expert mentorship gave me the
-                      confidence and skills to land my dream job at a top tech
-                      company.
+                      {testimonial.quote}
                     </Typography>
 
                     <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
@@ -690,7 +712,7 @@ const HomePage = () => {
                           width: 50,
                           height: 50,
                           borderRadius: "50%",
-                          backgroundColor: theme.palette.grey[300],
+                          backgroundColor: "grey.300",
                           mr: 2,
                         }}
                       />
@@ -700,13 +722,13 @@ const HomePage = () => {
                           variant="subtitle1"
                           sx={{ fontWeight: 600 }}
                         >
-                          Sarah Johnson
+                          {testimonial.name}
                         </Typography>
                         <Typography
                           variant="body2"
-                          sx={{ color: theme.palette.text.secondary }}
+                          sx={{ color: "text.secondary" }}
                         >
-                          Software Engineer at Google
+                          {testimonial.role}
                         </Typography>
                       </Box>
                     </Box>
@@ -718,12 +740,60 @@ const HomePage = () => {
         </Container>
       </Box>
 
-       {/* Marquee Section */}
-       <Box
+      {/* Marquee Section - Updated Version */}
+
+      <Box
         sx={{
-          py: 4,
-          backgroundColor: theme.palette.background.default,
+          py: 1,
+          backgroundColor: "white",
+          position: "relative",
           overflow: "hidden",
+          "&:before, &:after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            width: 100,
+            zIndex: 2,
+          },
+          "&:before": {
+            left: 0,
+            background: "linear-gradient(to right, white, transparent)",
+          },
+          "&:after": {
+            right: 0,
+            background: "linear-gradient(to left, white, transparent)",
+          },
+        }}
+      />
+
+      <Box
+        sx={{
+          pt: 1,
+          pb: 2,
+          backgroundColor: "white",
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          "&:before, &:after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            width: 60, // reduced width of gradient fade
+            zIndex: 2,
+            pointerEvents: "none",
+          },
+          "&:before": {
+            left: 0,
+            background: "linear-gradient(to right, white, transparent)",
+          },
+          "&:after": {
+            right: 0,
+            background: "linear-gradient(to left, white, transparent)",
+          },
+          borderBottom: "3px solid #2196F3", // blue line at the bottom
         }}
       >
         <Box
@@ -738,28 +808,56 @@ const HomePage = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 8,
-              padding: "0 2rem",
+              gap: { xs: 3, md: 3 },
+              padding: "0 1rem",
               whiteSpace: "nowrap",
             }}
           >
-            {companies.concat(companies).map((company, index) => (
-              <Typography
-                key={`${company}-${index}`}
-                variant="h4"
+            {[...companies, ...companies].map((company, index) => (
+              <Box
+                key={`${index}-${
+                  typeof company === "string"
+                    ? company
+                    : JSON.stringify(company)
+                }`}
                 sx={{
-                  fontWeight: 700,
-                  color: theme.palette.text.secondary,
-                  opacity: 0.8,
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    opacity: 1,
-                    color: theme.palette.primary.main,
+                  px: 1.5,
+                  display: "flex",
+                  alignItems: "center",
+                  position: "relative",
+                  "&:after": {
+                    content: '""',
+                    position: "absolute",
+                    right: -10,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: "6px",
+                    height: "6px",
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(0, 0, 0, 0.2)",
+                  },
+                  "&:last-of-type:after": {
+                    display: "none",
                   },
                 }}
               >
-                {company}
-              </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 800,
+                    color: "black",
+                    fontSize: { xs: "1rem", md: "1rem" }, // smaller font size
+                    transition: "all 0.3s ease",
+                    lineHeight: 1,
+                    "&:hover": {
+                      color: "primary.main",
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                >
+                  {typeof company === "string" ? company : company.name}
+                </Typography>
+              </Box>
             ))}
           </Box>
         </Box>
