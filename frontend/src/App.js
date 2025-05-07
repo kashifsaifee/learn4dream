@@ -14,6 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Blogs from './Pages/Blogs'
 import Signup from './Pages/Signup';
 import Profile from './Pages/Profile';
+import CourseDetail from './Pages/CourseDetail';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/courses" element={<Courses />} />
+           <Route path="/course/detail" element={<CourseDetail />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} handleLogin={handleLogin} />} />

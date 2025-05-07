@@ -535,7 +535,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             </Button>
             <Menu anchorEl={anchorCourses} open={Boolean(anchorCourses)} onClose={close(setAnchorCourses)} {...customMenuProps}>
               <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>All Courses</NavLinkBtn>
-              <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorCourses)}>Course Detail</NavLinkBtn>
+              <NavLinkBtn to="/course/detail" closeMenu={close(setAnchorCourses)}>Course Detail</NavLinkBtn>
             </Menu>
 
             <Button onClick={open(setAnchorPages)} endIcon={<ExpandMore />} sx={linkStyle('/blogs')}>
@@ -588,7 +588,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               <Divider />
               <NavLinkBtn to="/" closeMenu={close(setAnchorMobile)}>Home</NavLinkBtn>
               <NavLinkBtn to="/courses" closeMenu={close(setAnchorMobile)}>All Courses</NavLinkBtn>
-              <NavLinkBtn to="/courses/detail" closeMenu={close(setAnchorMobile)}>Course Detail</NavLinkBtn>
+              <NavLinkBtn to="/course/detail" closeMenu={close(setAnchorMobile)}>Course Detail</NavLinkBtn>
               <NavLinkBtn to="/blogs" closeMenu={close(setAnchorMobile)}>Blogs</NavLinkBtn>
               <NavLinkBtn to="/about" closeMenu={close(setAnchorMobile)}>About</NavLinkBtn>
               <NavLinkBtn to="/contact" closeMenu={close(setAnchorMobile)}>Contact</NavLinkBtn>
