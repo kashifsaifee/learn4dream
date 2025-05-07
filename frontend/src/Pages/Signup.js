@@ -322,19 +322,24 @@ import {
   Stack,
   CircularProgress,
 } from "@mui/material";
-import {FaMicrosoft } from "react-icons/fa";
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { GoogleLogin } from '@react-oauth/google';
+import { FaMicrosoft } from "react-icons/fa";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 export default function Signup() {
   const navigate = useNavigate();
 
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",
+  });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -351,7 +356,13 @@ export default function Signup() {
 
   const isValidEmail = /\S+@\S+\.\S+/.test(form.email);
   const isValidPassword = form.password.length >= 6;
-  const isFormInvalid = !form.name || !form.email || !form.password || !form.confirm || !isValidEmail || !isValidPassword;
+  const isFormInvalid =
+    !form.name ||
+    !form.email ||
+    !form.password ||
+    !form.confirm ||
+    !isValidEmail ||
+    !isValidPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -360,21 +371,29 @@ export default function Signup() {
     setIsSubmitting(true);
     setLoading(true);
 
-    if (!form.name.trim() || !form.email.trim() || !form.password || !form.confirm) {
-      setError('Please fill in all fields.');
+    if (
+      !form.name.trim() ||
+      !form.email.trim() ||
+      !form.password ||
+      !form.confirm
+    ) {
+      setError("Please fill in all fields.");
     } else if (!isValidEmail) {
-      setError('Invalid email format.');
+      setError("Invalid email format.");
     } else if (!isValidPassword) {
-      setError('Password must be at least 6 characters.');
+      setError("Password must be at least 6 characters.");
     } else if (form.password !== form.confirm) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
     } else {
       try {
-        const res = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
-          name: form.name,
-          email: form.email,
-          password: form.password,
-        });
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_URL}/signup`,
+          {
+            name: form.name,
+            email: form.email,
+            password: form.password,
+          }
+        );
 
         if (res.data.token) {
           localStorage.setItem("token", res.data.token);
@@ -397,16 +416,19 @@ export default function Signup() {
     setLoading(true);
     try {
       const { credential } = response;
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/google-signup`, { token: credential });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/google-signup`,
+        { token: credential }
+      );
 
       if (res.data.token) {
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem("token", res.data.token);
       }
 
-      setSuccess('Account created successfully!');
-      setTimeout(() => navigate('/profile'), 1000);
+      setSuccess("Account created successfully!");
+      setTimeout(() => navigate("/profile"), 1000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong.');
+      setError(err.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -414,24 +436,24 @@ export default function Signup() {
 
   const inputStyles = {
     mb: 3,
-    input: { color: 'white' },
-    '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)' },
+    input: { color: "white" },
+    ".MuiFilledInput-root": { bgcolor: "rgba(255,255,255,0.08)" },
   };
 
   const inputLabelProps = {
-    style: { color: '#ccc' },
+    style: { color: "#ccc" },
   };
 
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        background: 'linear-gradient(to right, #f2f6fa, #e0ecf3)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        minHeight: "100vh",
+        background: "linear-gradient(to right, #f2f6fa, #e0ecf3)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         px: 3,
-        bgcolor: '#FFB6C1',
+        bgcolor: "#FFB6C1",
         p: 2,
       }}
     >
@@ -439,14 +461,34 @@ export default function Signup() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        style={{ width: '100%', maxWidth: 460 }}
+        style={{ width: "100%", maxWidth: 460 }}
       >
-        <Card elevation={10} sx={{ borderRadius: 4, p: { xs: 3, sm: 4 }, m: 5, bgcolor: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+        <Card
+          elevation={10}
+          sx={{
+            borderRadius: 4,
+            p: { xs: 3, sm: 4 },
+            m: 5,
+            bgcolor: "white",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          }}
+        >
           <CardContent>
-            <Typography variant="h4" fontWeight="bold" mb={2} textAlign="center" color="primary">
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              mb={2}
+              textAlign="center"
+              color="primary"
+            >
               Create Your Account
             </Typography>
-            <Typography variant="body2" mb={3} textAlign="center" color="text.secondary">
+            <Typography
+              variant="body2"
+              mb={3}
+              textAlign="center"
+              color="text.secondary"
+            >
               Start using our services by creating your account below.
             </Typography>
 
@@ -455,60 +497,121 @@ export default function Signup() {
                 fullWidth
                 label="Full Name"
                 name="name"
-                variant="outlined"
+                variant="filled"
+                required
                 value={form.name}
                 onChange={handleChange}
-                sx={inputStyles}
+                sx={{
+                  ...inputStyles,
+                  input: { color: "black" }, // Input text color
+                  label: { color: "black" }, // Label color
+                  ".MuiFilledInput-root": {
+                    backgroundColor: "white", // Optional: background for better contrast
+                    "&:hover": {
+                      backgroundColor: "#f5f5f5",
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  },
+                }}
                 InputLabelProps={inputLabelProps}
               />
-
               <TextField
                 fullWidth
                 label="Email"
                 name="email"
                 type="email"
-                variant="outlined"
+                variant="filled"
+                required
                 value={form.email}
                 onChange={handleChange}
-                sx={inputStyles}
+                sx={{
+                  ...inputStyles,
+                  input: { color: "black" }, // Input text color
+                  label: { color: "black" }, // Label color
+                  ".MuiFilledInput-root": {
+                    backgroundColor: "white", // Optional: background for better contrast
+                    "&:hover": {
+                      backgroundColor: "#f5f5f5",
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  },
+                }}
                 InputLabelProps={inputLabelProps}
               />
-
               <TextField
                 fullWidth
                 label="Password"
                 name="password"
                 type={showPwd ? "text" : "password"}
-                variant="outlined"
+                variant="filled"
+                required
                 value={form.password}
                 onChange={handleChange}
-                sx={inputStyles}
+                sx={{
+                  ...inputStyles,
+                  input: { color: "black" }, // Input text color
+                  label: { color: "black" }, // Label color
+                  ".MuiFilledInput-root": {
+                    backgroundColor: "white", // Optional: background for better contrast
+                    "&:hover": {
+                      backgroundColor: "#f5f5f5",
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  },
+                }}
                 InputLabelProps={inputLabelProps}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={togglePwd} edge="end">
+                      <IconButton
+                        onClick={togglePwd}
+                        sx={{ color: "black" }}
+                        aria-label="toggle password visibility"
+                      >
                         {showPwd ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
               />
-
               <TextField
                 fullWidth
                 label="Confirm Password"
                 name="confirm"
                 type={showConfirm ? "text" : "password"}
-                variant="outlined"
+                variant="filled"
+                required
                 value={form.confirm}
                 onChange={handleChange}
-                sx={inputStyles}
+                sx={{
+                  ...inputStyles,
+                  input: { color: "black" }, // Input text color
+                  label: { color: "black" }, // Label color
+                  ".MuiFilledInput-root": {
+                    backgroundColor: "white", // Optional: background for better contrast
+                    "&:hover": {
+                      backgroundColor: "#f5f5f5",
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  },
+                }}
                 InputLabelProps={inputLabelProps}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={toggleConfirm} edge="end">
+                      <IconButton
+                        onClick={toggleConfirm}
+                        sx={{ color: "black" }}
+                        aria-label="toggle confirm password visibility"
+                      >
                         {showConfirm ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -516,8 +619,24 @@ export default function Signup() {
                 }}
               />
 
-              {error && <Typography color="error" variant="body2" sx={{ mb: 2, textAlign: "center" }}>{error}</Typography>}
-              {success && <Typography color="success.main" variant="body2" sx={{ mb: 2, textAlign: "center" }}>{success}</Typography>}
+              {error && (
+                <Typography
+                  color="error"
+                  variant="body2"
+                  sx={{ mb: 2, textAlign: "center" }}
+                >
+                  {error}
+                </Typography>
+              )}
+              {success && (
+                <Typography
+                  color="success.main"
+                  variant="body2"
+                  sx={{ mb: 2, textAlign: "center" }}
+                >
+                  {success}
+                </Typography>
+              )}
 
               <Button
                 type="submit"
@@ -533,16 +652,20 @@ export default function Signup() {
                   borderRadius: 30,
                 }}
               >
-                {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Create Account'}
+                {loading ? (
+                  <CircularProgress size={24} sx={{ color: "white" }} />
+                ) : (
+                  "Create Account"
+                )}
               </Button>
             </form>
 
-            <Divider sx={{ my: 3, borderColor: 'rgba(0,0,0,0.1)' }}>OR</Divider>
+            <Divider sx={{ my: 3, borderColor: "rgba(0,0,0,0.1)" }}>OR</Divider>
 
             <Stack spacing={2}>
               <GoogleLogin
                 onSuccess={handleGoogleSignup}
-                onError={() => setError('Google login failed.')}
+                onError={() => setError("Google login failed.")}
                 useOneTap
                 theme="filled_blue"
                 size="large"
@@ -552,11 +675,11 @@ export default function Signup() {
                 variant="outlined"
                 fullWidth
                 startIcon={<FaMicrosoft />}
-                onClick={() => alert('Microsoft signup not implemented')}
+                onClick={() => alert("Microsoft signup not implemented")}
                 sx={{
                   textTransform: "none",
                   borderColor: "#ccc",
-                  '&:hover': {
+                  "&:hover": {
                     borderColor: "#1976d2",
                     backgroundColor: "rgba(25, 118, 210, 0.05)",
                   },
@@ -567,8 +690,17 @@ export default function Signup() {
             </Stack>
 
             <Typography mt={4} textAlign="center" fontSize="0.9rem">
-              <Box component="span" sx={{ color: "text.secondary" }}>Already have an account? </Box>
-              <Link to="/login" style={{ color: "#1976d2", textDecoration: "none", fontWeight: 500 }}>
+              <Box component="span" sx={{ color: "text.secondary" }}>
+                Already have an account?{" "}
+              </Box>
+              <Link
+                to="/login"
+                style={{
+                  color: "#1976d2",
+                  textDecoration: "none",
+                  fontWeight: 500,
+                }}
+              >
                 Log in
               </Link>
             </Typography>
