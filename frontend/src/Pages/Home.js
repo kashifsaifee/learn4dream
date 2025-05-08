@@ -18,8 +18,8 @@ import DotHoverButton from "../Components/DotHoverButton";
 import { Favorite, Forest, BeachAccessRounded } from "@mui/icons-material";
 import AnimatedCard from "../Components/AnimatedCard";
 import Footer from "../Components/Footer";
-import { Lottie } from "lottie-react";
-import animationData from "../assets/animation/Animation - 1746626268259.json";
+import Lottie from 'lottie-react';
+import animationData from "../assets/animation/animation.json";
 
 import {
   CodeIcon,
@@ -142,8 +142,6 @@ const HomePage = () => {
     { label: "Years of Experience", value: 5, suffix: "+" },
   ];
 
-  
-
   // Initialize animations only after component mounts
   useEffect(() => {
     setIsMounted(true);
@@ -264,86 +262,104 @@ const HomePage = () => {
 
   return (
     <Box sx={{ overflowX: "auto", width: "100%" }}>
-      {/* Hero Section */}
       <Box
         sx={{
           minHeight: "100vh",
           background:
             "radial-gradient(circle at center,rgb(255, 255, 255) 0%, #ffffff 80%)",
-          position: "relative",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "white",
-          overflow: "hidden",
+          px: 4,
         }}
       >
-        {/* Lottie Animation */}
-        <Lottie
-          animationData={require(animationData)}
-          loop={true}
-          autoplay={true}
-          style={{
-            position: "absolute",
-            zIndex: -1, // Ensure the animation stays in the background
-            width: "100%",
-            height: "100%",
-            objectFit: "cover", // Ensure the animation covers the hero section
-          }}
-        />
-
-        <Container>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }} // Update to fit the animation style
+        <Container maxWidth="lg">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
+            {/* Left Side - Text and Buttons */}
             <Box
               sx={{
-                position: "relative",
+                flex: 1,
                 zIndex: 1,
-                textAlign: "center",
-                padding: 4,
+                textAlign: { xs: "center", md: "left" },
+                mb: { xs: 4, md: 0 },
               }}
             >
-              <Typography
-                variant="h1"
-                sx={{
-                  fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
-                  fontWeight: 800,
-                  lineHeight: 1.2,
-                  mb: 3,
-                  background:
-                    "linear-gradient(90deg,rgb(78, 133, 185), rgba(0, 0, 0, 0.65))",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                }}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                Learn4Dream
-              </Typography>
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
+                    fontWeight: 800,
+                    lineHeight: 1.2,
+                    mb: 3,
+                    background:
+                      "linear-gradient(90deg,rgb(78, 133, 185), rgba(0, 0, 0, 0.65))",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                  }}
+                >
+                  Learn4Dream
+                </Typography>
 
-              <Typography
-                variant="h5"
-                sx={{
-                  maxWidth: "800px",
-                  margin: "0 auto",
-                  mb: 4,
-                  color: "rgba(0, 0, 0, 0.8)",
-                  fontSize: { xs: "1rem", md: "1.25rem" },
-                }}
-              >
-                Join a community of learners and professionals who are
-                passionate about advancing their careers.
-              </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    maxWidth: "600px",
+                    mb: 4,
+                    color: "rgba(0, 0, 0, 0.8)",
+                    fontSize: { xs: "1rem", md: "1.25rem" },
+                    mx: { xs: "auto", md: 0 },
+                  }}
+                >
+                  Join a community of learners and professionals who are
+                  passionate about advancing their careers.
+                </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-                <DotHoverButton text="Get Started" />
-                <DotHoverButton text="Explore Programs" />
-              </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    justifyContent: { xs: "center", md: "flex-start" },
+                  }}
+                >
+                  <DotHoverButton text="Get Started" />
+                  <DotHoverButton text="Explore Programs" />
+                </Box>
+              </motion.div>
             </Box>
-          </motion.div>
+
+            {/* Right Side - Lottie Animation */}
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                maxWidth: "500px",
+              }}
+            >
+              <Lottie
+                animationData={animationData}
+                loop = {true}
+                autoplay = {true}
+                style={{ width: "100%", height: "auto" }}
+              />
+            </Box>
+          </Box>
         </Container>
       </Box>
+
       {/* Features Section */}
       <Box
         sx={{
