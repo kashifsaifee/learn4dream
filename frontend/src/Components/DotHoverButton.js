@@ -12,7 +12,7 @@ const DotHoverButton = ({ text = "Hover this link" }) => {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        backgroundColor: hovered ? "#000" : "#000000", // Button baround color changes on hover
+        backgroundColor: hovered ? "#243240" : "#394653", // Button baround color changes on hover
         borderRadius: "999px",
         padding: "10px 20px",
         cursor: "pointer",

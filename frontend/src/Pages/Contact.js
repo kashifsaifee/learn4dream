@@ -1,418 +1,367 @@
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import Footer from '../Components/Footer';
-import styled from 'styled-components';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import InfoIcon from '@mui/icons-material/Info';
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Paper,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import { motion } from "framer-motion";
+import Footer from "../Components/Footer";
+import {
+  FaInstagram,
+  FaFacebookF,
+  FaLinkedinIn,
+  FaTwitter,
+} from "react-icons/fa";
+import { gsap } from "gsap";
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
+const ContactSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  phone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Phone must be 10 digits")
+    .required("Phone number is required"),
+  message: Yup.string().required("Message is required"),
+});
 
-const Contact = () => {
-  const pageRef = useRef(null);
-  const formRef = useRef(null);
-  const infoRef = useRef(null);
-  const floatingElements = useRef([]); // Correcting to initialize as an array
+const ContactSection = () => {
+  const iconRefs = useRef([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false); // ✨ For success alert
 
   useEffect(() => {
-    // Page-level animation
     gsap.fromTo(
-      pageRef.current,
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
-    );
-
-    // Form and info section animations
-    gsap.fromTo(
-      infoRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 }
-    );
-    
-    gsap.fromTo(
-      formRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.4 }
-    );
-
-    // Floating animation for decorative elements
-    floatingElements.current.forEach((el, index) => {
-      gsap.to(el, {
-        y: 10,
-        duration: 3 + index * 0.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
-      });
-    });
-
-    // Input focus animations
-    const inputs = gsap.utils.toArray(formRef.current.querySelectorAll('input, textarea')); // Using gsap.utils.toArray to select multiple elements
-    inputs.forEach(input => {
-      input.addEventListener('focus', () => {
-        gsap.to(input, {
-          scale: 1.02,
-          duration: 0.3,
-          boxShadow: '0 5px 15px rgba(74, 108, 247, 0.2)'
-        });
-      });
-      input.addEventListener('blur', () => {
-        gsap.to(input, {
-          scale: 1,
-          duration: 0.3,
-          boxShadow: '0 2px 10px rgba(74, 108, 247, 0.1)'
-        });
-      });
-    });
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Enhanced submission animation
-    gsap.to(formRef.current, {
-      y: -10,
-      duration: 0.2,
-      repeat: 1,
-      yoyo: true,
-      ease: 'power1.inOut',
-    });
-
-    // Floating particles effect on submit
-    for (let i = 0; i < 10; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'submit-particle';
-      particle.style.left = `${Math.random() * 100}%`;
-      particle.style.top = `${Math.random() * 100}%`;
-      formRef.current.appendChild(particle);
-
-      gsap.to(particle, {
-        y: -100,
-        x: (Math.random() - 0.5) * 100,
-        opacity: 0,
+      iconRefs.current,
+      { y: 50, opacity: 0, scale: 0.3 },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
         duration: 1,
-        onComplete: () => particle.remove()
-      });
-    }
+        ease: "back.out(1.7)",
+        stagger: 0.2,
+      }
+    );
+  }, []);
+  const socialIcons = [
+    {
+      Icon: FaInstagram,
+      color: "#E1306C",
+      name: "Instagram",
+    },
+    {
+      Icon: FaFacebookF,
+      color: "#1877F2",
+      name: "Facebook",
+    },
+    {
+      Icon: FaLinkedinIn,
+      color: "#0A66C2",
+      name: "LinkedIn",
+    },
+    {
+      Icon: FaTwitter,
+      color: "#1DA1F2",
+      name: "Twitter",
+    },
+  ];
 
-    console.log('Form submitted');
-  };
+  const handleCloseSnackbar = () => setOpenSnackbar(false); // ✨ Snackbar handler
 
   return (
     <>
-      <ContactContainer ref={pageRef}>
-        {/* Floating decorative elements */}
-        <FloatingOrb ref={el => floatingElements.current[0] = el} className="floating-orb orb-1" />
-        <FloatingOrb ref={el => floatingElements.current[1] = el} className="floating-orb orb-2" />
-        <FloatingOrb ref={el => floatingElements.current[2] = el} className="floating-orb orb-3" />
-        <FloatingShape ref={el => floatingElements.current[3] = el} className="floating-shape shape-1" />
-        <FloatingShape ref={el => floatingElements.current[4] = el} className="floating-shape shape-2" />
+      <Box
+        sx={{
+          minHeight: "100vh",
+          bgcolor: "#f5f5f5",
+          py: 6,
+          px: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Paper
+          elevation={6}
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            width: "100%",
+            maxWidth: 1100,
+            borderRadius: 4,
+            overflow: "hidden",
+          }}
+        >
+          {/* Left Panel */}
+          <Box
+            sx={{
+              bgcolor: "rgba(101, 128, 153, 0.64)",
+              color: "white",
+              flex: 1,
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              borderRadius: "12px", // Rounded corners for the box
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4)", // Soft shadow for depth
+            }}
+          >
+            <Box>
+              <Typography
+                variant="h4"
+                gutterBottom
+                sx={{
+                  fontWeight: "bold",
+                  letterSpacing: "0.5px",
 
-        <ContactContent>
-          {/* Contact Info */}
-          <ContactInfo ref={infoRef}>
-            <h2>Get in Touch</h2>
-            <div className="info-section">
-              <InfoIcon className="icon-email" />
-              <h3>Email Us</h3>
-              <p>info@yourcompany.com</p>
-              <p>support@yourcompany.com</p>
-            </div>
-            <div className="info-section">
-              <InfoIcon className="icon-phone" />
-              <h3>Call Us</h3>
-              <p>+1 (123) 456-7890</p>
-              <p>+1 (987) 654-3210</p>
-            </div>
-            <div className="info-section">
-              <InfoIcon className="icon-location" />
-              <h3>Visit Us</h3>
-              <p>123 Business Avenue</p>
-              <p>Suite 456, New York, NY 10001</p>
-            </div>
-            
-            <SocialLinks>
-              <SocialIcon className="social-icon twitter" />
-              <SocialIcon className="social-icon facebook" />
-              <SocialIcon className="social-icon linkedin" />
-              <SocialIcon className="social-icon instagram" />
-            </SocialLinks>
-          </ContactInfo>
+                  color: "#243240",
+                  animation: "fadeIn 1s ease-out",
+                }}
+              >
+                Get in Touch
+              </Typography>
+              <Typography
+                variant="body1"
+                mb={3}
+                sx={{
+                  fontWeight: "200",
+                  color: "black",
+                  animation: "fadeIn 1s ease-out 0.5s",
+                  fontSize: "15px",
+                }}
+              >
+                We’d love to hear from you. Whether it’s feedback or just a
+                hello, feel free to reach out.
+              </Typography>
 
-          {/* Contact Form */}
-          <FormWrapper ref={formRef}>
-            <form className="form-container" onSubmit={handleSubmit} noValidate>
-              <FormHeader>
-                <h2>Send a Message</h2>
-                <p>We'll respond within 24 hours</p>
-              </FormHeader>
+              <Box mb={3}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    color: "#243240",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Address
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "black", fontSize: "14px" }}
+                >
+                  123 Main Street, Dream City
+                </Typography>
+              </Box>
 
-              <FormGroup>
-                <input type="text" name="name" placeholder="Full Name" required />
-                <FormUnderline />
-              </FormGroup>
-              <FormGroup>
-                <input type="email" name="email" placeholder="Email Address" required />
-                <FormUnderline />
-              </FormGroup>
-              <FormGroup>
-                <input type="tel" name="phone" placeholder="Phone Number" />
-                <FormUnderline />
-              </FormGroup>
-              <FormGroup>
-                <textarea name="message" placeholder="Your Message" required></textarea>
-                <FormUnderline />
-              </FormGroup>
+              <Box mb={3}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    color: "#243240",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Phone No
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "black", fontSize: "14px" }}
+                >
+                  +1 234 567 8900 <br></br>
+                  +1 234 567 8900
+                </Typography>
+              </Box>
 
-              <SubmitBtn type="submit">
-                <span>Send Message</span>
-                <SubmitArrow />
-              </SubmitBtn>
-            </form>
-          </FormWrapper>
-        </ContactContent>
-      </ContactContainer>
+              <Box mb={3}>
+                <Typography variant="body2" sx={{ color: "black" }}>
+                  <Box mb={4}>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        color: "#243240",
+                        fontSize: "20px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Visit Us
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "black", fontSize: "14px" }}
+                    >
+                      Mon - Fri, 9am - 6pm{" "}
+                    </Typography>
+                  </Box>
+                </Typography>
+              </Box>
+            </Box>
 
-      {/* Footer */}
+            {/* social Icons */}
+            <Box mt={3} display="flex" gap={3} justifyContent="flex-start">
+              {socialIcons.map(({ Icon, color }, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: index * 0.1,
+                    type: "src",
+                    stiffness: 300,
+                    damping: 20,
+                  }}
+                  whileHover={{
+                    scale: 1.2,
+                    color: color,
+                    transition: { type: "src", stiffness: 300 },
+                  }}
+                  style={{
+                    color: "#243240",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                  }}
+                >
+                  <Icon />
+                </motion.div>
+              ))}
+            </Box>
+          </Box>
+
+          {/* Right Panel */}
+          <Box
+            component={motion.div}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            sx={{
+              flex: 1.2,
+              p: { xs: 3, md: 5 },
+              bgcolor: "white",
+              backdropFilter: "blur(1px)",
+            }}
+          >
+            <Typography variant="h4" mb={4} fontWeight="bold">
+              Contact Us
+            </Typography>
+
+            <Formik
+              initialValues={{ name: "", email: "", phone: "", message: "" }}
+              validationSchema={ContactSchema}
+              onSubmit={(values, { resetForm }) => {
+                console.log("Form Submitted", values);
+                resetForm();
+                setOpenSnackbar(true);
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                isSubmitting,
+              }) => (
+                <Form>
+                  <Grid container spacing={2} direction="column">
+                    {[
+                      { name: "name", label: "Name" },
+                      { name: "email", label: "Email" },
+                      { name: "phone", label: "Phone Number" },
+                    ].map(({ name, label }) => (
+                      <Grid item xs={8} key={name}>
+                        <TextField
+                          fullWidth
+                          label={label}
+                          name={name}
+                          value={values[name]}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={touched[name] && Boolean(errors[name])}
+                          helperText={touched[name] && errors[name]}
+                          variant="outlined"
+                          InputLabelProps={{ shrink: true }} // ✨ Floating label
+                        />
+                      </Grid>
+                    ))}
+
+                    <Grid item xs={8}>
+                      <TextField
+                        fullWidth
+                        multiline
+                        rows={2}
+                        label="Message"
+                        name="message"
+                        value={values.message}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.message && Boolean(errors.message)}
+                        helperText={touched.message && errors.message}
+                        variant="outlined"
+                        InputLabelProps={{ shrink: true }}
+                      />
+                    </Grid>
+
+                    {/* submit button */}
+                    <Grid item xs={12}>
+                      <motion.div
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          disabled={isSubmitting}
+                          sx={{
+                            py: 0.8,
+                            fontWeight: "bold",
+                            borderRadius: "5px",
+                            fontSize: "15px",
+                            textTransform: "none",
+                            bgcolor: "#243240",
+                            "&:hover": {
+                              bgcolor: "#7F93A6",
+                            },
+                            width: "200px", // Set a fixed width
+                            margin: "0 auto", // Center the button
+                          }}
+                        >
+                          {isSubmitting ? "Sending..." : "Send message"}
+                        </Button>
+                      </motion.div>
+                    </Grid>
+                  </Grid>
+                </Form>
+              )}
+            </Formik>
+
+            {/* ✨ Snackbar */}
+            <Snackbar
+              open={openSnackbar}
+              autoHideDuration={4000}
+              onClose={handleCloseSnackbar}
+              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+              <Alert
+                severity="success"
+                onClose={handleCloseSnackbar}
+                sx={{ width: "100%" }}
+              >
+                Message sent successfully!
+              </Alert>
+            </Snackbar>
+          </Box>
+        </Paper>
+      </Box>
+      {/* ✅ Footer Section */}
       <Footer />
     </>
   );
 };
 
-// Enhanced Styled Components
-
-const ContactContainer = styled.section`
-  width: 100%;
-  min-height: 100vh;
-  background-color: #f9faff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  padding: 40px 20px;
-`;
-
-const FloatingOrb = styled.div`
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(30px);
-  opacity: 0.6;
-  z-index: 0;
-
-  &.orb-1 {
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, #003267 0%, transparent 70%);
-    top: 10%;
-    left: 5%;
-  }
-
-  &.orb-2 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, #003267 0%, transparent 70%);
-    bottom: 15%;
-    right: 8%;
-  }
-
-  &.orb-3 {
-    width: 150px;
-    height: 150px;
-    background: radial-gradient(circle, #00cec9 0%, transparent 70%);
-    top: 60%;
-    left: 25%;
-  }
-`;
-
-const FloatingShape = styled.div`
-  position: absolute;
-  opacity: 0.1;
-  z-index: 0;
-
-  &.shape-1 {
-    width: 100px;
-    height: 100px;
-    background: #003267;
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    top: 20%;
-    right: 15%;
-  }
-
-  &.shape-2 {
-    width: 80px;
-    height: 80px;
-    background: #003267;
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    bottom: 25%;
-    left: 20%;
-  }
-`;
-
-const ContactContent = styled.div`
-  display: flex;
-  width: 100%;
-  max-width: 1200px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  z-index: 1;
-  position: relative;
-`;
-
-const ContactInfo = styled.aside`
-  flex: 1;
-  padding: 60px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  color: #333;
-  position: relative;
-  overflow: hidden;
-
-  h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #003267;
-  }
-
-  .info-section {
-    display: flex;
-    margin-bottom: 30px;
-    align-items: center;
-
-    .icon-email,
-    .icon-phone,
-    .icon-location {
-      font-size: 35px;
-      margin-right: 15px;
-      color: #003267;
-    }
-
-    h3 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 5px;
-      color: #003267;
-    }
-
-    p {
-      font-size: 1rem;
-      margin: 3px 0;
-    }
-  }
-`;
-
-const SocialLinks = styled.div`
-  display: flex;
-  gap: 15px;
-  margin-top: 30px;
-`;
-
-const SocialIcon = styled.div`
-  width: 30px;
-  height: 30px;
-  background-color: #003267;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  &.twitter {
-    background-color: #1da1f2;
-  }
-
-  &.facebook {
-    background-color: #1877f2;
-  }
-
-  &.linkedin {
-    background-color: #0077b5;
-  }
-
-  &.instagram {
-    background-color: #e1306c;
-  }
-`;
-
-const FormWrapper = styled.div`
-  flex: 2;
-  padding: 60px;
-  background: #ffffff;
-`;
-
-const FormHeader = styled.div`
-  margin-bottom: 40px;
-  text-align: center;
-  
-  h2 {
-    font-size: 2.2rem;
-    color: #003267;
-  }
-
-  p {
-    font-size: 1.2rem;
-    color: #777;
-  }
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 30px;
-  position: relative;
-  width: 100%;
-
-  input,
-  textarea {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    background: #f7f7f7;
-    transition: all 0.3s ease;
-  }
-
-  textarea {
-    height: 150px;
-    resize: none;
-  }
-`;
-
-const FormUnderline = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: #003267;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: all 0.3s ease;
-`;
-
-const SubmitBtn = styled.button`
-  background: linear-gradient(45deg, #00cec9, #003267);
-  padding: 12px 30px;
-  font-size: 1.2rem;
-  border: none;
-  color: white;
-  border-radius: 25px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background 0.3s ease;
-  
-  &:hover {
-    background: linear-gradient(45deg, #003267, #00cec9);
-  }
-`;
-
-const SubmitArrow = styled.div`
-  margin-left: 10px;
-  font-size: 1.5rem;
-  transform: translateX(4px);
-`;
-
-export default Contact; 
+export default ContactSection;

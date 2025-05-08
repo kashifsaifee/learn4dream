@@ -17,7 +17,10 @@ import { useInView } from "react-intersection-observer";
 import DotHoverButton from "../Components/DotHoverButton";
 import { Favorite, Forest, BeachAccessRounded } from "@mui/icons-material";
 import AnimatedCard from "../Components/AnimatedCard";
-import Footer from '../Components/Footer'; 
+import Footer from "../Components/Footer";
+import { Lottie } from "lottie-react";
+import animationData from "../assets/animation/Animation - 1746626268259.json";
+
 import {
   CodeIcon,
   DesignServicesIcon,
@@ -138,6 +141,8 @@ const HomePage = () => {
     { label: "Team Members", value: 12, suffix: "+" },
     { label: "Years of Experience", value: 5, suffix: "+" },
   ];
+
+  
 
   // Initialize animations only after component mounts
   useEffect(() => {
@@ -261,7 +266,6 @@ const HomePage = () => {
     <Box sx={{ overflowX: "auto", width: "100%" }}>
       {/* Hero Section */}
       <Box
-        ref={heroRef}
         sx={{
           minHeight: "100vh",
           background:
@@ -274,78 +278,31 @@ const HomePage = () => {
           overflow: "hidden",
         }}
       >
-        {/* Animated grid background */}
-        <Box
-          sx={{
+        {/* Lottie Animation */}
+        <Lottie
+          animationData={require(animationData)}
+          loop={true}
+          autoplay={true}
+          style={{
             position: "absolute",
-            top: 0,
-            left: 0,
+            zIndex: -1, // Ensure the animation stays in the background
             width: "100%",
             height: "100%",
-            display: "grid",
-            gridTemplateColumns: "repeat(20, 1fr)",
-            gridTemplateRows: "repeat(20, 1fr)",
-            zIndex: 0,
-            opacity: 0.2,
-          }}
-        >
-          {Array.from({ length: 400 }).map((_, i) => (
-            <Box
-              key={i}
-              className="grid-item"
-              sx={{
-                border: "1px solid rgba(22, 92, 154, 0.05)",
-                transition: "all 0.3s ease",
-              }}
-            />
-          ))}
-        </Box>
-
-        {/* Floating elements */}
-        {/* <Box
-          className="floating-element"
-          sx={{
-            position: "absolute",
-            width: 100,
-            height: 100,
-            background:
-              "radial-gradient(circle, rgba(15, 112, 165, 0.8) 0%, rgba(160, 128, 32, 0) 70%)",
-            borderRadius: "50%",
-            top: "20%",
-            left: "10%",
-            filter: "blur(20px)",
-            zIndex: 0,
+            objectFit: "cover", // Ensure the animation covers the hero section
           }}
         />
-        <Box
-          className="floating-element"
-          sx={{
-            position: "absolute",
-            width: 150,
-            height: 150,
-            background:
-              "radial-gradient(circle,rgb(220, 183, 150), rgba(85, 87, 52, 0) 70%)",
-            borderRadius: "50%",
-            bottom: "15%",
-            right: "10%",
-            filter: "blur(25px)",
-            zIndex: 0,
-          }}
-        /> */}
 
-        {/* Hero content */}
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            animate={controls}
-            ref={ref}
+            animate={{ opacity: 1, y: 0 }} // Update to fit the animation style
           >
             <Box
               sx={{
                 position: "relative",
                 zIndex: 1,
                 textAlign: "center",
-                padding: theme.spacing(4),
+                padding: 4,
               }}
             >
               <Typography
@@ -387,7 +344,6 @@ const HomePage = () => {
           </motion.div>
         </Container>
       </Box>
-
       {/* Features Section */}
       <Box
         sx={{
@@ -441,202 +397,224 @@ const HomePage = () => {
         </Container>
       </Box>
 
-
       {/* Statistics Section */}
       <Box
-      sx={{
-        minHeight: "70vh",
-        py: 10,
-        background: "linear-gradient(90deg, rgb(255, 255, 255), rgb(255, 255, 255))",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Grid container spacing={4} justifyContent="center">
-        {stats.map((stat, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ type: "spring", stiffness: 60, damping: 15, delay: index * 0.2 }}
-
-            >
-              <Card
-                sx={{
-                  borderRadius: 4,
-                  background: "rgba(255, 255, 255, 0.8)",
-                  backdropFilter: "blur(10px)",
-                  WebkitBackdropFilter: "blur(10px)",
-                  boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
-                  p: 4,
-                  textAlign: "center",
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h3" sx={{ fontWeight: "bold", mb: 1 }}>
-                    <CountUp start={0} end={stat.value} duration={4} suffix={stat.suffix} />
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: theme.palette.text.secondary,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {stat.label}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
-
-      {/* Programs Section */}
-<Box
-  sx={{
-    minHeight: "60vh",
-    py: 10,
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: theme.palette.background.default,
-    background: "linear-gradient(90deg,rgb(227, 221, 210),rgb(255, 255, 255))",
-  }}
->
-  <Container>
-    <motion.div
-      className="scroll-trigger"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.25 }}
-      transition={{ duration: 0.8, delay: 0.1 }}
-    >
-      <Typography
-        variant="h3"
         sx={{
-          textAlign: "center",
-          mb: 8,
-          fontWeight: 800,
-          fontSize: "2.5rem",
-          background: "linear-gradient(90deg,rgb(0, 0, 0),rgb(0, 0, 0))",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
+          minHeight: "70vh",
+          py: 10,
+          background: "linear-gradient(90deg, #4F5A66, #7B848C)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        Our Programs
-      </Typography>
-    </motion.div>
-
-    <Grid container spacing={4} justifyContent="center" alignItems="stretch" wrap="nowrap">
-      {programs.map((program, index) => (
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={3}
-          key={index}
-          sx={{ display: "flex" }}
+        {/* Single transparent container for all counters */}
+        <Card
+          sx={{
+            background: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(10px)",
+            borderRadius: "16px",
+            padding: "2rem",
+            boxShadow: "0px 6px 20px rgba(0, 0, 0, 0.3)",
+            display: "flex",
+            justifyContent: "space-between", // Align counters in a row
+            width: "80%", // Adjust width as per your design
+          }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            style={{ width: "100%", display: "flex" }}
-          >
-            <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                height: "100%",
-                width: "100%",
-                borderRadius: 4,
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-                boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                overflow: "hidden",
-                padding: 0,
-                "&:hover": {
-                  transform: "translateY(-8px)",
-                  boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
-                },
+          {/* Loop through the counters inside the single transparent box */}
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: "easeOut",
+                delay: index * 0.2,
               }}
+              style={{ flex: 1, textAlign: "center" }}
             >
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexGrow: 1,
-                  p: 3,
-                  textAlign: "center",
-                }}
-              >
-                <Box
+              <CardContent>
+                <Typography
+                  variant="h3"
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 1.5,
-                    flexGrow: 1,
-                    justifyContent: "center",
+                    fontWeight: "bold",
+                    mb: 1,
+                    color: "#ffffff",
+                    fontSize: "2.5rem",
                   }}
                 >
-                  <Box sx={{ fontSize: "2rem" }}>{program.icon}</Box>
+                  <CountUp
+                    start={0}
+                    end={stat.value}
+                    duration={3}
+                    suffix={stat.suffix}
+                  />
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#12191F",
+                    fontWeight: 500,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  {stat.label}
+                </Typography>
+              </CardContent>
+            </motion.div>
+          ))}
+        </Card>
+      </Box>
 
-                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                    {program.title}
-                  </Typography>
+      {/* Programs Section */}
+      <Box
+        sx={{
+          minHeight: "60vh",
+          py: 8,
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: theme.palette.background.default,
+          background: "linear-gradient(90deg,#e3ddd2,rgb(255, 255, 255))",
+        }}
+      >
+        <Container>
+          <motion.div
+            className="scroll-trigger"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            <Typography
+              variant="h3"
+              sx={{
+                textAlign: "center",
+                mb: 8,
+                fontWeight: 800,
+                fontSize: "2.5rem",
+                background: "linear-gradient(90deg,rgb(0, 0, 0),rgb(0, 0, 0))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Our Programs
+            </Typography>
+          </motion.div>
 
-                  <Typography
-                    variant="body2"
+          <Grid
+            container
+            spacing={4}
+            justifyContent="center"
+            alignItems="stretch"
+            wrap="nowrap"
+          >
+            {programs.map((program, index) => (
+              <Grid
+                item
+                xs={8}
+                sm={6}
+                md={3}
+                key={index}
+                sx={{ display: "flex" }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  style={{ width: "100%", display: "flex" }}
+                >
+                  <Card
                     sx={{
-                      color: theme.palette.text.secondary,
-                      px: 1,
-                    }}
-                  >
-                    {program.description}
-                  </Typography>
-                </Box>
-
-                <Box sx={{ mt: 3 }}>
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      borderRadius: "30px",
-                      fontWeight: 600,
-                      textTransform: "none",
-                      transition: "all 0.3s ease",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      height: "100%",
+                      width: "100%",
+                      borderRadius: 4,
+                      background: "rgba(255, 255, 255, 0.8)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                      boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                      overflow: "hidden",
+                      padding: 0,
                       "&:hover": {
-                        backgroundColor: theme.palette.primary.main,
-                        color: "#fff",
+                        transform: "translateY(-8px)",
+                        boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
                       },
                     }}
                   >
-                    Learn More
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </Grid>
-      ))}
-    </Grid>
-  </Container>
-</Box>
+                    <CardContent
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexGrow: 1,
+                        p: 3,
+                        textAlign: "center",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: 1.5,
+                          flexGrow: 1,
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Box sx={{ fontSize: "2rem" }}>{program.icon}</Box>
 
+                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                          {program.title}
+                        </Typography>
+
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: theme.palette.text.secondary,
+                            px: 1,
+                          }}
+                        >
+                          {program.description}
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ mt: 3 }}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            borderRadius: "30px",
+                            fontWeight: 600,
+                            textTransform: "none",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              backgroundColor: theme.palette.primary.main,
+                              color: "#fff",
+                            },
+                          }}
+                        >
+                          Learn More
+                        </Button>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
 
       {/* Testimonials Section */}
       <Box
         sx={{
-          py: 10,
+          py: 8,
           backgroundColor: "background.paper",
         }}
       >
@@ -673,9 +651,44 @@ const HomePage = () => {
                       height: "100%",
                       borderRadius: "16px",
                       padding: "2rem",
-                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.05)",
+                      boxShadow: "0 8px 32px rgba(36, 50, 64, 0.3)",
                       position: "relative",
                       overflow: "hidden",
+                      zIndex: 0,
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: "-2px",
+                        left: "-2px",
+                        right: "-2px",
+                        bottom: "-2px",
+                        background:
+                          "linear-gradient(135deg, #243240, #394653, #4f5a66, #656f79, #7b848c, #e3ddd2)",
+                        backgroundSize: "400%",
+                        borderRadius: "18px",
+                        zIndex: 0,
+                        opacity: 0,
+                        transition: "opacity 0.4s ease-in-out",
+                      },
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        top: "2px",
+                        left: "2px",
+                        right: "2px",
+                        bottom: "2px",
+                        backgroundColor: "#fff",
+                        borderRadius: "14px",
+                        zIndex: 1,
+                      },
+                      "&:hover::before": {
+                        animation: "shimmerBorder 6s linear infinite",
+                        opacity: 1,
+                      },
+                      "& > *": {
+                        position: "relative",
+                        zIndex: 2,
+                      },
                     }}
                   >
                     <Box
@@ -780,8 +793,8 @@ const HomePage = () => {
 
       <Box
         sx={{
-          pt: 2,
-          pb: 2,
+          pt: 4,
+          pb: 4,
           backgroundColor: "rgb(223, 223, 223)",
           position: "relative",
           overflow: "hidden",
@@ -847,8 +860,8 @@ const HomePage = () => {
                   variant="h6"
                   sx={{
                     fontWeight: 800,
-                    color: "black",
-                    fontSize: { xs: "1rem", md: "1rem" },
+                    color: "#243240",
+                    fontSize: { xs: "2rem", md: "1.2rem" },
                     transition: "all 0.2s ease",
                     lineHeight: 1,
                     "&:hover": {
@@ -901,6 +914,7 @@ const HomePage = () => {
                 zIndex: 1,
                 textAlign: "center",
                 maxWidth: "800px",
+                maxHeight: "100vh",
                 margin: "0 auto",
               }}
             >
@@ -938,6 +952,5 @@ const HomePage = () => {
     </Box>
   );
 };
-
 
 export default HomePage;
