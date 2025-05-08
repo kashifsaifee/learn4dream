@@ -18,7 +18,7 @@ import DotHoverButton from "../Components/DotHoverButton";
 import { Favorite, Forest, BeachAccessRounded } from "@mui/icons-material";
 import AnimatedCard from "../Components/AnimatedCard";
 import Footer from "../Components/Footer";
-import Lottie from 'lottie-react';
+import Lottie from "lottie-react";
 import animationData from "../assets/animation/animation.json";
 
 import {
@@ -69,7 +69,7 @@ const HomePage = () => {
       quote:
         "Amet minim mollit non deserunt ullam co est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat.",
       name: "Mark Tanker",
-      role: "California",
+      role: "DevOps Engineer atCalifornia",
     },
     {
       id: 3,
@@ -141,6 +141,14 @@ const HomePage = () => {
     { label: "Team Members", value: 12, suffix: "+" },
     { label: "Years of Experience", value: 5, suffix: "+" },
   ];
+  // Lottie animation reference
+ const lottieRef = useRef();
+
+  useEffect(() => {
+    if (lottieRef.current) {
+      lottieRef.current.play();
+    }
+  }, []);
 
   // Initialize animations only after component mounts
   useEffect(() => {
@@ -286,7 +294,7 @@ const HomePage = () => {
             <Box
               sx={{
                 flex: 1,
-                zIndex: 1,
+                zIndex: 0,
                 textAlign: { xs: "center", md: "left" },
                 mb: { xs: 4, md: 0 },
               }}
@@ -350,9 +358,10 @@ const HomePage = () => {
               }}
             >
               <Lottie
+                lottieRef={lottieRef}
                 animationData={animationData}
-                loop = {true}
-                autoplay = {true}
+                loop={true}
+                autoplay={true}
                 style={{ width: "100%", height: "auto" }}
               />
             </Box>
