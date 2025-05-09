@@ -511,7 +511,18 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   });
 
   return (
-    <AppBar position="sticky" sx={{ bgcolor: '#fefefe', color: '#333', boxShadow: 3 }}>
+    <AppBar
+      position="sticky"
+      sx={{
+        bgcolor: 'transparent',
+        color: '#333',
+        boxShadow: 3,
+        borderRadius: '12px',
+        width: '60%',
+        margin: '0 auto',
+        backdropFilter: 'blur(10px)',
+      }}
+    >
       <Toolbar sx={{ justifyContent: 'space-between', gap: 2 }}>
         <Typography
           variant="h5"

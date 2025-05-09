@@ -21,6 +21,7 @@ import Footer from "../Components/Footer";
 import Lottie from "lottie-react";
 import animationData from "../assets/animation/animation.json";
 
+
 import {
   CodeIcon,
   DesignServicesIcon,
@@ -427,7 +428,7 @@ const HomePage = () => {
         sx={{
           minHeight: "70vh",
           py: 10,
-          background: "linear-gradient(90deg, #4F5A66, #7B848C)",
+          background: "linear-gradient(90deg,rgb(113, 120, 128), #7B848C)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
