@@ -481,7 +481,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         scrollbarWidth: "thin",
         scrollbarGutter: "stable",
         "&::-webkit-scrollbar": {
-          // width: "8px",
+          width: "8px",
         },
         "&::-webkit-scrollbar-thumb": {
           backgroundColor: "#ccc",
