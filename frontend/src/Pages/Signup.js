@@ -306,9 +306,10 @@
 //     </Box>
 //   );
 // }
+
+
 import React, { useState } from 'react';
 import {
-  // Box,
   Button,
   TextField,
   Typography,
@@ -317,6 +318,7 @@ import {
   Divider,
   Stack,
   Snackbar,
+  CircularProgress,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -325,22 +327,49 @@ import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 import styled from 'styled-components';
 import axios from 'axios';
 
+// Color palette
+const COLORS = {
+  background: '#181F2A',
+  leftPanel: 'linear-gradient(135deg, #1e2a38 60%, #FFA559 100%)',
+  cardBg: 'rgba(24,31,42,0.98)',
+  accent: '#FFA559',
+  inputBg: 'rgba(255,255,255,0.10)',
+  inputText: '#fff',
+  inputLabel: '#e0e0e0',
+  border: '#FFA559',
+  divider: 'rgba(255,255,255,0.12)',
+  buttonHover: 'rgba(255,165,89,0.10)',
+  outline: '#FFA559',
+  error: '#ff5252',
+  success: '#4caf50',
+};
+
+// Shared input style for TextFields
+const inputStyle = {
+  input: { color: COLORS.inputText },
+  '.MuiFilledInput-root': {
+    bgcolor: COLORS.inputBg,
+    borderRadius: '12px',
+  },
+};
+
 // Styled Components
 const Container = styled.div`
   display: flex;
   min-height: 100vh;
-  background: #121212;
+  background: ${COLORS.background};
 `;
 
 const LeftPanel = styled.div`
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  background: ${COLORS.leftPanel};
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 40px;
+  padding: 48px 40px 48px 64px;
+  min-width: 340px;
+  box-shadow: 2px 0 24px 0 rgba(0, 0, 0, 0.12);
 `;
 
 const RightPanel = styled(motion.div)`
@@ -348,17 +377,16 @@ const RightPanel = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #121212;
+  background: ${COLORS.background};
 `;
 
 const FormWrapper = styled.div`
   width: 100%;
   max-width: 440px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(15px);
-  border-radius: 16px;
-  padding: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  background: ${COLORS.cardBg};
+  border-radius: 18px;
+  padding: 44px 36px 36px 36px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
   color: white;
 `;
 
@@ -373,9 +401,6 @@ export default function Signup() {
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  const togglePwd = () => setShowPwd(!showPwd);
-  const toggleConfirm = () => setShowConfirm(!showConfirm);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -400,18 +425,23 @@ export default function Signup() {
         password: form.password,
       });
 
-      if (res.data.token) {
-        localStorage.setItem('token', res.data.token);
-      }
+      if (res.data.token) localStorage.setItem('token', res.data.token);
 
       setSnack({ open: true, message: 'Signup successful!', severity: 'success' });
-      setTimeout(() => navigate('/profile'), 1500);
+      setTimeout(() => navigate('/profile'), 1300);
     } catch (err) {
-      setSnack({ open: true, message: err.response?.data?.message || 'Signup failed.', severity: 'error' });
+      setSnack({
+        open: true,
+        message: err.response?.data?.message || 'Signup failed.',
+        severity: 'error',
+      });
     } finally {
       setLoading(false);
     }
   };
+
+  const togglePwd = () => setShowPwd(!showPwd);
+  const toggleConfirm = () => setShowConfirm(!showConfirm);
 
   const handleSocialSignup = (provider) => {
     console.log(`Signing up with ${provider}`);
@@ -420,50 +450,38 @@ export default function Signup() {
   return (
     <Container>
       <LeftPanel>
-        <Typography variant="h3" fontWeight="bold" mb={2}>
+        <Typography variant="h3" fontWeight="bold" mb={2} sx={{ color: COLORS.accent }}>
           Start Your Learning
         </Typography>
-        <Typography variant="body1" fontSize="1.1rem">
+        <Typography variant="body1" fontSize="1.1rem" sx={{ opacity: 0.92 }}>
           Unlock access to premium courses, expert instructors, and a community of learners.
         </Typography>
       </LeftPanel>
 
-      <RightPanel
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
+      <RightPanel initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
         <FormWrapper>
-          <Typography variant="h4" fontWeight="bold" mb={3} color="#FFA559" textAlign="center">
+          <Typography variant="h4" fontWeight="bold" mb={3} textAlign="center" sx={{ color: COLORS.accent }}>
             Sign Up
           </Typography>
 
           <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Full Name"
-              name="name"
-              variant="filled"
-              required
-              value={form.name}
-              onChange={handleChange}
-              sx={{ mb: 3, input: { color: 'white' }, '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)', borderRadius: '12px' } }}
-              InputLabelProps={{ style: { color: '#ccc' } }}
-            />
+            {['name', 'email'].map((field, idx) => (
+              <TextField
+                key={field}
+                fullWidth
+                label={field === 'name' ? 'Full Name' : 'Email'}
+                name={field}
+                type={field === 'email' ? 'email' : 'text'}
+                variant="filled"
+                required
+                value={form[field]}
+                onChange={handleChange}
+                sx={{ mb: 3, ...inputStyle }}
+                InputLabelProps={{ style: { color: COLORS.inputLabel } }}
+              />
+            ))}
 
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              variant="filled"
-              required
-              value={form.email}
-              onChange={handleChange}
-              sx={{ mb: 3, input: { color: 'white' }, '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)', borderRadius: '12px' } }}
-              InputLabelProps={{ style: { color: '#ccc' } }}
-            />
-
+            {/* Password Field */}
             <TextField
               fullWidth
               label="Password"
@@ -473,12 +491,12 @@ export default function Signup() {
               required
               value={form.password}
               onChange={handleChange}
-              sx={{ mb: 3, input: { color: 'white' }, '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)', borderRadius: '12px' } }}
-              InputLabelProps={{ style: { color: '#ccc' } }}
+              sx={{ mb: 3, ...inputStyle }}
+              InputLabelProps={{ style: { color: COLORS.inputLabel } }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
+                    <IconButton onClick={togglePwd} edge="end" aria-label="toggle password" sx={{ color: COLORS.inputLabel }}>
                       {showPwd ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -486,6 +504,7 @@ export default function Signup() {
               }}
             />
 
+            {/* Confirm Password */}
             <TextField
               fullWidth
               label="Confirm Password"
@@ -495,12 +514,12 @@ export default function Signup() {
               required
               value={form.confirm}
               onChange={handleChange}
-              sx={{ mb: 3, input: { color: 'white' }, '.MuiFilledInput-root': { bgcolor: 'rgba(255,255,255,0.08)', borderRadius: '12px' } }}
-              InputLabelProps={{ style: { color: '#ccc' } }}
+              sx={{ mb: 3, ...inputStyle }}
+              InputLabelProps={{ style: { color: COLORS.inputLabel } }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={toggleConfirm} edge="end" sx={{ color: 'white' }}>
+                    <IconButton onClick={toggleConfirm} edge="end" aria-label="toggle confirm password" sx={{ color: COLORS.inputLabel }}>
                       {showConfirm ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -515,55 +534,53 @@ export default function Signup() {
               variant="contained"
               color="secondary"
               disabled={loading}
-              sx={{ borderRadius: 3, fontWeight: 'bold', textTransform: 'none', mb: 3 }}
+              sx={{
+                borderRadius: 3,
+                fontWeight: 'bold',
+                textTransform: 'none',
+                mb: 3,
+                bgcolor: loading ? '#ccc' : COLORS.accent,
+                color: '#222',
+                '&:hover': {
+                  bgcolor: loading ? '#ccc' : '#ffb877',
+                },
+              }}
             >
-              {loading ? 'Signing Up...' : 'Sign Up'}
+              {loading ? <CircularProgress size={24} sx={{ color: '#222' }} /> : 'Sign Up'}
             </Button>
           </form>
 
-          <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.1)' }}>OR</Divider>
+          <Divider sx={{ my: 3, borderColor: COLORS.divider }}>OR</Divider>
 
           <Stack spacing={2}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => handleSocialSignup('Google')}
-              startIcon={<FaGoogle />}
-              sx={{
-                color: 'white',
-                borderColor: '#ccc',
-                textTransform: 'none',
-                '&:hover': {
-                  borderColor: '#FFA559',
-                  backgroundColor: 'rgba(255,165,89,0.05)',
-                },
-              }}
-            >
-              Sign Up with Google
-            </Button>
-
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => handleSocialSignup('Microsoft')}
-              startIcon={<FaMicrosoft />}
-              sx={{
-                color: 'white',
-                borderColor: '#ccc',
-                textTransform: 'none',
-                '&:hover': {
-                  borderColor: '#FFA559',
-                  backgroundColor: 'rgba(255,165,89,0.05)',
-                },
-              }}
-            >
-              Sign Up with Microsoft
-            </Button>
+            {[
+              { provider: 'Google', icon: <FaGoogle /> },
+              { provider: 'Microsoft', icon: <FaMicrosoft /> },
+            ].map(({ provider, icon }) => (
+              <Button
+                key={provider}
+                fullWidth
+                variant="outlined"
+                onClick={() => handleSocialSignup(provider)}
+                startIcon={icon}
+                sx={{
+                  color: COLORS.inputText,
+                  borderColor: COLORS.outline,
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: COLORS.accent,
+                    backgroundColor: COLORS.buttonHover,
+                  },
+                }}
+              >
+                Sign Up with {provider}
+              </Button>
+            ))}
           </Stack>
 
-          <Typography mt={4} textAlign="center" fontSize="0.9rem">
+          <Typography mt={4} textAlign="center" fontSize="0.9rem" sx={{ color: COLORS.inputLabel }}>
             Already have an account?{' '}
-            <Link to="/login" style={{ color: '#FFA559', textDecoration: 'none' }}>
+            <Link to="/login" style={{ color: COLORS.accent, textDecoration: 'none' }}>
               Log in
             </Link>
           </Typography>
@@ -572,10 +589,22 @@ export default function Signup() {
 
       <Snackbar
         open={snack.open}
-        autoHideDuration={6000}
+        autoHideDuration={4500}
         onClose={() => setSnack({ ...snack, open: false })}
         message={snack.message}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        ContentProps={{
+          sx: {
+            bgcolor:
+              snack.severity === 'success'
+                ? COLORS.success
+                : snack.severity === 'error'
+                ? COLORS.error
+                : COLORS.cardBg,
+            color: '#fff',
+            fontWeight: 500,
+          },
+        }}
       />
     </Container>
   );
