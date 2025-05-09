@@ -434,7 +434,7 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
       onClick={closeMenu}
       sx={{
         color: active ? theme.palette.primary.main : '#333',
-        fontWeight: active ? 'bold' : '500',
+        fontWeight: active ? 'bold' : 500,
         px: 3,
         py: 1.2,
         borderRadius: 2,
@@ -462,21 +462,17 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const [anchorMobile, setAnchorMobile] = useState(null);
   const [anchorProfile, setAnchorProfile] = useState(null);
 
-  const open = (set) => (e) => set(e.currentTarget);
-  const close = (set) => () => set(null);
-
   const handleLogout = () => {
     setIsLoggedIn(false);
     navigate('/');
   };
 
-  const customMenuProps = {
+  const menuProps = {
     TransitionComponent: Grow,
     PaperProps: {
       elevation: 4,
       sx: {
         borderRadius: 3,
-        minWidth: 180,
         mt: 1,
         bgcolor: '#ffffff',
         boxShadow: '0px 3px 8px rgba(0,0,0,0.1)',
@@ -490,13 +486,17 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
       vertical: 'top',
       horizontal: 'left',
     },
+    MenuListProps: {
+      onMouseLeave: () => {
+        setAnchorCourses(null);
+        setAnchorPages(null);
+      },
+    },
   };
 
-  const linkStyle = (path) => ({
-    color: location.pathname.startsWith(path)
-      ? theme.palette.primary.main
-      : '#333',
-    fontWeight: location.pathname.startsWith(path) ? 'bold' : '500',
+  const navButtonStyle = (path) => ({
+    color: location.pathname.startsWith(path) ? theme.palette.primary.main : '#333',
+    fontWeight: location.pathname.startsWith(path) ? 'bold' : 500,
     textTransform: 'none',
     fontSize: '1rem',
     px: 2,
@@ -511,7 +511,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   });
 
   return (
-    <AppBar position="sticky" sx={{ bgcolor: '#fefefe', color: '#333', boxShadow: 3 }}>
+    <AppBar position="sticky" sx={{ bgcolor: '#f9f9f9', color: '#333', boxShadow: 3 }}>
       <Toolbar sx={{ justifyContent: 'space-between', gap: 2 }}>
         <Typography
           variant="h5"
@@ -526,27 +526,45 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
           Learn<span style={{ color: theme.palette.secondary.main }}>4</span>Dream
         </Typography>
 
-        {!isMobile && (
+        {!isMobile ? (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button component={Link} to="/" sx={linkStyle('/')}>Home</Button>
+            <Button component={Link} to="/" sx={navButtonStyle('/')}>Home</Button>
 
-            <Button onClick={open(setAnchorCourses)} endIcon={<ExpandMore />} sx={linkStyle('/courses')}>
-              Courses
-            </Button>
-            <Menu anchorEl={anchorCourses} open={Boolean(anchorCourses)} onClose={close(setAnchorCourses)} {...customMenuProps}>
-              <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>All Courses</NavLinkBtn>
-              <NavLinkBtn to="/course/detail" closeMenu={close(setAnchorCourses)}>Course Detail</NavLinkBtn>
-            </Menu>
+            <Box
+              onMouseEnter={(e) => setAnchorCourses(e.currentTarget)}
+            >
+              <Button endIcon={<ExpandMore />} sx={navButtonStyle('/courses')}>
+                Courses
+              </Button>
+              <Menu
+                anchorEl={anchorCourses}
+                open={Boolean(anchorCourses)}
+                onClose={() => setAnchorCourses(null)}
+                {...menuProps}
+              >
+                <NavLinkBtn to="/courses" closeMenu={() => setAnchorCourses(null)}>All Courses</NavLinkBtn>
+                <NavLinkBtn to="/course/detail" closeMenu={() => setAnchorCourses(null)}>Course Detail</NavLinkBtn>
+              </Menu>
+            </Box>
 
-            <Button onClick={open(setAnchorPages)} endIcon={<ExpandMore />} sx={linkStyle('/blogs')}>
-              Pages
-            </Button>
-            <Menu anchorEl={anchorPages} open={Boolean(anchorPages)} onClose={close(setAnchorPages)} {...customMenuProps}>
-              <NavLinkBtn to="/blogs" closeMenu={close(setAnchorPages)}>Blogs</NavLinkBtn>
-              <NavLinkBtn to="/about" closeMenu={close(setAnchorPages)}>About</NavLinkBtn>
-            </Menu>
+            <Box
+              onMouseEnter={(e) => setAnchorPages(e.currentTarget)}
+            >
+              <Button endIcon={<ExpandMore />} sx={navButtonStyle('/blogs')}>
+                Pages
+              </Button>
+              <Menu
+                anchorEl={anchorPages}
+                open={Boolean(anchorPages)}
+                onClose={() => setAnchorPages(null)}
+                {...menuProps}
+              >
+                <NavLinkBtn to="/blogs" closeMenu={() => setAnchorPages(null)}>Blogs</NavLinkBtn>
+                <NavLinkBtn to="/about" closeMenu={() => setAnchorPages(null)}>About</NavLinkBtn>
+              </Menu>
+            </Box>
 
-            <Button component={Link} to="/contact" sx={linkStyle('/contact')}>Contact</Button>
+            <Button component={Link} to="/contact" sx={navButtonStyle('/contact')}>Contact</Button>
 
             {!isLoggedIn ? (
               <>
@@ -559,15 +577,18 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               </>
             ) : (
               <>
-                <IconButton onClick={open(setAnchorProfile)} sx={{ color: theme.palette.primary.main }}>
+                <IconButton onClick={(e) => setAnchorProfile(e.currentTarget)} sx={{ color: theme.palette.primary.main }}>
                   <CgProfile size={24} />
                 </IconButton>
-                <Menu anchorEl={anchorProfile} open={Boolean(anchorProfile)} onClose={close(setAnchorProfile)} {...customMenuProps}>
-                  <NavLinkBtn to="/profile" closeMenu={close(setAnchorProfile)}>Profile</NavLinkBtn>
-                  <NavLinkBtn to="/mycourses" closeMenu={close(setAnchorProfile)}>My Courses</NavLinkBtn>
+                <Menu anchorEl={anchorProfile} open={Boolean(anchorProfile)} onClose={() => setAnchorProfile(null)} {...menuProps}>
+                  <NavLinkBtn to="/profile" closeMenu={() => setAnchorProfile(null)}>Profile</NavLinkBtn>
+                  <NavLinkBtn to="/mycourses" closeMenu={() => setAnchorProfile(null)}>My Courses</NavLinkBtn>
                   <Divider sx={{ my: 1 }} />
                   <MenuItem
-                    onClick={() => { handleLogout(); close(setAnchorProfile)(); }}
+                    onClick={() => {
+                      handleLogout();
+                      setAnchorProfile(null);
+                    }}
                     sx={{ px: 3, py: 1.2, '&:hover': { bgcolor: 'rgba(255,0,0,0.1)', color: 'red' } }}
                   >
                     Logout
@@ -576,33 +597,31 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               </>
             )}
           </Box>
-        )}
-
-        {isMobile && (
+        ) : (
           <>
-            <IconButton color="inherit" onClick={open(setAnchorMobile)}>
+            <IconButton color="inherit" onClick={(e) => setAnchorMobile(e.currentTarget)}>
               <MenuIcon />
             </IconButton>
-            <Menu anchorEl={anchorMobile} open={Boolean(anchorMobile)} onClose={close(setAnchorMobile)} {...customMenuProps}>
+            <Menu anchorEl={anchorMobile} open={Boolean(anchorMobile)} onClose={() => setAnchorMobile(null)} {...menuProps}>
               <Typography sx={{ px: 2, py: 1, fontWeight: 600 }}>Menu</Typography>
               <Divider />
-              <NavLinkBtn to="/" closeMenu={close(setAnchorMobile)}>Home</NavLinkBtn>
-              <NavLinkBtn to="/courses" closeMenu={close(setAnchorMobile)}>All Courses</NavLinkBtn>
-              <NavLinkBtn to="/course/detail" closeMenu={close(setAnchorMobile)}>Course Detail</NavLinkBtn>
-              <NavLinkBtn to="/blogs" closeMenu={close(setAnchorMobile)}>Blogs</NavLinkBtn>
-              <NavLinkBtn to="/about" closeMenu={close(setAnchorMobile)}>About</NavLinkBtn>
-              <NavLinkBtn to="/contact" closeMenu={close(setAnchorMobile)}>Contact</NavLinkBtn>
+              <NavLinkBtn to="/" closeMenu={() => setAnchorMobile(null)}>Home</NavLinkBtn>
+              <NavLinkBtn to="/courses" closeMenu={() => setAnchorMobile(null)}>All Courses</NavLinkBtn>
+              <NavLinkBtn to="/course/detail" closeMenu={() => setAnchorMobile(null)}>Course Detail</NavLinkBtn>
+              <NavLinkBtn to="/blogs" closeMenu={() => setAnchorMobile(null)}>Blogs</NavLinkBtn>
+              <NavLinkBtn to="/about" closeMenu={() => setAnchorMobile(null)}>About</NavLinkBtn>
+              <NavLinkBtn to="/contact" closeMenu={() => setAnchorMobile(null)}>Contact</NavLinkBtn>
               <Divider />
               {!isLoggedIn ? (
                 <>
-                  <NavLinkBtn to="/login" closeMenu={close(setAnchorMobile)}>Login</NavLinkBtn>
-                  <NavLinkBtn to="/signup" closeMenu={close(setAnchorMobile)}>Sign Up</NavLinkBtn>
+                  <NavLinkBtn to="/login" closeMenu={() => setAnchorMobile(null)}>Login</NavLinkBtn>
+                  <NavLinkBtn to="/signup" closeMenu={() => setAnchorMobile(null)}>Sign Up</NavLinkBtn>
                 </>
               ) : (
                 <>
-                  <NavLinkBtn to="/profile" closeMenu={close(setAnchorMobile)}>Profile</NavLinkBtn>
-                  <NavLinkBtn to="/mycourses" closeMenu={close(setAnchorMobile)}>My Courses</NavLinkBtn>
-                  <MenuItem onClick={() => { handleLogout(); close(setAnchorMobile)(); }}>
+                  <NavLinkBtn to="/profile" closeMenu={() => setAnchorMobile(null)}>Profile</NavLinkBtn>
+                  <NavLinkBtn to="/mycourses" closeMenu={() => setAnchorMobile(null)}>My Courses</NavLinkBtn>
+                  <MenuItem onClick={() => { handleLogout(); setAnchorMobile(null); }}>
                     Logout
                   </MenuItem>
                 </>

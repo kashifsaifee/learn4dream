@@ -232,53 +232,71 @@ import {
 } from '@mui/material';
 import styled from 'styled-components';
 
-// Container split into left and right
+// === Color Palette Consistent with Signin.js ===
+const PRIMARY_BG = '#0f274a';
+const CARD_BG = '#fff';
+const ACCENT = '#FFA559';
+const TEXT_PRIMARY = '#0f274a';
+const TEXT_SECONDARY = '#555';
+const INPUT_BG = '#f5f7fa';
+
+// === Reusable Input Style ===
+const inputStyles = {
+  mb: 3,
+  input: { color: TEXT_PRIMARY },
+  '.MuiFilledInput-root': {
+    bgcolor: INPUT_BG,
+    borderRadius: '12px',
+  },
+};
+
+// === Styled Components ===
 const Container = styled.div`
   display: flex;
   height: 100vh;
-  background: #0e0e0e;
-  color: white;
+  background: ${PRIMARY_BG};
+  color: ${TEXT_PRIMARY};
+  overflow: hidden;
 `;
 
 const LeftSection = styled.div`
   flex: 1;
-  background: rgba(15, 15, 15, 0.5);
-  backdrop-filter: blur(15px);
+  background: linear-gradient(135deg, #ffa559 0%, #ffe6c7 100%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
   flex-direction: column;
-  box-shadow: inset -2px 0 10px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
 `;
 
 const RightSection = styled(motion.div)`
   flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
-  backdrop-filter: blur(12px);
-  background: rgba(0, 0, 0, 0.45);
+  align-items: center;
+  background: ${PRIMARY_BG};
 `;
 
 const Card = styled.div`
+  background-color: ${CARD_BG};
+  padding: 32px;
+  border-radius: 18px;
   width: 100%;
   max-width: 420px;
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 30px;
-  border-radius: 16px;
-  color: white;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  color: ${TEXT_PRIMARY};
 `;
 
 const SocialButton = styled(Button)`
-  color: white;
+  color: ${TEXT_PRIMARY};
   border-color: #ccc;
+  background: #fff;
   text-transform: none;
+  font-weight: 500;
 
   &:hover {
-    border-color: #ffa559;
-    background-color: rgba(255, 165, 89, 0.08);
+    background-color: #fff7f0;
+    border-color: ${ACCENT};
   }
 `;
 
@@ -293,7 +311,7 @@ export default function Login({ setIsLoggedIn }) {
 
   useEffect(() => {
     gsap.fromTo(
-      '.login-form',
+      '.login-card',
       { opacity: 0, y: 40 },
       { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
     );
@@ -307,6 +325,7 @@ export default function Login({ setIsLoggedIn }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!isValidEmail(form.email)) {
       setError('Please enter a valid email address.');
       setOpenSnackbar(true);
@@ -325,7 +344,9 @@ export default function Login({ setIsLoggedIn }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
+
       const data = await res.json();
+
       if (res.ok) {
         localStorage.setItem('token', data.access_token);
         setSuccessMessage(data.message);
@@ -334,8 +355,8 @@ export default function Login({ setIsLoggedIn }) {
       } else {
         setError(data.message || 'Login failed.');
       }
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch (err) {
+      console.error('Login error:', err);
       setError('Something went wrong. Try again later.');
     } finally {
       setOpenSnackbar(true);
@@ -347,27 +368,25 @@ export default function Login({ setIsLoggedIn }) {
     console.log(`Logging in with ${provider}`);
   };
 
-  const handleCloseSnackbar = () => setOpenSnackbar(false);
-
   return (
     <Container>
       <LeftSection>
-        <Typography variant="h3" color="#FFA559" gutterBottom>
+        <Typography variant="h3" color={PRIMARY_BG} fontWeight="bold" gutterBottom>
           Welcome to Learn4Dream
         </Typography>
-        <Typography variant="body1" sx={{ maxWidth: 360, textAlign: 'center', color: '#ccc' }}>
-          Access personalized learning, track your progress, and unlock your potential with our intuitive platform.
+        <Typography variant="body1" sx={{ textAlign: 'center', maxWidth: 400, color: TEXT_SECONDARY }}>
+          Access personalized learning, track progress, and grow with our intuitive platform.
         </Typography>
       </LeftSection>
 
       <RightSection
-        className="login-form"
+        className="login-card"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <Card>
-          <Typography variant="h4" fontWeight="bold" mb={3} color="#FFA559" textAlign="center">
+          <Typography variant="h4" fontWeight="bold" textAlign="center" mb={3} color={ACCENT}>
             Welcome Back
           </Typography>
 
@@ -381,15 +400,8 @@ export default function Login({ setIsLoggedIn }) {
               required
               value={form.email}
               onChange={handleChange}
-              sx={{
-                mb: 3,
-                input: { color: 'white' },
-                '.MuiFilledInput-root': {
-                  bgcolor: 'rgba(255,255,255,0.08)',
-                  borderRadius: '12px',
-                },
-              }}
-              InputLabelProps={{ style: { color: '#ccc' } }}
+              sx={inputStyles}
+              InputLabelProps={{ style: { color: TEXT_SECONDARY } }}
             />
 
             <TextField
@@ -401,19 +413,12 @@ export default function Login({ setIsLoggedIn }) {
               required
               value={form.password}
               onChange={handleChange}
-              sx={{
-                mb: 4,
-                input: { color: 'white' },
-                '.MuiFilledInput-root': {
-                  bgcolor: 'rgba(255,255,255,0.08)',
-                  borderRadius: '12px',
-                },
-              }}
-              InputLabelProps={{ style: { color: '#ccc' } }}
+              sx={{ ...inputStyles, mb: 4 }}
+              InputLabelProps={{ style: { color: TEXT_SECONDARY } }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={togglePwd} edge="end" sx={{ color: 'white' }}>
+                    <IconButton onClick={togglePwd} edge="end" sx={{ color: TEXT_PRIMARY }}>
                       {showPwd ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -424,23 +429,27 @@ export default function Login({ setIsLoggedIn }) {
             <Button
               type="submit"
               fullWidth
-              size="large"
               variant="contained"
-              color="secondary"
+              size="large"
               sx={{
-                textTransform: 'none',
+                bgcolor: ACCENT,
+                color: PRIMARY_BG,
                 fontWeight: 'bold',
+                textTransform: 'none',
                 borderRadius: 3,
+                '&:hover': {
+                  bgcolor: '#ffb877',
+                },
               }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Log In'}
+              {loading ? <CircularProgress size={24} sx={{ color: PRIMARY_BG }} /> : 'Log In'}
             </Button>
           </form>
 
-          <Typography mt={3} textAlign="center" fontSize="0.9rem">
-            Don&rsquo;t have an account?{' '}
-            <Link to="/signup" style={{ color: '#FFA559', textDecoration: 'none' }}>
+          <Typography mt={3} textAlign="center" fontSize="0.9rem" color={TEXT_SECONDARY}>
+            Don’t have an account?{' '}
+            <Link to="/signup" style={{ color: ACCENT, textDecoration: 'none', fontWeight: 500 }}>
               Sign up
             </Link>
           </Typography>
@@ -454,6 +463,7 @@ export default function Login({ setIsLoggedIn }) {
             >
               Continue with Google
             </SocialButton>
+
             <SocialButton
               fullWidth
               variant="outlined"
@@ -469,7 +479,7 @@ export default function Login({ setIsLoggedIn }) {
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
+        onClose={() => setOpenSnackbar(false)}
         message={successMessage || error}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       />
