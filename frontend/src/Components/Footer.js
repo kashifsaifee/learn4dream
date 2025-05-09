@@ -191,7 +191,7 @@ const Footer = () => {
         backgroundColor: '#fdfdfd',
         borderTop: '1px solid #e0e0e0',
         py: 8,
-        mt: 10,
+       
       }}
       component="footer"
     >
