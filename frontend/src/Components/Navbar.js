@@ -534,7 +534,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               Courses
             </Button>
             <Menu anchorEl={anchorCourses} open={Boolean(anchorCourses)} onClose={close(setAnchorCourses)} {...customMenuProps}>
-              <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>All Courses</NavLinkBtn>
+              <NavLinkBtn to="/courses" closeMenu={close(setAnchorCourses)}>Courses</NavLinkBtn>
+              <NavLinkBtn to="/all-courses" closeMenu={close(setAnchorCourses)}>All Courses</NavLinkBtn>
               <NavLinkBtn to="/course/detail" closeMenu={close(setAnchorCourses)}>Course Detail</NavLinkBtn>
             </Menu>
 
