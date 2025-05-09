@@ -1,0 +1,14 @@
+body {
+  overflow-x: auto;
+}
+
+body {
+  overflow-x: hidden !important;
+  background-color: #6e7681; /* ✅ Match this with your actual app background */
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #fff; /* ya jo bhi tera base color ho */
+}
