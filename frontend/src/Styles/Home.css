@@ -1,4 +1,4 @@
-.home-container {
+/* .home-container {
   overflow-x: hidden;
 }
 
@@ -14,7 +14,7 @@
   color: #555;
 }
 
-/* Cards Section */
+/* Cards Section *
 .cards-section {
   background-color: #f8f9fa;
   border-radius: 12px;
@@ -30,7 +30,7 @@
   color: #555;
 }
 
-/* WHY US Section */
+/* WHY US Section *
 .whyus-container {
   background: #f8f9fa;
   border-radius: 12px;
@@ -67,7 +67,7 @@
   color: #333;
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling *
 html, body {
   scroll-behavior: smooth;
-}
+} */

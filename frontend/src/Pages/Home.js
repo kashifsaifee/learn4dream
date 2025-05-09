@@ -7,7 +7,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
   useTheme,
 } from "@mui/material";
 import { motion, useAnimation } from "framer-motion";
@@ -15,7 +14,20 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs";
 import { useInView } from "react-intersection-observer";
+import DotHoverButton from "../Components/DotHoverButton";
+import { Favorite, Forest, BeachAccessRounded } from "@mui/icons-material";
+import AnimatedCard from "../Components/AnimatedCard";
+import Footer from "../Components/Footer";
+import Lottie from "lottie-react";
+import animationData from "../assets/animation/animation.json";
 
+import {
+  CodeIcon,
+  DesignServicesIcon,
+  LanguageIcon,
+  SchoolIcon,
+} from "../utils/icon";
+import CountUp from "react-countup";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,54 +54,101 @@ const HomePage = () => {
     "Intel",
   ];
 
-  // Features data
-  const features = [
+  // Testimonials data
+
+  const testimonials = [
     {
-      title: "Interactive Learning",
-      description: "Engage with hands-on projects and real-world scenarios.",
-      icon: "📚",
+      id: 1,
+      quote:
+        "This program completely transformed my career. The hands-on projects and expert mentorship gave me the confidence and skills to land my dream job at a top tech company.",
+      name: "Sarah Johnson",
+      role: "Software Engineer at Google",
     },
     {
-      title: "Expert Mentors",
+      id: 2,
+      quote:
+        "Amet minim mollit non deserunt ullam co est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat.",
+      name: "Mark Tanker",
+      role: "DevOps Engineer atCalifornia",
+    },
+    {
+      id: 3,
+      quote:
+        "The curriculum was perfectly balanced between theory and practice. I went from beginner to job-ready in just six months, and now I'm working remotely for an international company.",
+      name: "Alex Chen",
+      role: "Frontend Developer at Shopify",
+    },
+  ];
+
+  // Animated cards data
+
+  const cardData = [
+    {
+      id: 1,
+      icon: <Favorite />,
+      title: "Data Science",
       description:
-        "Learn from industry professionals with years of experience.",
-      icon: "👨‍🏫",
+        "Data science is the study of data to extract meaningful insights for business",
     },
     {
-      title: "Community Support",
-      description: "Join a vibrant community of learners and professionals.",
-      icon: "👥",
+      id: 2,
+      icon: <BeachAccessRounded />,
+      title: "Web Development",
+      description:
+        "Build responsive and interactive websites using modern technologies.",
     },
     {
-      title: "Career Growth",
-      description: "Get the skills you need to advance in your career.",
-      icon: "📈",
+      id: 3,
+      a: <Forest />,
+      title: "AI & Machine Learning",
+      description:
+        "Learn how to build intelligent systems that learn from data and improve over time.",
     },
   ];
 
   // Programs data
   const programs = [
     {
-      title: "Web Development",
-      description: "Master HTML, CSS, JavaScript, and modern frameworks.",
-      image: "https://source.unsplash.com/400x300/?web,development",
-    },
-    {
-      title: "Data Science",
-      description: "Learn data analysis, visualization, and machine learning.",
-      image: "https://source.unsplash.com/400x300/?data,science",
+      title: "Web Dev",
+      description: "Master front-end and back-end development skills.",
+      image: "webdev.jpg",
+      icon: <CodeIcon sx={{ color: "#1976d2", mr: 1 }} />,
     },
     {
       title: "UI/UX Design",
       description: "Craft intuitive and aesthetic digital experiences.",
-      image: "https://source.unsplash.com/400x300/?design,ui",
+      image: "design.jpg",
+      icon: <DesignServicesIcon sx={{ color: "#9c27b0", mr: 1 }} />,
     },
     {
-      title: "Cloud Computing",
-      description: "Explore AWS, Azure, and cloud architecture best practices.",
-      image: "https://source.unsplash.com/400x300/?cloud,computing",
+      title: "AI-ML",
+      description: "Build intelligent systems using AI and machine learning.",
+      image: "languages.jpg",
+      icon: <LanguageIcon sx={{ color: "#ff9800", mr: 1 }} />,
+    },
+    {
+      title: "Data Science",
+      description: "Analyze and visualize data to drive business decisions.",
+      image: "support.jpg",
+      icon: <SchoolIcon sx={{ color: "#2e7d32", mr: 1 }} />,
     },
   ];
+
+  // Statistics data
+  const stats = [
+    { label: "Happy Clients", value: 10, suffix: "+" },
+    { label: "Projects Completed", value: 35, suffix: "+" },
+    { label: "Team Members", value: 12, suffix: "+" },
+    { label: "Years of Experience", value: 5, suffix: "+" },
+  ];
+  // Lottie animation reference
+ const lottieRef = useRef();
+
+  useEffect(() => {
+    if (lottieRef.current) {
+      lottieRef.current.play();
+    }
+  }, []);
 
   // Initialize animations only after component mounts
   useEffect(() => {
@@ -210,170 +269,111 @@ const HomePage = () => {
   }, [isMounted]);
 
   return (
-    <Box sx={{ overflowX: "hidden" }}>
-      {/* Hero Section */}
+    <Box sx={{ overflowX: "auto", width: "100%" }}>
       <Box
-        ref={heroRef}
         sx={{
           minHeight: "100vh",
           background:
-            "radial-gradient(circle at center, #1a1a1a 0%, #000 100%)",
-          position: "relative",
+            "radial-gradient(circle at center,rgb(255, 255, 255) 0%, #ffffff 80%)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "white",
-          overflow: "hidden",
+          px: 4,
         }}
       >
-        {/* Animated grid background */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            display: "grid",
-            gridTemplateColumns: "repeat(20, 1fr)",
-            gridTemplateRows: "repeat(20, 1fr)",
-            zIndex: 0,
-            opacity: 0.2,
-          }}
-        >
-          {Array.from({ length: 400 }).map((_, i) => (
-            <Box
-              key={i}
-              className="grid-item"
-              sx={{
-                border: "1px solid rgba(255, 255, 255, 0.05)",
-                transition: "all 0.3s ease",
-              }}
-            />
-          ))}
-        </Box>
-
-        {/* Floating elements */}
-        <Box
-          className="floating-element"
-          sx={{
-            position: "absolute",
-            width: 100,
-            height: 100,
-            background:
-              "radial-gradient(circle, rgba(100, 200, 255, 0.8) 0%, rgba(100, 200, 255, 0) 70%)",
-            borderRadius: "50%",
-            top: "20%",
-            left: "10%",
-            filter: "blur(20px)",
-            zIndex: 0,
-          }}
-        />
-        <Box
-          className="floating-element"
-          sx={{
-            position: "absolute",
-            width: 150,
-            height: 150,
-            background:
-              "radial-gradient(circle, rgba(255, 100, 200, 0.6) 0%, rgba(255, 100, 200, 0) 70%)",
-            borderRadius: "50%",
-            bottom: "15%",
-            right: "10%",
-            filter: "blur(25px)",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Hero content */}
-        <Container>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={controls}
-            ref={ref}
+        <Container maxWidth="lg">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
+            {/* Left Side - Text and Buttons */}
             <Box
               sx={{
-                position: "relative",
-                zIndex: 1,
-                textAlign: "center",
-                padding: theme.spacing(4),
+                flex: 1,
+                zIndex: 0,
+                textAlign: { xs: "center", md: "left" },
+                mb: { xs: 4, md: 0 },
               }}
             >
-              <Typography
-                variant="h1"
-                sx={{
-                  fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
-                  fontWeight: 800,
-                  lineHeight: 1.2,
-                  mb: 3,
-                  background: "linear-gradient(90deg, #fff, #aaa)",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                }}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
               >
-                Transform Your Career With Cutting-Edge Skills
-              </Typography>
-
-              <Typography
-                variant="h5"
-                sx={{
-                  maxWidth: "800px",
-                  margin: "0 auto",
-                  mb: 4,
-                  color: "rgba(255, 255, 255, 0.8)",
-                  fontSize: { xs: "1rem", md: "1.25rem" },
-                }}
-              >
-                Join thousands of professionals who have accelerated their
-                careers with our industry-leading programs and mentorship.
-              </Typography>
-
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
+                <Typography
+                  variant="h1"
                   sx={{
-                    borderRadius: "50px",
-                    padding: "12px 32px",
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    boxShadow: "0 4px 20px rgba(0, 150, 255, 0.3)",
+                    fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
+                    fontWeight: 800,
+                    lineHeight: 1.2,
+                    mb: 3,
+                    background:
+                      "linear-gradient(90deg,rgb(78, 133, 185), rgba(0, 0, 0, 0.65))",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
                   }}
                 >
-                  Get Started
-                </Button>
+                  Learn4Dream
+                </Typography>
 
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  size="large"
+                <Typography
+                  variant="h5"
                   sx={{
-                    borderRadius: "50px",
-                    padding: "12px 32px",
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    borderWidth: "2px",
-                    "&:hover": { borderWidth: "2px" },
+                    maxWidth: "600px",
+                    mb: 4,
+                    color: "rgba(0, 0, 0, 0.8)",
+                    fontSize: { xs: "1rem", md: "1.25rem" },
+                    mx: { xs: "auto", md: 0 },
                   }}
                 >
-                  Explore Programs
-                </Button>
-              </Box>
+                  Join a community of learners and professionals who are
+                  passionate about advancing their careers.
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    justifyContent: { xs: "center", md: "flex-start" },
+                  }}
+                >
+                  <DotHoverButton text="Get Started" />
+                  <DotHoverButton text="Explore Programs" />
+                </Box>
+              </motion.div>
             </Box>
-          </motion.div>
+
+            {/* Right Side - Lottie Animation */}
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                maxWidth: "500px",
+              }}
+            >
+              <Lottie
+                lottieRef={lottieRef}
+                animationData={animationData}
+                loop={true}
+                autoplay={true}
+                style={{ width: "100%", height: "auto" }}
+              />
+            </Box>
+          </Box>
         </Container>
       </Box>
-
-     
 
       {/* Features Section */}
       <Box
         sx={{
-          py: 10,
-          backgroundColor: theme.palette.background.paper,
+          py: 8,
+          background: "linear-gradient(to right, #ffffff, #e6f0f6)", // White background with a soft gradient
         }}
       >
         <Container>
@@ -381,77 +381,252 @@ const HomePage = () => {
             className="scroll-trigger"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
           >
             <Typography
               variant="h3"
               sx={{
                 textAlign: "center",
                 mb: 8,
-                fontWeight: 700,
+                fontWeight: 800,
+                fontSize: "2.5rem",
+                background: "linear-gradient(90deg,rgb(0, 0, 0),rgb(0, 0, 0))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
               Why Choose Us?
             </Typography>
           </motion.div>
 
-          <Grid container spacing={4}>
-            {features.map((feature, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
+          {/* Animated cards */}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: 4,
+            }}
+          >
+            {cardData.map((card, index) => (
+              <AnimatedCard
+                key={index}
+                image={card.image}
+                title={card.title}
+                subheader={card.subheader}
+                description={card.description}
+              />
+            ))}
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Statistics Section */}
+      <Box
+        sx={{
+          minHeight: "70vh",
+          py: 10,
+          background: "linear-gradient(90deg, #4F5A66, #7B848C)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {/* Single transparent container for all counters */}
+        <Card
+          sx={{
+            background: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(10px)",
+            borderRadius: "16px",
+            padding: "2rem",
+            boxShadow: "0px 6px 20px rgba(0, 0, 0, 0.3)",
+            display: "flex",
+            justifyContent: "space-between", // Align counters in a row
+            width: "80%", // Adjust width as per your design
+          }}
+        >
+          {/* Loop through the counters inside the single transparent box */}
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: "easeOut",
+                delay: index * 0.2,
+              }}
+              style={{ flex: 1, textAlign: "center" }}
+            >
+              <CardContent>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: "bold",
+                    mb: 1,
+                    color: "#ffffff",
+                    fontSize: "2.5rem",
+                  }}
+                >
+                  <CountUp
+                    start={0}
+                    end={stat.value}
+                    duration={3}
+                    suffix={stat.suffix}
+                  />
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#12191F",
+                    fontWeight: 500,
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  {stat.label}
+                </Typography>
+              </CardContent>
+            </motion.div>
+          ))}
+        </Card>
+      </Box>
+
+      {/* Programs Section */}
+      <Box
+        sx={{
+          minHeight: "60vh",
+          py: 8,
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: theme.palette.background.default,
+          background: "linear-gradient(90deg,#e3ddd2,rgb(255, 255, 255))",
+        }}
+      >
+        <Container>
+          <motion.div
+            className="scroll-trigger"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            <Typography
+              variant="h3"
+              sx={{
+                textAlign: "center",
+                mb: 8,
+                fontWeight: 800,
+                fontSize: "2.5rem",
+                background: "linear-gradient(90deg,rgb(0, 0, 0),rgb(0, 0, 0))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Our Programs
+            </Typography>
+          </motion.div>
+
+          <Grid
+            container
+            spacing={4}
+            justifyContent="center"
+            alignItems="stretch"
+            wrap="nowrap"
+          >
+            {programs.map((program, index) => (
+              <Grid
+                item
+                xs={8}
+                sm={6}
+                md={3}
+                key={index}
+                sx={{ display: "flex" }}
+              >
                 <motion.div
-                  className="scroll-trigger"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  style={{ width: "100%", display: "flex" }}
                 >
                   <Card
                     sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
                       height: "100%",
-                      borderRadius: "16px",
-                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-                      transition: "all 0.3s ease",
+                      width: "100%",
+                      borderRadius: 4,
+                      background: "rgba(255, 255, 255, 0.8)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                      boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                      overflow: "hidden",
+                      padding: 0,
                       "&:hover": {
                         transform: "translateY(-8px)",
-                        boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
+                        boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
                       },
                     }}
                   >
                     <CardContent
                       sx={{
-                        padding: "2rem",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexGrow: 1,
+                        p: 3,
                         textAlign: "center",
                       }}
                     >
-                      <Typography
-                        variant="h2"
+                      <Box
                         sx={{
-                          mb: 3,
-                          fontSize: "3rem",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: 1.5,
+                          flexGrow: 1,
+                          justifyContent: "center",
                         }}
                       >
-                        {feature.icon}
-                      </Typography>
+                        <Box sx={{ fontSize: "2rem" }}>{program.icon}</Box>
 
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          mb: 2,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {feature.title}
-                      </Typography>
+                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                          {program.title}
+                        </Typography>
 
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          color: theme.palette.text.secondary,
-                        }}
-                      >
-                        {feature.description}
-                      </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: theme.palette.text.secondary,
+                            px: 1,
+                          }}
+                        >
+                          {program.description}
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ mt: 3 }}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            borderRadius: "30px",
+                            fontWeight: 600,
+                            textTransform: "none",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              backgroundColor: theme.palette.primary.main,
+                              color: "#fff",
+                            },
+                          }}
+                        >
+                          Learn More
+                        </Button>
+                      </Box>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -461,150 +636,15 @@ const HomePage = () => {
         </Container>
       </Box>
 
-      
-
-     {/* Programs Section */}
-<Box
-  sx={{
-    minHeight: "100vh",
-    py: 10,
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: theme.palette.background.default,
-  }}
->
-  <Container>
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-    >
-      <Typography
-        variant="h3"
-        sx={{
-          textAlign: "center",
-          mb: 8,
-          fontWeight: 700,
-        }}
-      >
-        Our Programs
-      </Typography>
-    </motion.div>
-
-    <Grid container spacing={4} justifyContent="center">
-      {programs.map((program, index) => (
-        <Grid item xs={12} sm={6} md={3} key={index} sx={{ display: "flex" }}>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            style={{ width: "100%" }}
-          >
-            <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                width: "100%",
-                borderRadius: "20px",
-                background: "rgba(255, 255, 255, 0.1)",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                overflow: "hidden",
-                "&:hover": {
-                  transform: "translateY(-8px)",
-                  boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
-                },
-              }}
-            >
-              <CardMedia
-                component="img"
-                image={program.image}
-                alt={program.title}
-                sx={{
-                  height: 0,
-                  paddingTop: "56.25%", // 16:9
-                  transition: "transform 0.4s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-              />
-
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  flexGrow: 1,
-                  p: 3,
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: 700, mb: 1 }}
-                >
-                  {program.title}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: theme.palette.text.secondary,
-                    mb: 2,
-                    display: "-webkit-box",
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {program.description}
-                </Typography>
-
-                <Box sx={{ mt: "auto" }}>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    sx={{
-                      borderRadius: "30px",
-                      fontWeight: 600,
-                      textTransform: "none",
-                      transition: "all 0.3s ease",
-                      "&:hover": {
-                        backgroundColor: theme.palette.primary.main,
-                        color: "#fff",
-                      },
-                    }}
-                  >
-                    Learn More
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </Grid>
-      ))}
-    </Grid>
-  </Container>
-</Box>
-
-
-      
-
       {/* Testimonials Section */}
       <Box
         sx={{
-          py: 10,
-          backgroundColor: theme.palette.background.paper,
+          py: 8,
+          backgroundColor: "background.paper",
         }}
       >
         <Container>
           <motion.div
-            className="scroll-trigger"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -623,10 +663,9 @@ const HomePage = () => {
           </motion.div>
 
           <Grid container spacing={4}>
-            {[1, 2, 3].map((item, index) => (
-              <Grid item xs={12} md={4} key={index}>
+            {testimonials.map((testimonial, index) => (
+              <Grid item xs={12} md={4} key={testimonial.id}>
                 <motion.div
-                  className="scroll-trigger"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -637,9 +676,44 @@ const HomePage = () => {
                       height: "100%",
                       borderRadius: "16px",
                       padding: "2rem",
-                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.05)",
+                      boxShadow: "0 8px 32px rgba(36, 50, 64, 0.3)",
                       position: "relative",
                       overflow: "hidden",
+                      zIndex: 0,
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        top: "-2px",
+                        left: "-2px",
+                        right: "-2px",
+                        bottom: "-2px",
+                        background:
+                          "linear-gradient(135deg, #243240, #394653, #4f5a66, #656f79, #7b848c, #e3ddd2)",
+                        backgroundSize: "400%",
+                        borderRadius: "18px",
+                        zIndex: 0,
+                        opacity: 0,
+                        transition: "opacity 0.4s ease-in-out",
+                      },
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        top: "2px",
+                        left: "2px",
+                        right: "2px",
+                        bottom: "2px",
+                        backgroundColor: "#fff",
+                        borderRadius: "14px",
+                        zIndex: 1,
+                      },
+                      "&:hover::before": {
+                        animation: "shimmerBorder 6s linear infinite",
+                        opacity: 1,
+                      },
+                      "& > *": {
+                        position: "relative",
+                        zIndex: 2,
+                      },
                     }}
                   >
                     <Box
@@ -662,7 +736,7 @@ const HomePage = () => {
                         mb: 2,
                         fontSize: "4rem",
                         lineHeight: 1,
-                        color: theme.palette.primary.main,
+                        color: "primary.main",
                         opacity: 0.2,
                       }}
                     >
@@ -678,10 +752,7 @@ const HomePage = () => {
                         fontStyle: "italic",
                       }}
                     >
-                      This program completely transformed my career. The
-                      hands-on projects and expert mentorship gave me the
-                      confidence and skills to land my dream job at a top tech
-                      company.
+                      {testimonial.quote}
                     </Typography>
 
                     <Box sx={{ display: "flex", alignItems: "center", mt: 3 }}>
@@ -690,7 +761,7 @@ const HomePage = () => {
                           width: 50,
                           height: 50,
                           borderRadius: "50%",
-                          backgroundColor: theme.palette.grey[300],
+                          backgroundColor: "grey.300",
                           mr: 2,
                         }}
                       />
@@ -700,13 +771,13 @@ const HomePage = () => {
                           variant="subtitle1"
                           sx={{ fontWeight: 600 }}
                         >
-                          Sarah Johnson
+                          {testimonial.name}
                         </Typography>
                         <Typography
                           variant="body2"
-                          sx={{ color: theme.palette.text.secondary }}
+                          sx={{ color: "text.secondary" }}
                         >
-                          Software Engineer at Google
+                          {testimonial.role}
                         </Typography>
                       </Box>
                     </Box>
@@ -718,12 +789,51 @@ const HomePage = () => {
         </Container>
       </Box>
 
-       {/* Marquee Section */}
-       <Box
+      {/* Marquee Section - Updated Version */}
+
+      <Box
         sx={{
-          py: 4,
-          backgroundColor: theme.palette.background.default,
+          py: 1,
+          backgroundColor: "white",
+          position: "relative",
           overflow: "hidden",
+          "&:before, &:after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            width: 100,
+            zIndex: 2,
+          },
+          "&:before": {
+            left: 0,
+            background: "linear-gradient(to right, white, transparent)",
+          },
+          "&:after": {
+            right: 0,
+            background: "linear-gradient(to left, white, transparent)",
+          },
+        }}
+      />
+
+      <Box
+        sx={{
+          pt: 4,
+          pb: 4,
+          backgroundColor: "rgb(223, 223, 223)",
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          "&:before, &:after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            width: 60, // reduced width of gradient fade
+            zIndex: 2,
+            pointerEvents: "none",
+          },
         }}
       >
         <Box
@@ -738,28 +848,56 @@ const HomePage = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 8,
-              padding: "0 2rem",
+              gap: { xs: 3, md: 3 },
+              padding: "0 1rem",
               whiteSpace: "nowrap",
             }}
           >
-            {companies.concat(companies).map((company, index) => (
-              <Typography
-                key={`${company}-${index}`}
-                variant="h4"
+            {[...companies, ...companies].map((company, index) => (
+              <Box
+                key={`${index}-${
+                  typeof company === "string"
+                    ? company
+                    : JSON.stringify(company)
+                }`}
                 sx={{
-                  fontWeight: 700,
-                  color: theme.palette.text.secondary,
-                  opacity: 0.8,
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    opacity: 1,
-                    color: theme.palette.primary.main,
+                  px: 1.5,
+                  display: "flex",
+                  alignItems: "center",
+                  position: "relative",
+                  "&:after": {
+                    content: '""',
+                    position: "absolute",
+                    right: -10,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: "6px",
+                    height: "6px",
+                    borderRadius: "50%",
+                    backgroundColor: "rgba(0, 0, 0, 0.2)",
+                  },
+                  "&:last-of-type:after": {
+                    display: "none",
                   },
                 }}
               >
-                {company}
-              </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 800,
+                    color: "#243240",
+                    fontSize: { xs: "2rem", md: "1.2rem" },
+                    transition: "all 0.2s ease",
+                    lineHeight: 1,
+                    "&:hover": {
+                      color: "primary.main",
+                      transform: "scale(1.05)",
+                    },
+                  }}
+                >
+                  {typeof company === "string" ? company : company.name}
+                </Typography>
+              </Box>
             ))}
           </Box>
         </Box>
@@ -769,8 +907,8 @@ const HomePage = () => {
       <Box
         sx={{
           py: 15,
-          background: "linear-gradient(135deg, #0066ff 0%, #00ccff 100%)",
-          color: "white",
+          background: "linear-gradient(to bottom, #fff7f1, #e0f2ff)",
+          color: "black",
           position: "relative",
           overflow: "hidden",
         }}
@@ -790,7 +928,6 @@ const HomePage = () => {
 
         <Container>
           <motion.div
-            className="scroll-trigger"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -802,6 +939,7 @@ const HomePage = () => {
                 zIndex: 1,
                 textAlign: "center",
                 maxWidth: "800px",
+                maxHeight: "100vh",
                 margin: "0 auto",
               }}
             >
@@ -828,29 +966,14 @@ const HomePage = () => {
                 careers with our industry-leading programs.
               </Typography>
 
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                sx={{
-                  borderRadius: "50px",
-                  padding: "16px 48px",
-                  fontSize: "1.1rem",
-                  fontWeight: 700,
-                  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)",
-                  "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 12px 28px rgba(0, 0, 0, 0.25)",
-                  },
-                  transition: "all 0.3s ease",
-                }}
-              >
-                Enroll Now
-              </Button>
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+                <DotHoverButton text="Enroll Now" />
+              </Box>
             </Box>
           </motion.div>
         </Container>
       </Box>
+      <Footer />
     </Box>
   );
 };
