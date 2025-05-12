@@ -78,7 +78,7 @@ const ContactSection = () => {
       <Box
         sx={{
           minHeight: "100vh",
-          bgcolor: "#f5f5f5",
+          bgcolor: "#ffffff",
           py: 6,
           px: 3,
           display: "flex",

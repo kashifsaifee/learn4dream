@@ -31,6 +31,7 @@ const theme = createTheme({
         root: {
           textTransform: 'none',
           fontWeight: 600,
+        
         },
       },
     },
