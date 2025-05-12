@@ -13,11 +13,9 @@ import { motion, useAnimation } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs";
-// import { useInView } from "react-intersection-observer";
 import DotHoverButton from "../Components/DotHoverButton";
 import { Favorite, Forest, BeachAccessRounded } from "@mui/icons-material";
 import AnimatedCard from "../Components/AnimatedCard";
-import Footer from "../Components/Footer";
 import Lottie from "lottie-react";
 import animationData from "../assets/animation/animation.json";
 
@@ -972,7 +970,6 @@ const HomePage = () => {
           </motion.div>
         </Container>
       </Box>
-      <Footer />
     </Box>
   );
 };
