@@ -85,11 +85,11 @@
 
 // export default About;
 
-import React from "react";
+
 import { Box, Typography, Grid, Paper, Avatar, Button } from "@mui/material";
 import { School, FamilyRestroom, PersonPin } from "@mui/icons-material";
 import { motion } from "framer-motion";
-import Footer from '../Components/Footer'; 
+import Layout from "../Components/Layout";
 
 const MotionPaper = motion(Paper);
 
@@ -125,13 +125,11 @@ const About = () => {
   ];
 
   return (
-    <>
+    <Layout>
       <Box
         sx={{
           background: "linear-gradient(to bottom, #fff7f1, #e0f2ff)",
-          px: { xs: 3, md: 12 },
           py: { xs: 6, md: 10 },
-          color: "#1a1a1a",
         }}
       >
         {/* Header */}
@@ -271,9 +269,7 @@ const About = () => {
           </Button>
         </Box>
       </Box>
-      {/* ✅ Footer Section */}
-      <Footer />
-    </>
+    </Layout>
   );
 };
 

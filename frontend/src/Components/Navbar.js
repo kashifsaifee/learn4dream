@@ -1,52 +1,80 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Divider,
-  useMediaQuery,
-  Grow,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
+  useMediaQuery,
+  Grow,
 } from "@mui/material";
 import { Menu as MenuIcon, ExpandMore } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { CgProfile } from "react-icons/cg";
-import { margin, width } from "@mui/system";
- 
-const NavLinkBtn = ({ to, children, closeMenu }) => {
-  const theme = useTheme();
-  const location = useLocation();
-  const active = location.pathname === to;
 
-  return (
-    <MenuItem
-      component={Link}
-      to={to}
-      onClick={closeMenu}
-      sx={{
-        color: active ? theme.palette.primary.main : "#333",
-        fontWeight: active ? "bold" : 500,
-        px: 3,
-        py: 1.2,
-        borderRadius: 2,
-        transition: "all 0.3s ease",
-        "&:hover": {
-          backgroundColor: "rgba(0, 123, 255, 0.08)",
-          color: theme.palette.primary.main,
-          transform: "scale(1.02)",
-       },
-      }}
-    >
-      {children}
-    </MenuItem>
-  );
+// Reusable navigation link component
+const NavLinkBtn = ({ to, children, closeMenu }) => {
+  const theme = useTheme();
+  const location = useLocation();
+  const active = location.pathname === to;
+
+  return (
+    <MenuItem
+      component={Link}
+      to={to}
+      onClick={closeMenu}
+      sx={{
+        color: active ? theme.palette.primary.main : "#222",
+        fontWeight: active ? 700 : 500,
+        px: 3,
+        py: 1.2,
+        borderRadius: 2,
+        transition: "all 0.2s",
+        "&:hover": {
+          backgroundColor: theme.palette.action.hover,
+          color: theme.palette.primary.main,
+        },
+      }}
+    >
+      {children}
+    </MenuItem>
+  );
 };
- 
+
+// Menu structure
+const courseLinks = [
+  { to: "/courses", label: "Courses" },
+  { to: "/all-courses", label: "All Courses" },
+  { to: "/course/detail", label: "Course Detail" },
+];
+
+const pageLinks = [
+  { to: "/blogs", label: "Blogs" },
+  { to: "/about", label: "About" },
+];
+
+const mobileLinks = [
+  { to: "/", label: "Home" },
+  ...courseLinks,
+  ...pageLinks,
+  { to: "/contact", label: "Contact" },
+];
+
+const authLinks = [
+  { to: "/login", label: "Login" },
+  { to: "/signup", label: "Sign Up" },
+];
+
+const userLinks = [
+  { to: "/profile", label: "Profile" },
+  { to: "/mycourses", label: "My Courses" },
+];
+
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const theme = useTheme();
   const location = useLocation();
@@ -70,36 +98,14 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
       sx: {
         borderRadius: 3,
         mt: 1,
-        bgcolor: "#ffffff",
-        boxShadow: "0px 3px 8px rgba(0,0,0,0.1)",
-        minWidth: "180px",
-        maxHeight: "300px",
-        maxWidth: "100vw",
-        overflowX: "hidden",
-        overflowY: "auto",
-        scrollbarWidth: "thin",
-        scrollbarGutter: "stable",
-        "&::-webkit-scrollbar": {
-          width: "8px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: "#ccc",
-          borderRadius: "4px",
-        },
-        "&::-webkit-scrollbar-track": {
-          backgroundColor: "#f1f1f1",
-        },
+        bgcolor: "#fff",
+        minWidth: 180,
+        maxHeight: 320,
+        boxShadow: "0px 3px 12px rgba(0,0,0,0.08)",
       },
     },
-
-    anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "left",
-    },
-    transformOrigin: {
-      vertical: "top",
-      horizontal: "left",
-    },
+    anchorOrigin: { vertical: "bottom", horizontal: "left" },
+    transformOrigin: { vertical: "top", horizontal: "left" },
     MenuListProps: {
       onMouseLeave: () => {
         setAnchorCourses(null);
@@ -111,18 +117,17 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const navButtonStyle = (path) => ({
     color: location.pathname.startsWith(path)
       ? theme.palette.primary.main
-      : "#333",
-    fontWeight: location.pathname.startsWith(path) ? "bold" : 500,
+      : "#222",
+    fontWeight: location.pathname.startsWith(path) ? 700 : 500,
     textTransform: "none",
     fontSize: "1rem",
     px: 2,
     py: 1,
     borderRadius: 2,
-    transition: "all 0.3s ease",
+    transition: "all 0.2s",
     "&:hover": {
-      backgroundColor: "rgba(0, 123, 255, 0.08)",
+      backgroundColor: theme.palette.action.hover,
       color: theme.palette.primary.main,
-      transform: "scale(1.05)",
     },
   });
 
@@ -130,13 +135,14 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     <AppBar
       position="sticky"
       sx={{
-        bgcolor: "transparent",
-        color: "#333",
+        bgcolor: "#fff",
+        color: "#222",
         boxShadow: 3,
-        borderRadius: "12px",
-        width: "60%",
-        margin: "0 auto",
-        backdropFilter: "blur(10px)",
+        borderRadius: 3,
+        width: { xs: "98%", sm: "90%", md: "70%" },
+        mx: "auto",
+        mt: 1,
+        backdropFilter: "blur(8px)",
         overflow: "hidden",
       }}
     >
@@ -146,12 +152,19 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
           component={Link}
           to="/"
           sx={{
-            fontWeight: 700,
+            fontWeight: 800,
             textDecoration: "none",
             color: theme.palette.primary.main,
+            letterSpacing: 1,
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
           }}
         >
-          Learn<span style={{ color: theme.palette.secondary.main }}>4</span>
+          Learn
+          <span style={{ color: theme.palette.secondary.main, fontWeight: 900 }}>
+            4
+          </span>
           Dream
         </Typography>
 
@@ -162,91 +175,77 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             </Button>
 
             <Box onMouseEnter={(e) => setAnchorCourses(e.currentTarget)}>
-              <Button endIcon={<ExpandMore />} sx={navButtonStyle("/courses")}>
+              <Button
+                endIcon={<ExpandMore />}
+                sx={navButtonStyle("/courses")}
+                aria-controls="courses-menu"
+                aria-haspopup="true"
+              >
                 Courses
               </Button>
               <Menu
+                id="courses-menu"
                 anchorEl={anchorCourses}
                 open={Boolean(anchorCourses)}
                 onClose={() => setAnchorCourses(null)}
                 {...menuProps}
               >
-                <NavLinkBtn
-                  to="/courses"
-                  closeMenu={() => setAnchorCourses(null)}
-                >
-                  Courses
-                </NavLinkBtn>
-                <NavLinkBtn
-                  to="/all-courses"
-                  closeMenu={() => setAnchorCourses(null)}
-                >
-                  All Courses
-                </NavLinkBtn>
-                <NavLinkBtn
-                  to="/course/detail"
-                  closeMenu={() => setAnchorCourses(null)}
-                >
-                  Course Detail
-                </NavLinkBtn>
+                {courseLinks.map(({ to, label }) => (
+                  <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorCourses(null)}>
+                    {label}
+                  </NavLinkBtn>
+                ))}
               </Menu>
             </Box>
 
             <Box onMouseEnter={(e) => setAnchorPages(e.currentTarget)}>
-              <Button endIcon={<ExpandMore />} sx={navButtonStyle("/blogs")}>
+              <Button
+                endIcon={<ExpandMore />}
+                sx={navButtonStyle("/blogs")}
+                aria-controls="pages-menu"
+                aria-haspopup="true"
+              >
                 Pages
               </Button>
               <Menu
+                id="pages-menu"
                 anchorEl={anchorPages}
                 open={Boolean(anchorPages)}
                 onClose={() => setAnchorPages(null)}
                 {...menuProps}
               >
-                <NavLinkBtn to="/blogs" closeMenu={() => setAnchorPages(null)}>
-                  Blogs
-                </NavLinkBtn>
-                <NavLinkBtn to="/about" closeMenu={() => setAnchorPages(null)}>
-                  About
-                </NavLinkBtn>
+                {pageLinks.map(({ to, label }) => (
+                  <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorPages(null)}>
+                    {label}
+                  </NavLinkBtn>
+                ))}
               </Menu>
             </Box>
 
-            <Button
-              component={Link}
-              to="/contact"
-              sx={navButtonStyle("/contact")}
-            >
+            <Button component={Link} to="/contact" sx={navButtonStyle("/contact")}>
               Contact
             </Button>
 
             {!isLoggedIn ? (
-              <>
+              authLinks.map(({ to, label }) => (
                 <Button
+                  key={to}
                   component={Link}
-                  to="/login"
-                  variant="outlined"
+                  to={to}
+                  variant={label === "Sign Up" ? "contained" : "outlined"}
                   color="primary"
-                  sx={{ borderRadius: 3 }}
+                  sx={{ borderRadius: 2, ml: 1 }}
                 >
-                  Login
+                  {label}
                 </Button>
-                <Button
-                  component={Link}
-                  to="/signup"
-                  variant="contained"
-                  color="primary"
-                  sx={{ borderRadius: 3 }}
-                >
-                  Sign Up
-                </Button>
-              </>
+              ))
             ) : (
               <>
                 <IconButton
                   onClick={(e) => setAnchorProfile(e.currentTarget)}
-                  sx={{ color: theme.palette.primary.main }}
+                  sx={{ color: theme.palette.primary.main, ml: 1 }}
                 >
-                  <CgProfile size={24} />
+                  <CgProfile size={26} />
                 </IconButton>
                 <Menu
                   anchorEl={anchorProfile}
@@ -254,18 +253,11 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   onClose={() => setAnchorProfile(null)}
                   {...menuProps}
                 >
-                  <NavLinkBtn
-                    to="/profile"
-                    closeMenu={() => setAnchorProfile(null)}
-                  >
-                    Profile
-                  </NavLinkBtn>
-                  <NavLinkBtn
-                    to="/mycourses"
-                    closeMenu={() => setAnchorProfile(null)}
-                  >
-                    My Courses
-                  </NavLinkBtn>
+                  {userLinks.map(({ to, label }) => (
+                    <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorProfile(null)}>
+                      {label}
+                    </NavLinkBtn>
+                  ))}
                   <Divider sx={{ my: 1 }} />
                   <MenuItem
                     onClick={() => {
@@ -275,7 +267,9 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     sx={{
                       px: 3,
                       py: 1.2,
-                      "&:hover": { bgcolor: "rgba(255,0,0,0.1)", color: "red" },
+                      color: "red",
+                      fontWeight: 600,
+                      "&:hover": { bgcolor: "rgba(255,0,0,0.08)" },
                     }}
                   >
                     Logout
@@ -287,8 +281,9 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         ) : (
           <>
             <IconButton
-              color="inherit"
+              color="primary"
               onClick={(e) => setAnchorMobile(e.currentTarget)}
+              sx={{ ml: 1 }}
             >
               <MenuIcon />
             </IconButton>
@@ -297,72 +292,56 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               open={Boolean(anchorMobile)}
               onClose={() => setAnchorMobile(null)}
               {...menuProps}
+              PaperProps={{
+                ...menuProps.PaperProps,
+                sx: { ...menuProps.PaperProps.sx, minWidth: 200 },
+              }}
             >
-              <Typography sx={{ px: 2, py: 1, fontWeight: 600 }}>
+              <Typography
+                sx={{
+                  px: 2,
+                  py: 1,
+                  fontWeight: 700,
+                  color: theme.palette.primary.main,
+                }}
+              >
                 Menu
               </Typography>
               <Divider />
-              <NavLinkBtn to="/" closeMenu={() => setAnchorMobile(null)}>
-                Home
-              </NavLinkBtn>
-              <NavLinkBtn to="/courses" closeMenu={() => setAnchorMobile(null)}>
-                All Courses
-              </NavLinkBtn>
-              <NavLinkBtn
-                to="/course/detail"
-                closeMenu={() => setAnchorMobile(null)}
-              >
-                Course Detail
-              </NavLinkBtn>
-              <NavLinkBtn to="/blogs" closeMenu={() => setAnchorMobile(null)}>
-                Blogs
-              </NavLinkBtn>
-              <NavLinkBtn to="/about" closeMenu={() => setAnchorMobile(null)}>
-                About
-              </NavLinkBtn>
-              <NavLinkBtn to="/contact" closeMenu={() => setAnchorMobile(null)}>
-                Contact
-              </NavLinkBtn>
+              {mobileLinks.map(({ to, label }) => (
+                <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorMobile(null)}>
+                  {label}
+                </NavLinkBtn>
+              ))}
               <Divider />
-              {!isLoggedIn ? (
-                <>
-                  <NavLinkBtn
-                    to="/login"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    Login
-                  </NavLinkBtn>
-                  <NavLinkBtn
-                    to="/signup"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    Sign Up
-                  </NavLinkBtn>
-                </>
-              ) : (
-                <>
-                  <NavLinkBtn
-                    to="/profile"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    Profile
-                  </NavLinkBtn>
-                  <NavLinkBtn
-                    to="/mycourses"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    My Courses
-                  </NavLinkBtn>
-                  <MenuItem
-                    onClick={() => {
-                      handleLogout();
-                      setAnchorMobile(null);
-                    }}
-                  >
-                    Logout
-                  </MenuItem>
-                </>
-              )}
+              {!isLoggedIn
+                ? authLinks.map(({ to, label }) => (
+                    <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorMobile(null)}>
+                      {label}
+                    </NavLinkBtn>
+                  ))
+                : (
+                  <>
+                    {userLinks.map(({ to, label }) => (
+                      <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorMobile(null)}>
+                        {label}
+                      </NavLinkBtn>
+                    ))}
+                    <MenuItem
+                      onClick={() => {
+                        handleLogout();
+                        setAnchorMobile(null);
+                      }}
+                      sx={{
+                        color: "red",
+                        fontWeight: 600,
+                        "&:hover": { bgcolor: "rgba(255,0,0,0.08)" },
+                      }}
+                    >
+                      Logout
+                    </MenuItem>
+                  </>
+                )}
             </Menu>
           </>
         )}
@@ -370,4 +349,3 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     </AppBar>
   );
 }
- 
