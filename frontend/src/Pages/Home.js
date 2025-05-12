@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import { motion, useAnimation } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs";
-import { useInView } from "react-intersection-observer";
+// import { useInView } from "react-intersection-observer";
 import DotHoverButton from "../Components/DotHoverButton";
 import { Favorite, Forest, BeachAccessRounded } from "@mui/icons-material";
 import AnimatedCard from "../Components/AnimatedCard";
@@ -35,8 +35,6 @@ gsap.registerPlugin(ScrollTrigger);
 const HomePage = () => {
   const theme = useTheme();
   const controls = useAnimation();
-  const [ref] = useInView({ threshold: 0.1 });
-  const heroRef = useRef(null);
   const marqueeRef = useRef(null);
   const cardsRef = useRef([]);
   const [isMounted, setIsMounted] = useState(false);
@@ -100,7 +98,7 @@ const HomePage = () => {
     },
     {
       id: 3,
-      a: <Forest />,
+      icon: <Forest />,
       title: "AI & Machine Learning",
       description:
         "Learn how to build intelligent systems that learn from data and improve over time.",
@@ -216,13 +214,13 @@ const HomePage = () => {
   useEffect(() => {
     if (!isMounted || !cardsRef.current.length) return;
 
-    cardsRef.current.forEach((card, index) => {
+    cardsRef.current.forEach((card) => {
       if (!card) return;
 
       card.addEventListener("mousemove", (e) => {
-        const x = e.clientX - card.getBoundingClientRect().left;
-        const y = e.clientY - card.getBoundingClientRect().top;
-
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
         const centerX = card.offsetWidth / 2;
         const centerY = card.offsetHeight / 2;
 
