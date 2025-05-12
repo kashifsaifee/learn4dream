@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import Review from './Review';
 import {
   Box, Typography, Button, Grid, Avatar, Accordion, AccordionSummary,
-  AccordionDetails, Card, CardContent, Chip, Rating, List, ListItem, ListItemText, Divider
+  AccordionDetails, Card, CardContent, Chip, Rating
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PersonIcon from '@mui/icons-material/Person';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 const CourseDetail = () => {
   const [tab, setTab] = useState('info');
@@ -70,11 +69,13 @@ const CourseDetail = () => {
                 <Grid container spacing={2} mt={1}>
                   {[
                     'Become a UX designer.',
-                    'Add UX design to your skillset.',
-                    'Design mobile interfaces.',
-                    'Build a UX project from scratch.',
-                    'Create wireframes and personas.',
-                    'Apply professional techniques.'
+                    'You will be able to add UX design.',
+                    'Become a UI designer.',
+                    'Learn to design mobile.',
+                    'Create your first UX brief persona.',
+                    'Create quick wireframes.',
+                    'Build a UX project from beginning to end.',
+                    'All the techniques used by UX professionals.'
                   ].map((item, i) => (
                     <Grid item xs={12} sm={6} key={i}>
                       <Typography>
@@ -153,53 +154,6 @@ const CourseDetail = () => {
             ) : (
               <Review />
             )}
-          </Box>
-        </Grid>
-
-        {/* Right Section */}
-        <Grid item xs={12} md={4}>
-          <Card sx={{ mb: 4 }}>
-            <CardContent>
-              <Box textAlign="center">
-                <PlayCircleOutlineIcon sx={{ fontSize: 80 }} color="primary" />
-                <Typography variant="h6" mt={1}>
-                  $25.00 <del style={{ color: '#999', marginLeft: 8 }}>$84.00</del>
-                </Typography>
-                <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-                  ENROLL NOW
-                </Button>
-              </Box>
-              <List dense sx={{ mt: 2 }}>
-                {[
-                  ['Duration', '52 Hours'],
-                  ['Estimated Seats', '290'],
-                  ['Joined', '2450'],
-                  ['Language', 'English'],
-                  ['Category', 'Design']
-                ].map(([label, value], i) => (
-                  <ListItem key={i}>
-                    <ListItemText primary={label} secondary={value} />
-                  </ListItem>
-                ))}
-              </List>
-            </CardContent>
-          </Card>
-
-          {/* Related Courses */}
-          <Box sx={{ p: 2, bgcolor: 'white', borderRadius: 3, boxShadow: 1 }}>
-            <Typography variant="h6" mb={2}>Related Courses</Typography>
-            {[
-              ['Mastering Data', '$22.00'],
-              ['Make Edition', '$18.00'],
-              ['The Potentially Accessibility', '$11.00'],
-              ['Create Quick Wireframes', '$11.00']
-            ].map(([title, price], i) => (
-              <Box key={i} mb={2}>
-                <Typography variant="body2" fontWeight="bold">{title}</Typography>
-                <Typography variant="caption" color="text.secondary">{price}</Typography>
-                <Divider sx={{ mt: 1 }} />
-              </Box>
-            ))}
           </Box>
         </Grid>
       </Grid>

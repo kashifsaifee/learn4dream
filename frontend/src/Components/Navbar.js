@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -16,7 +16,6 @@ import { Menu as MenuIcon, ExpandMore } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { CgProfile } from "react-icons/cg";
-
 
 const NavLinkBtn = ({ to, children, closeMenu }) => {
   const theme = useTheme();
@@ -42,10 +41,11 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
         },
       }}
     >
-      {children}{" "}
+      {children}
     </MenuItem>
   );
 };
+
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const theme = useTheme();
   const location = useLocation();
@@ -54,8 +54,22 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
   const [anchorCourses, setAnchorCourses] = useState(null);
   const [anchorPages, setAnchorPages] = useState(null);
-  const [anchorMobile, setAnchorMobile] = useState(null);
+  const [anchorobile, setAnchorMobile] = useState(null);
   const [anchorProfile, setAnchorProfile] = useState(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  // 🔥 Close dropdowns on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setAnchorCourses(null);
+      setAnchorPages(null);
+      setAnchorProfile(null);
+      setDropdownVisible(false);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -63,44 +77,45 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   };
 
   const menuProps = {
-  TransitionComponent: Grow,
-  PaperProps: {
-    elevation: 3,
-    sx: {
-      borderRadius: 3,
-      mt: 1,
-      bgcolor: "#ffffff",
-      boxShadow: "0px 3px 8px rgba(0,0,0,0.1)",
-      minWidth: "180px",
-      maxWidth: "100vw",
-      overflow: "visible", // ✅ No scrollbars
-      "& .MuiMenuItem-root": {
-        px: 2,
-        py: 1,
-        color: "#000", // default text color
-        transition: "background-color 0.2s ease",
-        "&:hover": {
-          bgcolor: "#e3f2fd", // soft blue hover
-          color: "#1976d2",   // blue text on hover
+    TransitionComponent: Grow,
+    PaperProps: {
+      elevation: 3,
+      sx: {
+        borderRadius: 3,
+        mt: 2,
+        bgcolor: "#ffffff",
+        boxShadow: "0px 3px 8px rgba(0,0,0,0.3)",
+        minWidth: "120px",
+        maxWidth: "80vw",
+        overflowX: "hidden",
+        
+        "& .MuiMenuItem-root": {
+          px: 2,
+          py: 1,
+          color: "#000",
+         // transition: "background-color 0.2s ease",
+          "&:hover": {
+            bgcolor: "#e3f2fd",
+            color: "#1976d2",
+          },
         },
       },
     },
-  },
-  anchorOrigin: {
-    vertical: "bottom",
-    horizontal: "left",
-  },
-  transformOrigin: {
-    vertical: "top",
-    horizontal: "left",
-  },
-  MenuListProps: {
-    onMouseLeave: () => {
-      setAnchorCourses(null);
-      setAnchorPages(null);
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "left",
     },
-  },
-};
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "left",
+    },
+    MenuListProps: {
+      onMouseLeave: () => {
+        setAnchorCourses(null);
+        setAnchorPages(null);
+      },
+    },
+  };
 
   const navButtonStyle = (path) => ({
     color: location.pathname.startsWith(path)
@@ -122,18 +137,27 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
   return (
     <AppBar
-      position="sticky"
+      position="Sticky"
       sx={{
         bgcolor: "transparent",
         color: "#333",
         boxShadow: 3,
         borderRadius: "12px",
         width: "100%",
+        maxWidth: "100vw",
+        overflowX: "hidden",
         backdropFilter: "blur(10px)",
-        overflow: "hidden",
       }}
     >
-      <Toolbar sx={{ justifyContent: "space-between", gap: 2 }}>
+      <Toolbar
+        sx={{
+          justifyContent: "space-between",
+          gap: 2,
+          width: "100%",
+          maxWidth: "100vw",
+          overflowX: "hidden",
+        }}
+      >
         <Typography
           variant="h5"
           component={Link}
@@ -142,6 +166,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             fontWeight: 700,
             textDecoration: "none",
             color: theme.palette.primary.main,
+            overflow: "hidden",
           }}
         >
           Learn<span style={{ color: theme.palette.secondary.main }}>4</span>
@@ -149,18 +174,32 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         </Typography>
 
         {!isMobile ? (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              flexWrap: "wrap",
+              maxWidth: "100%",
+            }}
+          >
             <Button component={Link} to="/" sx={navButtonStyle("/")}>
               Home
             </Button>
 
-            <Box onMouseEnter={(e) => setAnchorCourses(e.currentTarget)}>
+            <Box
+              onMouseEnter={(e) => {
+                setAnchorCourses(e.currentTarget);
+                setDropdownVisible(true);
+              }}
+              onMouseLeave={() => setDropdownVisible(false)}
+            >
               <Button endIcon={<ExpandMore />} sx={navButtonStyle("/courses")}>
                 Courses
               </Button>
               <Menu
                 anchorEl={anchorCourses}
-                open={Boolean(anchorCourses)}
+                open={Boolean(anchorCourses) && dropdownVisible}
                 onClose={() => setAnchorCourses(null)}
                 {...menuProps}
               >
@@ -268,7 +307,10 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     sx={{
                       px: 3,
                       py: 1.5,
-                      "&:hover": { bgcolor: "rgba(255,0,0,0.1)", color: "red" },
+                      "&:hover": {
+                        bgcolor: "rgba(255,0,0,0.1)",
+                        color: "red",
+                      },
                     }}
                   >
                     Logout
@@ -278,86 +320,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             )}
           </Box>
         ) : (
-          <>
-            <IconButton
-              color="inherit"
-              onClick={(e) => setAnchorMobile(e.currentTarget)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorMobile}
-              open={Boolean(anchorMobile)}
-              onClose={() => setAnchorMobile(null)}
-              {...menuProps}
-            >
-              <Typography sx={{ px: 2, py: 1, fontWeight: 600 }}>
-                Menu
-              </Typography>
-              <Divider />
-              <NavLinkBtn to="/" closeMenu={() => setAnchorMobile(null)}>
-                Home
-              </NavLinkBtn>
-              <NavLinkBtn to="/courses" closeMenu={() => setAnchorMobile(null)}>
-                All Courses
-              </NavLinkBtn>
-              <NavLinkBtn
-                to="/course/detail"
-                closeMenu={() => setAnchorMobile(null)}
-              >
-                Course Detail
-              </NavLinkBtn>
-              <NavLinkBtn to="/blogs" closeMenu={() => setAnchorMobile(null)}>
-                Blogs
-              </NavLinkBtn>
-              <NavLinkBtn to="/about" closeMenu={() => setAnchorMobile(null)}>
-                About
-              </NavLinkBtn>
-              <NavLinkBtn to="/contact" closeMenu={() => setAnchorMobile(null)}>
-                Contact
-              </NavLinkBtn>
-              <Divider />
-              {!isLoggedIn ? (
-                <>
-                  <NavLinkBtn
-                    to="/login"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    Login
-                  </NavLinkBtn>
-                  <NavLinkBtn
-                    to="/signup"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    Sign Up
-                  </NavLinkBtn>
-                </>
-              ) : (
-                <>
-                  <NavLinkBtn
-                    to="/profile"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    Profile
-                  </NavLinkBtn>
-                  <NavLinkBtn
-                    to="/mycourses"
-                    closeMenu={() => setAnchorMobile(null)}
-                  >
-                    My Courses
-                  </NavLinkBtn>
-                  <MenuItem
-                    onClick={() => {
-                      handleLogout();
-                      setAnchorMobile(null);
-                    }}
-                  >
-                    Logout
-                  </MenuItem>
-                </>
-              )}
-            </Menu>
-          </>
+          <IconButton
+            color="inherit"
+            onClick={(e) => setAnchorMobile(e.currentTarget)}
+          >
+            <MenuIcon />
+          </IconButton>
         )}
       </Toolbar>
     </AppBar>
