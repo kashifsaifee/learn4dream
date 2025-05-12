@@ -13,12 +13,16 @@ import {
     CardMedia,
     FormControl,
     InputLabel,
+    Drawer,
+    IconButton,
+    Divider,
+    useMediaQuery,
+    useTheme
 } from '@mui/material';
-import { AccessTime, People, PlayCircle } from '@mui/icons-material';
+import { AccessTime, People, PlayCircle, FilterList, Close } from '@mui/icons-material';
 
 // Enhanced dummy course data with different categories and real thumbnails
 const allCourses = [
-
     {
         id: 1,
         title: 'Adobe Illustrator for Beginners',
@@ -47,7 +51,7 @@ const allCourses = [
         instructor: 'Jackson Alive',
         language: 'English',
         difficulty: 'Advanced',
-        thumbnail:  'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
+        thumbnail: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
     },
     {
         id: 3,
@@ -62,7 +66,7 @@ const allCourses = [
         instructor: 'Omar Alve',
         language: 'Hindi',
         difficulty: 'Intermediate',
-        thumbnail:  'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
+        thumbnail: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
     },
     {
         id: 4,
@@ -77,7 +81,7 @@ const allCourses = [
         instructor: 'Laden Meyer',
         language: 'English',
         difficulty: 'Intermediate',
-        thumbnail:'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
+        thumbnail: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
     },
     {
         id: 5,
@@ -199,103 +203,107 @@ const allCourses = [
         difficulty: 'Intermediate',
         thumbnail: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
     },
-
-
 ];
 
-  
-  const CourseCard = ({ course }) => {
+const CourseCard = ({ course }) => {
     return (
-      <Card
-        sx={{
-          p: 2,
-          borderRadius: 3,
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-          transition: '0.3s ease',
-          '&:hover': {
-            transform: 'translateY(-5px)',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-          },
-        }}
-      >
-        <Box sx={{ borderRadius: 2, overflow: 'hidden' }}>
-          <CardMedia
-            component="img"
-            height="180"
-            image={course.thumbnail}
-            alt={course.title}
+        <Card
             sx={{
-              objectFit: 'cover',
-              transition: '0.3s',
+                p: 2,
+                borderRadius: 3,
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                transition: '0.3s ease',
+                '&:hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                },
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
             }}
-          />
-        </Box>
-  
-        <CardContent sx={{ p: 0, mt: 2 }}>
-          <Chip
-            label={course.category}
-            size="small"
-            sx={{
-              backgroundColor: '#e5f6ee',
-              color: '#2e7d32',
-              fontWeight: 'bold',
-              mb: 1,
-            }}
-          />
-          <Typography variant="subtitle1" fontWeight="bold">
-            {course.title}
-          </Typography>
-  
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              fontSize: 14,
-              color: 'text.secondary',
-              gap: 2,
-              mt: 1,
-              mb: 1,
-            }}
-          >
-            <Box display="flex" alignItems="center" gap={0.5}>
-              <PlayCircle fontSize="small" />
-              {course.lectures}
+        >
+            <Box sx={{ borderRadius: 2, overflow: 'hidden' }}>
+                <CardMedia
+                    component="img"
+                    height="180"
+                    image={course.thumbnail}
+                    alt={course.title}
+                    sx={{
+                        objectFit: 'cover',
+                        transition: '0.3s',
+                    }}
+                />
             </Box>
-            <Box display="flex" alignItems="center" gap={0.5}>
-              <AccessTime fontSize="small" />
-              {course.duration}
-            </Box>
-            <Box display="flex" alignItems="center" gap={0.5}>
-              <People fontSize="small" />
-              {course.students}
-            </Box>
-          </Box>
-  
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mt: 1,
-            }}
-          >
-            <Typography variant="h6" color="primary">
-              ${course.price.toFixed(2)}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              ⭐ {course.rating.toFixed(1)}
-            </Typography>
-          </Box>
-        </CardContent>
-      </Card>
+
+            <CardContent sx={{ p: 0, mt: 2, flexGrow: 1 }}>
+                <Chip
+                    label={course.category}
+                    size="small"
+                    sx={{
+                        backgroundColor: '#e5f6ee',
+                        color: '#2e7d32',
+                        fontWeight: 'bold',
+                        mb: 1,
+                    }}
+                />
+                <Typography variant="subtitle1" fontWeight="bold">
+                    {course.title}
+                </Typography>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        fontSize: 14,
+                        color: 'text.secondary',
+                        gap: 2,
+                        mt: 1,
+                        mb: 1,
+                        flexWrap: 'wrap',
+                    }}
+                >
+                    <Box display="flex" alignItems="center" gap={0.5}>
+                        <PlayCircle fontSize="small" />
+                        {course.lectures}
+                    </Box>
+                    <Box display="flex" alignItems="center" gap={0.5}>
+                        <AccessTime fontSize="small" />
+                        {course.duration}
+                    </Box>
+                    <Box display="flex" alignItems="center" gap={0.5}>
+                        <People fontSize="small" />
+                        {course.students}
+                    </Box>
+                </Box>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        mt: 'auto',
+                    }}
+                >
+                    <Typography variant="h6" color="primary">
+                        ${course.price.toFixed(2)}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        ⭐ {course.rating.toFixed(1)}
+                    </Typography>
+                </Box>
+            </CardContent>
+        </Card>
     );
-  };
-  
+};
 
 const CoursePage = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    
     const [sortOption, setSortOption] = useState('');
     const [perPage, setPerPage] = useState(6);
     const [filteredCourses, setFilteredCourses] = useState(allCourses);
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
     // Extract unique values for filters
     const categories = [...new Set(allCourses.map(course => course.category))];
@@ -372,312 +380,303 @@ const CoursePage = () => {
         }));
     };
 
-
-
-    return (
-        <Box sx={{ border: "1px solid black", display: 'flex', p: 3, minHeight: '100vh', bgcolor: 'background.default' }}>
-            {/* Sidebar Filters */}
-            <Box sx={{ width: 280, pr: 3, flexShrink: 0 }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
-
+    const FilterSection = () => (
+        <Box sx={{ p: isMobile ? 2 : 0 }}>
+            {/* Category Filter */}
+            <Box mb={3} sx={{
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                backgroundColor: '#ffffff',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                p: 2
+            }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Filter by Category
                 </Typography>
-
-                {/* Category Filter */}
-                <Box
-                    mb={3}
-                    sx={{
-                        border: '1px solid #e0e0e0',
-                        borderRadius: 2, // or '8px'
-                        backgroundColor: '#ffffff',
-                        boxShadow: `
-    rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px,
-    rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px,
-    rgba(0, 0, 0, 0.09) 0px -3px 5px,
-    rgba(228, 11, 11, 0.05) 0 2px 8px
-  `,
-                        p: 2 // optional padding inside the box
-                    }}
-
-                >
-
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                        Filter by Category
-                    </Typography>
-                    {categories.map(category => (
-                        <FormControlLabel
-                            key={category}
-                            control={
-                                <Checkbox
-                                    checked={filters.category.includes(category)}
-                                    onChange={() => handleFilterChange('category', category)}
-                                    size="small"
-                                />
-                            }
-                            label={category}
-                            sx={{ display: 'block', ml: 0 }}
-                        />
-                    ))}
-                </Box>
-
-                {/* Price Filter */}
-                <Box mb={3}
-                    sx={{
-                        border: '1px solid #e0e0e0',
-                        borderRadius: 2,
-                        bgcolor: '#fff',
-                        boxShadow: [
-                            '0px 54px 55px rgba(0,0,0,0.25)',
-                            '0px -12px 30px rgba(0,0,0,0.12)',
-                            '0px 4px 6px rgba(0,0,0,0.12)',
-                            '0px 12px 13px rgba(0,0,0,0.17)',
-                            '0px -3px 5px rgba(0,0,0,0.09)',
-                            '0 2px 8px rgba(228,11,11,0.05)'
-                        ].join(', '),
-                        p: 2
-                    }}
-                >
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                        Price
-                    </Typography>
+                {categories.map(category => (
                     <FormControlLabel
+                        key={category}
                         control={
                             <Checkbox
-                                checked={filters.price.includes('Free')}
-                                onChange={() => handleFilterChange('price', 'Free')}
+                                checked={filters.category.includes(category)}
+                                onChange={() => handleFilterChange('category', category)}
                                 size="small"
                             />
                         }
-                        label="Free"
+                        label={category}
                         sx={{ display: 'block', ml: 0 }}
                     />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.price.includes('Paid')}
-                                onChange={() => handleFilterChange('price', 'Paid')}
-                                size="small"
-                            />
-                        }
-                        label="Paid"
-                        sx={{ display: 'block', ml: 0 }}
-                    />
-                </Box>
-
-                {/* Type Filter */}
-                <Box mb={3}
-                    sx={{
-                        border: '1px solid #e0e0e0',
-                        borderRadius: 2,
-                        bgcolor: '#fff',
-                        boxShadow: [
-                            '0px 54px 55px rgba(0,0,0,0.25)',
-                            '0px -12px 30px rgba(0,0,0,0.12)',
-                            '0px 4px 6px rgba(0,0,0,0.12)',
-                            '0px 12px 13px rgba(0,0,0,0.17)',
-                            '0px -3px 5px rgba(0,0,0,0.09)',
-                            '0 2px 8px rgba(228,11,11,0.05)'
-                        ].join(', '),
-                        p: 2
-                    }}
-                >
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                        Course Type
-                    </Typography>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.type.includes('Self-paced')}
-                                onChange={() => handleFilterChange('type', 'Self-paced')}
-                                size="small"
-                            />
-                        }
-                        label="Self-paced"
-                        sx={{ display: 'block', ml: 0 }}
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={filters.type.includes('Instructor-led')}
-                                onChange={() => handleFilterChange('type', 'Instructor-led')}
-                                size="small"
-                            />
-                        }
-                        label="Instructor-led"
-                        sx={{ display: 'block', ml: 0 }}
-                    />
-                </Box>
-
-                {/* Instructor Filter */}
-                <Box mb={3}
-                    sx={{
-                        border: '1px solid #e0e0e0',
-                        borderRadius: 2,
-                        bgcolor: '#fff',
-                        boxShadow: [
-                            '0px 54px 55px rgba(0,0,0,0.25)',
-                            '0px -12px 30px rgba(0,0,0,0.12)',
-                            '0px 4px 6px rgba(0,0,0,0.12)',
-                            '0px 12px 13px rgba(0,0,0,0.17)',
-                            '0px -3px 5px rgba(0,0,0,0.09)',
-                            '0 2px 8px rgba(228,11,11,0.05)'
-                        ].join(', '),
-                        p: 2
-                    }}
-                >
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                        Instructors
-                    </Typography>
-                    {instructors.map(instructor => (
-                        <FormControlLabel
-                            key={instructor}
-                            control={
-                                <Checkbox
-                                    checked={filters.instructor.includes(instructor)}
-                                    onChange={() => handleFilterChange('instructor', instructor)}
-                                    size="small"
-                                />
-                            }
-                            label={instructor}
-                            sx={{ display: 'block', ml: 0 }}
-                        />
-                    ))}
-                </Box>
-
-                {/* Language Filter */}
-                <Box mb={3}
-                    sx={{
-                        border: '1px solid #e0e0e0',
-                        borderRadius: 2,
-                        bgcolor: '#fff',
-                        boxShadow: [
-                            '0px 54px 55px rgba(0,0,0,0.25)',
-                            '0px -12px 30px rgba(0,0,0,0.12)',
-                            '0px 4px 6px rgba(0,0,0,0.12)',
-                            '0px 12px 13px rgba(0,0,0,0.17)',
-                            '0px -3px 5px rgba(0,0,0,0.09)',
-                            '0 2px 8px rgba(228,11,11,0.05)'
-                        ].join(', '),
-                        p: 2
-                    }}
-                >
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                        Languages
-                    </Typography>
-                    {languages.map(language => (
-                        <FormControlLabel
-                            key={language}
-                            control={
-                                <Checkbox
-                                    checked={filters.language.includes(language)}
-                                    onChange={() => handleFilterChange('language', language)}
-                                    size="small"
-                                />
-                            }
-                            label={language}
-                            sx={{ display: 'block', ml: 0 }}
-                        />
-                    ))}
-                </Box>
-
-                {/* Difficulty Filter */}
-                <Box mb={3}
-                    sx={{
-                        border: '1px solid #e0e0e0',
-                        borderRadius: 2,
-                        bgcolor: '#fff',
-                        boxShadow: [
-                            '0px 54px 55px rgba(0,0,0,0.25)',
-                            '0px -12px 30px rgba(0,0,0,0.12)',
-                            '0px 4px 6px rgba(0,0,0,0.12)',
-                            '0px 12px 13px rgba(0,0,0,0.17)',
-                            '0px -3px 5px rgba(0,0,0,0.09)',
-                            '0 2px 8px rgba(228,11,11,0.05)'
-                        ].join(', '),
-                        p: 2
-                    }}
-                >
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                        Difficulty Level
-                    </Typography>
-                    {difficulties.map(level => (
-                        <FormControlLabel
-                            key={level}
-                            control={
-                                <Checkbox
-                                    checked={filters.difficulty.includes(level)}
-                                    onChange={() => handleFilterChange('difficulty', level)}
-                                    size="small"
-                                />
-                            }
-                            label={level}
-                            sx={{ display: 'block', ml: 0 }}
-                        />
-                    ))}
-                </Box>
-
-
+                ))}
             </Box>
 
-            {/* Main Content */}
-            <Box sx={{ flex: 1 }}>
-                {/* Top Controls */}
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                        {filteredCourses.length} Courses Found
-                    </Typography>
-                    <Box display="flex" gap={2}>
-                        <FormControl size="small" sx={{ minWidth: 120 }}>
-                            <InputLabel>Sort By</InputLabel>
-                            <Select
-                                value={sortOption}
-                                onChange={(e) => setSortOption(e.target.value)}
-                                label="Sort By"
-                            >
-                                <MenuItem value="">None</MenuItem>
-                                <MenuItem value="price">Price (Low to High)</MenuItem>
-                                <MenuItem value="rating">Rating (High to Low)</MenuItem>
-                                <MenuItem value="students">Popularity</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <FormControl size="small" sx={{ minWidth: 100 }}>
-                            <InputLabel>Per Page</InputLabel>
-                            <Select
-                                value={perPage}
-                                onChange={(e) => setPerPage(Number(e.target.value))}
-                                label="Per Page"
-                            >
-                                <MenuItem value={6}>6</MenuItem>
-                                <MenuItem value={9}>9</MenuItem>
-                                <MenuItem value={12}>12</MenuItem>
-                                <MenuItem value={24}>24</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </Box>
+            {/* Price Filter */}
+            <Box mb={3} sx={{
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                bgcolor: '#fff',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                p: 2
+            }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Price
+                </Typography>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={filters.price.includes('Free')}
+                            onChange={() => handleFilterChange('price', 'Free')}
+                            size="small"
+                        />
+                    }
+                    label="Free"
+                    sx={{ display: 'block', ml: 0 }}
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={filters.price.includes('Paid')}
+                            onChange={() => handleFilterChange('price', 'Paid')}
+                            size="small"
+                        />
+                    }
+                    label="Paid"
+                    sx={{ display: 'block', ml: 0 }}
+                />
+            </Box>
 
-                {/* Course Grid */}
-                {filteredCourses.length > 0 ? (
-                    <Grid container spacing={3}>
-                        {filteredCourses.slice(0, perPage).map(course => (
-                            <Grid key={course.id} item xs={12} sm={6} md={4} lg={3}>
-                                <CourseCard course={course} />
-                            </Grid>
-                        ))}
-                    </Grid>
-                ) : (
-                    <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        minHeight="300px"
+            {/* Type Filter */}
+            <Box mb={3} sx={{
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                bgcolor: '#fff',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                p: 2
+            }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Course Type
+                </Typography>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={filters.type.includes('Self-paced')}
+                            onChange={() => handleFilterChange('type', 'Self-paced')}
+                            size="small"
+                        />
+                    }
+                    label="Self-paced"
+                    sx={{ display: 'block', ml: 0 }}
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={filters.type.includes('Instructor-led')}
+                            onChange={() => handleFilterChange('type', 'Instructor-led')}
+                            size="small"
+                        />
+                    }
+                    label="Instructor-led"
+                    sx={{ display: 'block', ml: 0 }}
+                />
+            </Box>
+
+            {/* Instructor Filter */}
+            <Box mb={3} sx={{
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                bgcolor: '#fff',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                p: 2
+            }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Instructors
+                </Typography>
+                {instructors.map(instructor => (
+                    <FormControlLabel
+                        key={instructor}
+                        control={
+                            <Checkbox
+                                checked={filters.instructor.includes(instructor)}
+                                onChange={() => handleFilterChange('instructor', instructor)}
+                                size="small"
+                            />
+                        }
+                        label={instructor}
+                        sx={{ display: 'block', ml: 0 }}
+                    />
+                ))}
+            </Box>
+
+            {/* Language Filter */}
+            <Box mb={3} sx={{
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                bgcolor: '#fff',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                p: 2
+            }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Languages
+                </Typography>
+                {languages.map(language => (
+                    <FormControlLabel
+                        key={language}
+                        control={
+                            <Checkbox
+                                checked={filters.language.includes(language)}
+                                onChange={() => handleFilterChange('language', language)}
+                                size="small"
+                            />
+                        }
+                        label={language}
+                        sx={{ display: 'block', ml: 0 }}
+                    />
+                ))}
+            </Box>
+
+            {/* Difficulty Filter */}
+            <Box mb={3} sx={{
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                bgcolor: '#fff',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                p: 2
+            }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Difficulty Level
+                </Typography>
+                {difficulties.map(level => (
+                    <FormControlLabel
+                        key={level}
+                        control={
+                            <Checkbox
+                                checked={filters.difficulty.includes(level)}
+                                onChange={() => handleFilterChange('difficulty', level)}
+                                size="small"
+                            />
+                        }
+                        label={level}
+                        sx={{ display: 'block', ml: 0 }}
+                    />
+                ))}
+            </Box>
+        </Box>
+    );
+
+    return (
+        <Box sx={{ p: isMobile ? 1 : 3, minHeight: '100vh', bgcolor: 'background.default' }}>
+            {/* Mobile Filter Button */}
+            {isMobile && (
+                <Box display="flex" justifyContent="flex-end" mb={2}>
+                    <IconButton 
+                        onClick={() => setMobileFiltersOpen(true)}
+                        sx={{ 
+                            backgroundColor: 'primary.main', 
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: 'primary.dark',
+                            }
+                        }}
                     >
-                        <Typography variant="h6" color="text.secondary">
-                            No courses match your filters. Try adjusting your criteria.
-                        </Typography>
+                        <FilterList />
+                        <Typography variant="body2" sx={{ ml: 1 }}>Filters</Typography>
+                    </IconButton>
+                </Box>
+            )}
+
+            <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
+                {/* Sidebar Filters - Desktop */}
+                {!isMobile && (
+                    <Box sx={{ width: 280, pr: 3, flexShrink: 0 }}>
+                        <FilterSection />
                     </Box>
                 )}
+
+                {/* Mobile Filters Drawer */}
+                {isMobile && (
+                    <Drawer
+                        anchor="right"
+                        open={mobileFiltersOpen}
+                        onClose={() => setMobileFiltersOpen(false)}
+                        sx={{
+                            '& .MuiDrawer-paper': {
+                                width: '80%',
+                                maxWidth: 300,
+                                p: 2,
+                            },
+                        }}
+                    >
+                        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                            <Typography variant="h6">Filters</Typography>
+                            <IconButton onClick={() => setMobileFiltersOpen(false)}>
+                                <Close />
+                            </IconButton>
+                        </Box>
+                        <Divider sx={{ mb: 2 }} />
+                        <FilterSection />
+                    </Drawer>
+                )}
+
+                {/* Main Content */}
+                <Box sx={{ flex: 1 }}>
+                    {/* Top Controls */}
+                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={3} flexDirection={isMobile ? 'column' : 'row'} gap={isMobile ? 2 : 0}>
+                        <Typography variant="h5" sx={{ fontWeight: 'bold', alignSelf: isMobile ? 'flex-start' : 'auto' }}>
+                            {filteredCourses.length} Courses Found
+                        </Typography>
+                        <Box display="flex" gap={2} width={isMobile ? '100%' : 'auto'}>
+                            <FormControl size="small" sx={{ minWidth: 120, flex: isMobile ? 1 : 'auto' }}>
+                                <InputLabel>Sort By</InputLabel>
+                                <Select
+                                    value={sortOption}
+                                    onChange={(e) => setSortOption(e.target.value)}
+                                    label="Sort By"
+                                    fullWidth={isMobile}
+                                >
+                                    <MenuItem value="">None</MenuItem>
+                                    <MenuItem value="price">Price (Low to High)</MenuItem>
+                                    <MenuItem value="rating">Rating (High to Low)</MenuItem>
+                                    <MenuItem value="students">Popularity</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <FormControl size="small" sx={{ minWidth: 100, flex: isMobile ? 1 : 'auto' }}>
+                                <InputLabel>Per Page</InputLabel>
+                                <Select
+                                    value={perPage}
+                                    onChange={(e) => setPerPage(Number(e.target.value))}
+                                    label="Per Page"
+                                    fullWidth={isMobile}
+                                >
+                                    <MenuItem value={6}>6</MenuItem>
+                                    <MenuItem value={9}>9</MenuItem>
+                                    <MenuItem value={12}>12</MenuItem>
+                                    <MenuItem value={24}>24</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Box>
+
+                    {/* Course Grid */}
+                    {filteredCourses.length > 0 ? (
+                        <Grid container spacing={3}>
+                            {filteredCourses.slice(0, perPage).map(course => (
+                                <Grid key={course.id} item xs={12} sm={6} md={4} lg={3}>
+                                    <CourseCard course={course} />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    ) : (
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            minHeight="300px"
+                        >
+                            <Typography variant="h6" color="text.secondary" textAlign="center">
+                                No courses match your filters. Try adjusting your criteria.
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
             </Box>
         </Box>
     );

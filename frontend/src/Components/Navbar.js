@@ -22,7 +22,7 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
   const theme = useTheme();
   const location = useLocation();
   const active = location.pathname === to;
- 
+
   return (
     <MenuItem
       component={Link}
@@ -39,7 +39,7 @@ const NavLinkBtn = ({ to, children, closeMenu }) => {
           backgroundColor: "rgba(0, 123, 255, 0.08)",
           color: theme.palette.primary.main,
           transform: "scale(1.02)",
-        },
+       },
       }}
     >
       {children}
@@ -173,6 +173,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               >
                 <NavLinkBtn
                   to="/courses"
+                  closeMenu={() => setAnchorCourses(null)}
+                >
+                  Courses
+                </NavLinkBtn>
+                <NavLinkBtn
+                  to="/all-courses"
                   closeMenu={() => setAnchorCourses(null)}
                 >
                   All Courses
