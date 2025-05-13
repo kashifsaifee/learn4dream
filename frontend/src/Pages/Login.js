@@ -215,6 +215,7 @@
 //   );
 // }
 
+// Login.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
@@ -233,13 +234,13 @@ import {
 } from '@mui/material';
 import styled from 'styled-components';
 
-// === Dark Theme & Glassmorphism Palette ===
-const PRIMARY_BG = '#0d1117';
+// === Dark Glassmorphic Theme ===
+const PRIMARY_BG = '#000000';
 const ACCENT = '#58a6ff';
-const CARD_BG = 'rgba(255, 255, 255, 0.06)';
-const BORDER_COLOR = 'rgba(88, 166, 255, 0.3)';
-const TEXT_PRIMARY = '#e6edf3';
-const TEXT_SECONDARY = '#8b949e';
+const CARD_BG = 'rgba(255, 255, 255, 0.08)';
+const BORDER_COLOR = 'rgba(88, 166, 255, 0.25)';
+const TEXT_PRIMARY = '#ffffff';
+const TEXT_SECONDARY = '#b0b8c1';
 
 // === Styled Components ===
 const Container = styled.div`
@@ -252,7 +253,7 @@ const Container = styled.div`
 
 const LeftSection = styled.div`
   flex: 1;
-  background: linear-gradient(135deg, #1f2937, #0d1117);
+  background: linear-gradient(135deg, #0a0a0a, #121212);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -272,28 +273,32 @@ const RightSection = styled(motion.div)`
 const GlassCard = styled.div`
   background: ${CARD_BG};
   border: 1px solid ${BORDER_COLOR};
-  backdrop-filter: blur(20px);
-  padding: 32px;
+  backdrop-filter: blur(25px);
+  padding: 36px;
   border-radius: 18px;
   width: 100%;
-  max-width: 420px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  max-width: 440px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
 `;
 
 const StyledTextField = styled(TextField)`
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 
   label {
-    color: ${TEXT_SECONDARY};
+    color: ${TEXT_SECONDARY} !important;
   }
 
   .MuiFilledInput-root {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.04);
     border-radius: 12px;
     border: 1px solid ${BORDER_COLOR};
 
     input {
       color: ${TEXT_PRIMARY};
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
     }
   }
 `;
@@ -317,10 +322,10 @@ const SocialButton = styled(Button)`
   background: rgba(255, 255, 255, 0.05);
   text-transform: none;
   font-weight: 500;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
 
   &:hover {
-    background-color: rgba(88, 166, 255, 0.1);
+    background-color: rgba(88, 166, 255, 0.12);
     border-color: ${ACCENT};
   }
 `;
@@ -418,7 +423,6 @@ export default function Login({ setIsLoggedIn }) {
           <form onSubmit={handleSubmit}>
             <StyledTextField
               fullWidth
-              className='my-4'
               label="Email"
               name="email"
               type="email"
@@ -427,10 +431,9 @@ export default function Login({ setIsLoggedIn }) {
               value={form.email}
               onChange={handleChange}
             />
-            
+
             <StyledTextField
               fullWidth
-               className='my-4'
               label="Password"
               name="password"
               type={showPwd ? 'text' : 'password'}
@@ -495,6 +498,14 @@ export default function Login({ setIsLoggedIn }) {
         onClose={() => setOpenSnackbar(false)}
         message={successMessage || error}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        ContentProps={{
+          sx: {
+            backgroundColor: '#1e1e1e',
+            color: '#fff',
+            border: `1px solid ${ACCENT}`,
+            backdropFilter: 'blur(10px)',
+          },
+        }}
       />
     </Container>
   );
