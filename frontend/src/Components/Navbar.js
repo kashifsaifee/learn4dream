@@ -18,6 +18,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { CgProfile } from "react-icons/cg";
 
+// Links
 const courseLinks = [
   { to: "/courses", label: "Courses" },
   { to: "/all-courses", label: "All Courses" },
@@ -78,13 +79,36 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     top: "100%",
     left: 0,
     bgcolor: "#fff",
-    boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+    boxShadow: 3,
     borderRadius: 2,
     zIndex: 1000,
     mt: 1,
     minWidth: 160,
     py: 1,
   };
+
+  const renderDropdown = (links, closeFn) => (
+    <Box sx={dropdownBoxStyle}>
+      {links.map(({ to, label }) => (
+        <Button
+          key={to}
+          component={Link}
+          to={to}
+          sx={{
+            justifyContent: "flex-start",
+            px: 2,
+            py: 1,
+            width: "100%",
+            color: "#333",
+            "&:hover": { backgroundColor: theme.palette.action.hover },
+          }}
+          onClick={closeFn}
+        >
+          {label}
+        </Button>
+      ))}
+    </Box>
+  );
 
   const drawerList = (
     <Box
@@ -97,21 +121,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
           <ListItemText primary="Home" />
         </ListItem>
 
-        {courseLinks.map(({ to, label }) => (
-          <ListItem button key={to} component={Link} to={to}>
-            <ListItemText primary={label} />
-          </ListItem>
-        ))}
-
-        {pageLinks.map(({ to, label }) => (
-          <ListItem button key={to} component={Link} to={to}>
-            <ListItemText primary={label} />
-          </ListItem>
-        ))}
-
-        <ListItem button component={Link} to="/contact">
-          <ListItemText primary="Contact" />
-        </ListItem>
+        {[...courseLinks, ...pageLinks, { to: "/contact", label: "Contact" }]
+          .map(({ to, label }) => (
+            <ListItem button key={to} component={Link} to={to}>
+              <ListItemText primary={label} />
+            </ListItem>
+          ))}
 
         {!isLoggedIn ? (
           authLinks.map(({ to, label }) => (
@@ -136,204 +151,159 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   );
 
   return (
-    <AppBar
-      position="sticky"
-      sx={{
-        bgcolor: "#fff",
-        color: "#222",
-        boxShadow: 3,
-        width: { xs: "100%", md: "60%" },
-        top: 0,
-        left: { md: "50%" },
-        transform: { md: "translateX(-30%)" },
-        zIndex: 1300,
-        borderRadius: { md: 1 },
+    <Box
+      onMouseLeave={() => {
+        setShowCourses(false);
+        setShowPages(false);
+        setShowProfile(false);
       }}
     >
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography
-          variant="h5"
-          component={Link}
-          to="/"
-          sx={{
-            fontWeight: 800,
-            textDecoration: "none",
-            color: theme.palette.primary.main,
-            letterSpacing: 1,
-            display: "flex",
-            alignItems: "center",
-            gap: 0.5,
-          }}
-        >
-          Learn
-          <span
-            style={{ color: theme.palette.secondary.main, fontWeight: 900 }}
-          >
-            4
-          </span>
-          Dream
-        </Typography>
-
-        {!isMobile ? (
-          <Box
+      <AppBar
+        position="sticky"
+        sx={{
+          bgcolor: "#fff",
+          color: "#222",
+          boxShadow: 3,
+          width: { xs: "100%", md: "60%" },
+          top: 0,
+          left: { md: "50%" },
+          transform: { md: "translateX(-30%)" },
+          zIndex: 1300,
+          borderRadius: { md: 1 },
+        }}
+      >
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          {/* Logo */}
+          <Typography
+            variant="h5"
+            component={Link}
+            to="/"
             sx={{
+              fontWeight: 800,
+              textDecoration: "none",
+              color: theme.palette.primary.main,
+              letterSpacing: 1,
               display: "flex",
               alignItems: "center",
-              gap: 2,
-              position: "relative",
+              gap: 0.5,
             }}
           >
-            <Button component={Link} to="/" sx={navButtonStyle("/")}>
-              Home
-            </Button>
+            Learn
+            <span style={{ color: theme.palette.secondary.main, fontWeight: 900 }}>4</span>
+            Dream
+          </Typography>
 
-            {/* Courses Dropdown */}
-            <Box
-              sx={{ position: "relative" }}
-              onMouseEnter={() => setShowCourses(true)}
-              onMouseLeave={() => setShowCourses(false)}
-            >
-              <Button sx={navButtonStyle("/courses")}>Courses</Button>
-              {showCourses && (
-                <Box sx={dropdownBoxStyle}>
-                  {courseLinks.map(({ to, label }) => (
-                    <Button
-                      key={to}
-                      component={Link}
-                      to={to}
-                      sx={{
-                        justifyContent: "flex-start",
-                        px: 2,
-                        py: 1,
-                        width: "100%",
-                        color: "#333",
-                        "&:hover": {
-                          backgroundColor: theme.palette.action.hover,
-                        },
-                      }}
-                      onClick={() => setShowCourses(false)}
-                    >
-                      {label}
-                    </Button>
-                  ))}
-                </Box>
-              )}
-            </Box>
+          {/* Desktop Nav */}
+          {!isMobile ? (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2, position: "relative" }}>
+              <Button component={Link} to="/" sx={navButtonStyle("/")}>
+                Home
+              </Button>
 
-            {/* Pages Dropdown */}
-            <Box
-              sx={{ position: "relative" }}
-              onMouseEnter={() => setShowPages(true)}
-              onMouseLeave={() => setShowPages(false)}
-            >
-              <Button sx={navButtonStyle("/blogs")}>Pages</Button>
-              {showPages && (
-                <Box sx={dropdownBoxStyle}>
-                  {pageLinks.map(({ to, label }) => (
-                    <Button
-                      key={to}
-                      component={Link}
-                      to={to}
-                      sx={{
-                        justifyContent: "flex-start",
-                        px: 2,
-                        py: 1,
-                        width: "100%",
-                        color: "#333",
-                        "&:hover": {
-                          backgroundColor: theme.palette.action.hover,
-                        },
-                      }}
-                      onClick={() => setShowPages(false)}
-                    >
-                      {label}
-                    </Button>
-                  ))}
-                </Box>
-              )}
-            </Box>
-
-            <Button component={Link} to="/contact" sx={navButtonStyle("/contact")}>
-              Contact
-            </Button>
-
-            {/* Profile Dropdown */}
-            {!isLoggedIn ? (
-              authLinks.map(({ to, label }) => (
-                <Button
-                  key={to}
-                  component={Link}
-                  to={to}
-                  variant={label === "Sign Up" ? "contained" : "outlined"}
-                  color="primary"
-                  sx={{ borderRadius: 2, ml: 1 }}
-                >
-                  {label}
+              <Box sx={{ position: "relative" }}>
+                <Button onClick={() => {
+                  setShowCourses(!showCourses);
+                  setShowPages(false);
+                  setShowProfile(false);
+                }} sx={navButtonStyle("/courses")}>
+                  Courses
                 </Button>
-              ))
-            ) : (
-              <Box
-                sx={{ position: "relative" }}
-                onMouseEnter={() => setShowProfile(true)}
-                onMouseLeave={() => setShowProfile(false)}
-              >
-                <IconButton sx={{ ml: 1 }}>
-                  <CgProfile size={26} />
-                </IconButton>
-                {showProfile && (
-                  <Box sx={dropdownBoxStyle}>
-                    {userLinks.map(({ to, label }) => (
+                {showCourses && renderDropdown(courseLinks, () => setShowCourses(false))}
+              </Box>
+
+              <Box sx={{ position: "relative" }}>
+                <Button onClick={() => {
+                  setShowPages(!showPages);
+                  setShowCourses(false);
+                  setShowProfile(false);
+                }} sx={navButtonStyle("/blogs")}>
+                  Pages
+                </Button>
+                {showPages && renderDropdown(pageLinks, () => setShowPages(false))}
+              </Box>
+
+              <Button component={Link} to="/contact" sx={navButtonStyle("/contact")}>
+                Contact
+              </Button>
+
+              {!isLoggedIn ? (
+                authLinks.map(({ to, label }) => (
+                  <Button
+                    key={to}
+                    component={Link}
+                    to={to}
+                    variant={label === "Sign Up" ? "contained" : "outlined"}
+                    color="primary"
+                    sx={{ borderRadius: 2, ml: 1 }}
+                  >
+                    {label}
+                  </Button>
+                ))
+              ) : (
+                <Box sx={{ position: "relative" }}>
+                  <IconButton onClick={() => {
+                    setShowProfile(!showProfile);
+                    setShowCourses(false);
+                    setShowPages(false);
+                  }} sx={{ ml: 1 }}>
+                    <CgProfile size={26} />
+                  </IconButton>
+                  {showProfile && (
+                    <Box sx={dropdownBoxStyle}>
+                      {userLinks.map(({ to, label }) => (
+                        <Button
+                          key={to}
+                          component={Link}
+                          to={to}
+                          sx={{
+                            justifyContent: "flex-start",
+                            px: 2,
+                            py: 1,
+                            width: "100%",
+                            color: "#333",
+                            "&:hover": {
+                              backgroundColor: theme.palette.action.hover,
+                            },
+                          }}
+                          onClick={() => setShowProfile(false)}
+                        >
+                          {label}
+                        </Button>
+                      ))}
+                      <Divider />
                       <Button
-                        key={to}
-                        component={Link}
-                        to={to}
+                        onClick={() => {
+                          handleLogout();
+                          setShowProfile(false);
+                        }}
                         sx={{
                           justifyContent: "flex-start",
                           px: 2,
                           py: 1,
                           width: "100%",
-                          color: "#333",
-                          "&:hover": {
-                            backgroundColor: theme.palette.action.hover,
-                          },
+                          color: "red",
                         }}
-                        onClick={() => setShowProfile(false)}
                       >
-                        {label}
+                        Logout
                       </Button>
-                    ))}
-                    <Divider />
-                    <Button
-                      onClick={() => {
-                        handleLogout();
-                        setShowProfile(false);
-                      }}
-                      sx={{
-                        justifyContent: "flex-start",
-                        px: 2,
-                        py: 1,
-                        width: "100%",
-                        color: "red",
-                      }}
-                    >
-                      Logout
-                    </Button>
-                  </Box>
-                )}
-              </Box>
-            )}
-          </Box>
-        ) : (
-          <>
-            <IconButton edge="end" color="inherit" onClick={() => setMobileOpen(true)}>
-              <MenuIcon />
-            </IconButton>
-            <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
-              {drawerList}
-            </Drawer>
-          </>
-        )}
-      </Toolbar>
-    </AppBar>
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
+          ) : (
+            // Mobile Nav
+            <>
+              <IconButton edge="end" color="inherit" onClick={() => setMobileOpen(true)}>
+                <MenuIcon />
+              </IconButton>
+              <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
+                {drawerList}
+              </Drawer>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }

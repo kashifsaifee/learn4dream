@@ -270,7 +270,7 @@ const HomePage = () => {
     <Box sx={{ overflowX: "auto", width: "100%" }}>
       <Box
         sx={{
-          minHeight: "70vh",
+          minHeight: "100vh",
           background:
             "radial-gradient(circle at center,rgb(255, 255, 255) 0%, #ffffff 80%)",
           display: "flex",
