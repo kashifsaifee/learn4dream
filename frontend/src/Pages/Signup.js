@@ -308,6 +308,10 @@
 // }
 
 
+// Signup.js
+
+// Signup.js
+
 import { useState } from 'react';
 import {
   Button,
@@ -327,67 +331,55 @@ import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// Color palette
+// Colors
 const COLORS = {
-  background: '#181F2A',
-  leftPanel: 'linear-gradient(135deg, #1e2a38 60%, #FFA559 100%)',
-  cardBg: 'rgba(24,31,42,0.98)',
-  accent: '#FFA559',
-  inputBg: 'rgba(255,255,255,0.10)',
-  inputText: '#fff',
-  inputLabel: '#e0e0e0',
-  border: '#FFA559',
-  divider: 'rgba(255,255,255,0.12)',
-  buttonHover: 'rgba(255,165,89,0.10)',
-  outline: '#FFA559',
-  error: '#ff5252',
-  success: '#4caf50',
+  background: '#000000',
+  cardBg: 'rgba(255, 255, 255, 0.05)',
+  accent: '#4F9BFF',
+  inputBg: 'rgba(255,255,255,0.08)',
+  inputText: '#ffffff',
+  inputLabel: '#bbbbbb',
+  buttonHover: 'rgba(79,155,255,0.1)',
+  outline: '#4F9BFF',
+  error: '#ef4444',
+  success: '#22c55e',
 };
 
-// Shared input style for TextFields
-const inputStyle = {
-  input: { color: COLORS.inputText },
-  '.MuiFilledInput-root': {
-    bgcolor: COLORS.inputBg,
-    borderRadius: '12px',
-  },
-};
-
-// Styled Components
+// Styled components
 const Container = styled.div`
   display: flex;
   min-height: 100vh;
   background: ${COLORS.background};
+  color: ${COLORS.inputText};
 `;
 
 const LeftPanel = styled.div`
   flex: 1;
-  background: ${COLORS.leftPanel};
-  color: white;
+  background: linear-gradient(135deg, #1e1e1e 60%, #4F9BFF 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 48px 40px 48px 64px;
+  padding: 64px 48px;
   min-width: 340px;
-  box-shadow: 2px 0 24px 0 rgba(0, 0, 0, 0.12);
+  color: #fff;
 `;
 
 const RightPanel = styled(motion.div)`
   flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: ${COLORS.background};
+  align-items: center;
 `;
 
-const FormWrapper = styled.div`
+const FormCard = styled.div`
   width: 100%;
   max-width: 440px;
   background: ${COLORS.cardBg};
-  border-radius: 18px;
-  padding: 44px 36px 36px 36px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
-  color: white;
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 40px 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 `;
 
 export default function Signup() {
@@ -398,9 +390,9 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [snack, setSnack] = useState({ open: false, message: '', severity: '' });
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const togglePwd = () => setShowPwd(!showPwd);
+  const toggleConfirm = () => setShowConfirm(!showConfirm);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -428,7 +420,7 @@ export default function Signup() {
       if (res.data.token) localStorage.setItem('token', res.data.token);
 
       setSnack({ open: true, message: 'Signup successful!', severity: 'success' });
-      setTimeout(() => navigate('/profile'), 1300);
+      setTimeout(() => navigate('/profile'), 1200);
     } catch (err) {
       setSnack({
         open: true,
@@ -440,39 +432,49 @@ export default function Signup() {
     }
   };
 
-  const togglePwd = () => setShowPwd(!showPwd);
-  const toggleConfirm = () => setShowConfirm(!showConfirm);
+  const inputStyle = {
+    input: { color: COLORS.inputText },
+    '.MuiFilledInput-root': {
+      backgroundColor: COLORS.inputBg,
+      borderRadius: '12px',
+      border: '1px solid rgba(255,255,255,0.1)',
+    },
+  };
 
   const handleSocialSignup = (provider) => {
-    console.log(`Signing up with ${provider}`);
+    console.log(`Sign up with ${provider}`);
   };
 
   return (
     <Container>
       <LeftPanel>
-        <Typography variant="h3" fontWeight="bold" mb={2} sx={{ color: COLORS.accent }}>
-          Start Your Learning
+        <Typography variant="h3" fontWeight="bold" mb={2}>
+          Welcome to Learn4Dream
         </Typography>
-        <Typography variant="body1" fontSize="1.1rem" sx={{ opacity: 0.92 }}>
-          Unlock access to premium courses, expert instructors, and a community of learners.
+        <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 400 }}>
+          Join our creative learning community and start your journey today.
         </Typography>
       </LeftPanel>
 
-      <RightPanel initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <FormWrapper>
+      <RightPanel
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        <FormCard>
           <Typography variant="h4" fontWeight="bold" mb={3} textAlign="center" sx={{ color: COLORS.accent }}>
             Sign Up
           </Typography>
 
           <form onSubmit={handleSubmit}>
-            {['name', 'email'].map((field, idx) => (
+            {['name', 'email'].map((field) => (
               <TextField
                 key={field}
                 fullWidth
                 label={field === 'name' ? 'Full Name' : 'Email'}
                 name={field}
-                type={field === 'email' ? 'email' : 'text'}
                 variant="filled"
+                type={field === 'email' ? 'email' : 'text'}
                 required
                 value={form[field]}
                 onChange={handleChange}
@@ -481,7 +483,6 @@ export default function Signup() {
               />
             ))}
 
-            {/* Password Field */}
             <TextField
               fullWidth
               label="Password"
@@ -496,7 +497,7 @@ export default function Signup() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={togglePwd} edge="end" aria-label="toggle password" sx={{ color: COLORS.inputLabel }}>
+                    <IconButton onClick={togglePwd} edge="end" sx={{ color: COLORS.inputLabel }}>
                       {showPwd ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -504,7 +505,6 @@ export default function Signup() {
               }}
             />
 
-            {/* Confirm Password */}
             <TextField
               fullWidth
               label="Confirm Password"
@@ -519,7 +519,7 @@ export default function Signup() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={toggleConfirm} edge="end" aria-label="toggle confirm password" sx={{ color: COLORS.inputLabel }}>
+                    <IconButton onClick={toggleConfirm} edge="end" sx={{ color: COLORS.inputLabel }}>
                       {showConfirm ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -532,50 +532,48 @@ export default function Signup() {
               fullWidth
               size="large"
               variant="contained"
-              color="secondary"
               disabled={loading}
               sx={{
+                mb: 3,
                 borderRadius: 3,
                 fontWeight: 'bold',
                 textTransform: 'none',
-                mb: 3,
-                bgcolor: loading ? '#ccc' : COLORS.accent,
-                color: '#222',
+                bgcolor: COLORS.accent,
+                color: '#000',
                 '&:hover': {
-                  bgcolor: loading ? '#ccc' : '#ffb877',
+                  bgcolor: '#76baff',
                 },
               }}
             >
-              {loading ? <CircularProgress size={24} sx={{ color: '#222' }} /> : 'Sign Up'}
+              {loading ? <CircularProgress size={24} sx={{ color: '#000' }} /> : 'Sign Up'}
             </Button>
           </form>
 
-          <Divider sx={{ my: 3, borderColor: COLORS.divider }}>OR</Divider>
+          <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.12)' }}>OR</Divider>
 
           <Stack spacing={2}>
-            {[
-              { provider: 'Google', icon: <FaGoogle /> },
-              { provider: 'Microsoft', icon: <FaMicrosoft /> },
-            ].map(({ provider, icon }) => (
-              <Button
-                key={provider}
-                fullWidth
-                variant="outlined"
-                onClick={() => handleSocialSignup(provider)}
-                startIcon={icon}
-                sx={{
-                  color: COLORS.inputText,
-                  borderColor: COLORS.outline,
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: COLORS.accent,
-                    backgroundColor: COLORS.buttonHover,
-                  },
-                }}
-              >
-                Sign Up with {provider}
-              </Button>
-            ))}
+            {[{ name: 'Google', icon: <FaGoogle /> }, { name: 'Microsoft', icon: <FaMicrosoft /> }].map(
+              ({ name, icon }) => (
+                <Button
+                  key={name}
+                  fullWidth
+                  variant="outlined"
+                  startIcon={icon}
+                  onClick={() => handleSocialSignup(name)}
+                  sx={{
+                    borderColor: COLORS.outline,
+                    color: COLORS.inputText,
+                    textTransform: 'none',
+                    '&:hover': {
+                      backgroundColor: COLORS.buttonHover,
+                      borderColor: COLORS.accent,
+                    },
+                  }}
+                >
+                  Sign up with {name}
+                </Button>
+              )
+            )}
           </Stack>
 
           <Typography mt={4} textAlign="center" fontSize="0.9rem" sx={{ color: COLORS.inputLabel }}>
@@ -584,7 +582,7 @@ export default function Signup() {
               Log in
             </Link>
           </Typography>
-        </FormWrapper>
+        </FormCard>
       </RightPanel>
 
       <Snackbar

@@ -40,7 +40,7 @@ if not GOOGLE_CLIENT_ID:
 
 # CORS
 CLIENT_ORIGIN = os.getenv("CLIENT_ORIGIN", "http://localhost:3000")
-CORS(app, resources={r"/api/*": {"origins": CLIENT_ORIGIN}})
+CORS(app, origins=CLIENT_ORIGIN)
 
 # Logging
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
