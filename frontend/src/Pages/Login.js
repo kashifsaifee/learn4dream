@@ -214,6 +214,8 @@
 //     </Box>
 //   );
 // }
+
+// Login.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
@@ -232,23 +234,13 @@ import {
 } from '@mui/material';
 import styled from 'styled-components';
 
-// === Color Palette Consistent with Signin.js ===
-const PRIMARY_BG = '#0f274a';
-const CARD_BG = '#fff';
-const ACCENT = '#FFA559';
-const TEXT_PRIMARY = '#0f274a';
-const TEXT_SECONDARY = '#555';
-const INPUT_BG = '#f5f7fa';
-
-// === Reusable Input Style ===
-const inputStyles = {
-  mb: 3,
-  input: { color: TEXT_PRIMARY },
-  '.MuiFilledInput-root': {
-    bgcolor: INPUT_BG,
-    borderRadius: '12px',
-  },
-};
+// === Dark Glassmorphic Theme ===
+const PRIMARY_BG = '#000000';
+const ACCENT = '#58a6ff';
+const CARD_BG = 'rgba(255, 255, 255, 0.08)';
+const BORDER_COLOR = 'rgba(88, 166, 255, 0.25)';
+const TEXT_PRIMARY = '#ffffff';
+const TEXT_SECONDARY = '#b0b8c1';
 
 // === Styled Components ===
 const Container = styled.div`
@@ -261,12 +253,13 @@ const Container = styled.div`
 
 const LeftSection = styled.div`
   flex: 1;
-  background: linear-gradient(135deg, #ffa559 0%, #ffe6c7 100%);
+  background: linear-gradient(135deg, #0a0a0a, #121212);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 40px;
+  text-align: center;
 `;
 
 const RightSection = styled(motion.div)`
@@ -277,25 +270,62 @@ const RightSection = styled(motion.div)`
   background: ${PRIMARY_BG};
 `;
 
-const Card = styled.div`
-  background-color: ${CARD_BG};
-  padding: 32px;
+const GlassCard = styled.div`
+  background: ${CARD_BG};
+  border: 1px solid ${BORDER_COLOR};
+  backdrop-filter: blur(25px);
+  padding: 36px;
   border-radius: 18px;
   width: 100%;
-  max-width: 420px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  color: ${TEXT_PRIMARY};
+  max-width: 440px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+`;
+
+const StyledTextField = styled(TextField)`
+  margin-bottom: 20px;
+
+  label {
+    color: ${TEXT_SECONDARY} !important;
+  }
+
+  .MuiFilledInput-root {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    border: 1px solid ${BORDER_COLOR};
+
+    input {
+      color: ${TEXT_PRIMARY};
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+  }
+`;
+
+const AccentButton = styled(Button)`
+  background-color: ${ACCENT};
+  color: ${PRIMARY_BG};
+  font-weight: bold;
+  border-radius: 12px;
+  text-transform: none;
+  margin-top: 12px;
+
+  &:hover {
+    background-color: #70b9ff;
+  }
 `;
 
 const SocialButton = styled(Button)`
   color: ${TEXT_PRIMARY};
-  border-color: #ccc;
-  background: #fff;
+  border-color: ${BORDER_COLOR};
+  background: rgba(255, 255, 255, 0.05);
   text-transform: none;
   font-weight: 500;
+  backdrop-filter: blur(12px);
 
   &:hover {
-    background-color: #fff7f0;
+    background-color: rgba(88, 166, 255, 0.12);
     border-color: ${ACCENT};
   }
 `;
@@ -371,10 +401,10 @@ export default function Login({ setIsLoggedIn }) {
   return (
     <Container>
       <LeftSection>
-        <Typography variant="h3" color={PRIMARY_BG} fontWeight="bold" gutterBottom>
+        <Typography variant="h3" color={TEXT_PRIMARY} fontWeight="bold" gutterBottom>
           Welcome to Learn4Dream
         </Typography>
-        <Typography variant="body1" sx={{ textAlign: 'center', maxWidth: 400, color: TEXT_SECONDARY }}>
+        <Typography variant="body1" sx={{ maxWidth: 400, color: TEXT_SECONDARY }}>
           Access personalized learning, track progress, and grow with our intuitive platform.
         </Typography>
       </LeftSection>
@@ -385,13 +415,13 @@ export default function Login({ setIsLoggedIn }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <Card>
+        <GlassCard>
           <Typography variant="h4" fontWeight="bold" textAlign="center" mb={3} color={ACCENT}>
             Welcome Back
           </Typography>
 
           <form onSubmit={handleSubmit}>
-            <TextField
+            <StyledTextField
               fullWidth
               label="Email"
               name="email"
@@ -400,11 +430,9 @@ export default function Login({ setIsLoggedIn }) {
               required
               value={form.email}
               onChange={handleChange}
-              sx={inputStyles}
-              InputLabelProps={{ style: { color: TEXT_SECONDARY } }}
             />
 
-            <TextField
+            <StyledTextField
               fullWidth
               label="Password"
               name="password"
@@ -413,8 +441,6 @@ export default function Login({ setIsLoggedIn }) {
               required
               value={form.password}
               onChange={handleChange}
-              sx={{ ...inputStyles, mb: 4 }}
-              InputLabelProps={{ style: { color: TEXT_SECONDARY } }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -426,25 +452,15 @@ export default function Login({ setIsLoggedIn }) {
               }}
             />
 
-            <Button
+            <AccentButton
               type="submit"
               fullWidth
               variant="contained"
               size="large"
-              sx={{
-                bgcolor: ACCENT,
-                color: PRIMARY_BG,
-                fontWeight: 'bold',
-                textTransform: 'none',
-                borderRadius: 3,
-                '&:hover': {
-                  bgcolor: '#ffb877',
-                },
-              }}
               disabled={loading}
             >
               {loading ? <CircularProgress size={24} sx={{ color: PRIMARY_BG }} /> : 'Log In'}
-            </Button>
+            </AccentButton>
           </form>
 
           <Typography mt={3} textAlign="center" fontSize="0.9rem" color={TEXT_SECONDARY}>
@@ -473,7 +489,7 @@ export default function Login({ setIsLoggedIn }) {
               Continue with Microsoft
             </SocialButton>
           </Stack>
-        </Card>
+        </GlassCard>
       </RightSection>
 
       <Snackbar
@@ -482,6 +498,14 @@ export default function Login({ setIsLoggedIn }) {
         onClose={() => setOpenSnackbar(false)}
         message={successMessage || error}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        ContentProps={{
+          sx: {
+            backgroundColor: '#1e1e1e',
+            color: '#fff',
+            border: `1px solid ${ACCENT}`,
+            backdropFilter: 'blur(10px)',
+          },
+        }}
       />
     </Container>
   );
