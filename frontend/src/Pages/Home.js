@@ -309,7 +309,7 @@ const HomePage = () => {
                     lineHeight: 1.2,
                     mb: 3,
                     background:
-                      "linear-gradient(90deg,rgb(78, 133, 185), rgba(0, 0, 0, 0.65))",
+                      "linear-gradient(90deg,#4e85b9, rgba(0, 0, 0, 0.65))",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     color: "transparent",

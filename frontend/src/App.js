@@ -18,7 +18,6 @@ import CourseDetail from "./Pages/CourseDetail";
 import CourseFilter from "./Pages/CourseFilter";
 import './App.css';
 
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
