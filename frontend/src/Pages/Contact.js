@@ -12,7 +12,6 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
-import Footer from "../Components/Footer";
 import {
   FaInstagram,
   FaFacebookF,
@@ -358,8 +357,6 @@ const ContactSection = () => {
           </Box>
         </Paper>
       </Box>
-      {/* ✅ Footer Section */}
-      <Footer />
     </>
   );
 };

@@ -7,7 +7,6 @@ import { IoBagOutline } from "react-icons/io5";
 import { TypeAnimation } from "react-type-animation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Styles/Courses.css";
-import Footer from "../Components/Footer";
 
 
 
@@ -137,11 +136,6 @@ export default function Courses() {
         </div>
       </motion.div>
 
-
-      {/* Footer Section */}
-
-
-      <Footer />
     </>
   );
 }

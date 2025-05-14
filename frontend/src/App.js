@@ -13,8 +13,7 @@ import Signup from './Pages/Signup';
 import Profile from './Pages/Profile';
 import CourseDetail from './Pages/CourseDetail';
 import CourseFilter from './Pages/CourseFilter';
-
-import Layout from './Components/Layout'; // ✅ Import Layout
+import Layout from './Components/Layout';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -31,7 +30,6 @@ function App() {
         <CssBaseline />
         <Router>
           <Routes>
-            {/* Pages with Layout (Navbar + Footer) */}
             <Route element={<Layout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
@@ -50,7 +48,6 @@ function App() {
               } />
             </Route>
 
-            {/* Auth pages without Navbar/Footer */}
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} handleLogin={handleLogin} />} />
             <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} />
           </Routes>
