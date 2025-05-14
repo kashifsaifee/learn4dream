@@ -469,6 +469,7 @@ export default function Signup() {
           <form onSubmit={handleSubmit}>
             {['name', 'email'].map((field) => (
               <TextField
+
                 key={field}
                 fullWidth
                 label={field === 'name' ? 'Full Name' : 'Email'}
@@ -597,8 +598,8 @@ export default function Signup() {
               snack.severity === 'success'
                 ? COLORS.success
                 : snack.severity === 'error'
-                ? COLORS.error
-                : COLORS.cardBg,
+                  ? COLORS.error
+                  : COLORS.cardBg,
             color: '#fff',
             fontWeight: 500,
           },
