@@ -21,11 +21,11 @@ import animationData from "../assets/animation/animation.json";
 
 
 import {
-  CodeIcon,
-  DesignServicesIcon,
-  LanguageIcon,
-  SchoolIcon,
-} from "../utils/icon";
+  Code as CodeIcon,
+  DesignServices as DesignServicesIcon,
+  Language as LanguageIcon,
+  School as SchoolIcon,
+} from "@mui/icons-material";
 import CountUp from "react-countup";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -195,11 +195,12 @@ const HomePage = () => {
 
     const marquee = marqueeRef.current;
     const content = marquee.firstChild;
-    const contentWidth = content.offsetWidth;
+    if (content) {
+      // Duplicate content for seamless looping
+      content.innerHTML += content.innerHTML;
+    }
 
-    // Duplicate content for seamless looping
-    content.innerHTML += content.innerHTML;
-
+    const contentWidth = content.offsetWidth; // Define contentWidth
     gsap.to(content, {
       x: -contentWidth / 2,
       duration: 20,
@@ -409,9 +410,8 @@ const HomePage = () => {
             {cardData.map((card, index) => (
               <AnimatedCard
                 key={index}
-                image={card.image}
+                icon={card.icon}
                 title={card.title}
-                subheader={card.subheader}
                 description={card.description}
               />
             ))}
@@ -811,7 +811,7 @@ const HomePage = () => {
             background: "linear-gradient(to left, white, transparent)",
           },
         }}
-      />
+      ></Box>
 
       <Box
         sx={{
