@@ -12,7 +12,6 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
-import Footer from "../Components/Footer";
 import {
   FaInstagram,
   FaFacebookF,
@@ -78,7 +77,7 @@ const ContactSection = () => {
       <Box
         sx={{
           minHeight: "100vh",
-          bgcolor: "#f5f5f5",
+          bgcolor: "#ffffff",
           py: 6,
           px: 3,
           display: "flex",
@@ -358,8 +357,6 @@ const ContactSection = () => {
           </Box>
         </Paper>
       </Box>
-      {/* ✅ Footer Section */}
-      <Footer />
     </>
   );
 };

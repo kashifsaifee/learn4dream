@@ -6,47 +6,18 @@ import {
   Button,
   Box,
   IconButton,
-  Menu,
-  MenuItem,
-  Divider,
   useMediaQuery,
-  Grow,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
 } from "@mui/material";
-import { Menu as MenuIcon, ExpandMore } from "@mui/icons-material";
+import { Menu as MenuIcon } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { CgProfile } from "react-icons/cg";
 
-// Reusable navigation link component
-const NavLinkBtn = ({ to, children, closeMenu }) => {
-  const theme = useTheme();
-  const location = useLocation();
-  const active = location.pathname === to;
-
-  return (
-    <MenuItem
-      component={Link}
-      to={to}
-      onClick={closeMenu}
-      sx={{
-        color: active ? theme.palette.primary.main : "#222",
-        fontWeight: active ? 700 : 500,
-        px: 3,
-        py: 1.2,
-        borderRadius: 2,
-        transition: "all 0.2s",
-        "&:hover": {
-          backgroundColor: theme.palette.action.hover,
-          color: theme.palette.primary.main,
-        },
-      }}
-    >
-      {children}
-    </MenuItem>
-  );
-};
-
-// Menu structure
 const courseLinks = [
   { to: "/courses", label: "Courses" },
   { to: "/all-courses", label: "All Courses" },
@@ -56,13 +27,6 @@ const courseLinks = [
 const pageLinks = [
   { to: "/blogs", label: "Blogs" },
   { to: "/about", label: "About" },
-];
-
-const mobileLinks = [
-  { to: "/", label: "Home" },
-  ...courseLinks,
-  ...pageLinks,
-  { to: "/contact", label: "Contact" },
 ];
 
 const authLinks = [
@@ -81,37 +45,14 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [anchorCourses, setAnchorCourses] = useState(null);
-  const [anchorPages, setAnchorPages] = useState(null);
-  const [anchorMobile, setAnchorMobile] = useState(null);
-  const [anchorProfile, setAnchorProfile] = useState(null);
+  const [showCourses, setShowCourses] = useState(false);
+  const [showPages, setShowPages] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     navigate("/");
-  };
-
-  const menuProps = {
-    TransitionComponent: Grow,
-    PaperProps: {
-      elevation: 4,
-      sx: {
-        borderRadius: 3,
-        mt: 1,
-        bgcolor: "#fff",
-        minWidth: 180,
-        maxHeight: 320,
-        boxShadow: "0px 3px 12px rgba(0,0,0,0.08)",
-      },
-    },
-    anchorOrigin: { vertical: "bottom", horizontal: "left" },
-    transformOrigin: { vertical: "top", horizontal: "left" },
-    MenuListProps: {
-      onMouseLeave: () => {
-        setAnchorCourses(null);
-        setAnchorPages(null);
-      },
-    },
   };
 
   const navButtonStyle = (path) => ({
@@ -124,12 +65,75 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     px: 2,
     py: 1,
     borderRadius: 2,
-    transition: "all 0.2s",
+    whiteSpace: "nowrap",
+    position: "relative",
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
       color: theme.palette.primary.main,
     },
   });
+
+  const dropdownBoxStyle = {
+    position: "absolute",
+    top: "100%",
+    left: 0,
+    bgcolor: "#fff",
+    boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+    borderRadius: 2,
+    zIndex: 1000,
+    mt: 1,
+    minWidth: 160,
+    py: 1,
+  };
+
+  const drawerList = (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={() => setMobileOpen(false)}
+    >
+      <List>
+        <ListItem button component={Link} to="/">
+          <ListItemText primary="Home" />
+        </ListItem>
+
+        {courseLinks.map(({ to, label }) => (
+          <ListItem button key={to} component={Link} to={to}>
+            <ListItemText primary={label} />
+          </ListItem>
+        ))}
+
+        {pageLinks.map(({ to, label }) => (
+          <ListItem button key={to} component={Link} to={to}>
+            <ListItemText primary={label} />
+          </ListItem>
+        ))}
+
+        <ListItem button component={Link} to="/contact">
+          <ListItemText primary="Contact" />
+        </ListItem>
+
+        {!isLoggedIn ? (
+          authLinks.map(({ to, label }) => (
+            <ListItem button key={to} component={Link} to={to}>
+              <ListItemText primary={label} />
+            </ListItem>
+          ))
+        ) : (
+          <>
+            {userLinks.map(({ to, label }) => (
+              <ListItem button key={to} component={Link} to={to}>
+                <ListItemText primary={label} />
+              </ListItem>
+            ))}
+            <ListItem button onClick={handleLogout}>
+              <ListItemText primary="Logout" sx={{ color: "red" }} />
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Box>
+  );
 
   return (
     <AppBar
@@ -138,15 +142,15 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         bgcolor: "#fff",
         color: "#222",
         boxShadow: 3,
-        borderRadius: 3,
-        width: { xs: "98%", sm: "90%", md: "70%" },
-        mx: "auto",
-        mt: 1,
-        backdropFilter: "blur(8px)",
-        overflow: "hidden",
+        width: { xs: "100%", md: "60%" },
+        top: 0,
+        left: { md: "50%" },
+        transform: { md: "translateX(-30%)" },
+        zIndex: 1300,
+        borderRadius: { md: 1 },
       }}
     >
-      <Toolbar sx={{ justifyContent: "space-between", gap: 2 }}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
         <Typography
           variant="h5"
           component={Link}
@@ -162,70 +166,98 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
           }}
         >
           Learn
-          <span style={{ color: theme.palette.secondary.main, fontWeight: 900 }}>
+          <span
+            style={{ color: theme.palette.secondary.main, fontWeight: 900 }}
+          >
             4
           </span>
           Dream
         </Typography>
 
         {!isMobile ? (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              position: "relative",
+            }}
+          >
             <Button component={Link} to="/" sx={navButtonStyle("/")}>
               Home
             </Button>
 
-            <Box onMouseEnter={(e) => setAnchorCourses(e.currentTarget)}>
-              <Button
-                endIcon={<ExpandMore />}
-                sx={navButtonStyle("/courses")}
-                aria-controls="courses-menu"
-                aria-haspopup="true"
-              >
-                Courses
-              </Button>
-              <Menu
-                id="courses-menu"
-                anchorEl={anchorCourses}
-                open={Boolean(anchorCourses)}
-                onClose={() => setAnchorCourses(null)}
-                {...menuProps}
-              >
-                {courseLinks.map(({ to, label }) => (
-                  <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorCourses(null)}>
-                    {label}
-                  </NavLinkBtn>
-                ))}
-              </Menu>
+            {/* Courses Dropdown */}
+            <Box
+              sx={{ position: "relative" }}
+              onMouseEnter={() => setShowCourses(true)}
+              onMouseLeave={() => setShowCourses(false)}
+            >
+              <Button sx={navButtonStyle("/courses")}>Courses</Button>
+              {showCourses && (
+                <Box sx={dropdownBoxStyle}>
+                  {courseLinks.map(({ to, label }) => (
+                    <Button
+                      key={to}
+                      component={Link}
+                      to={to}
+                      sx={{
+                        justifyContent: "flex-start",
+                        px: 2,
+                        py: 1,
+                        width: "100%",
+                        color: "#333",
+                        "&:hover": {
+                          backgroundColor: theme.palette.action.hover,
+                        },
+                      }}
+                      onClick={() => setShowCourses(false)}
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </Box>
+              )}
             </Box>
 
-            <Box onMouseEnter={(e) => setAnchorPages(e.currentTarget)}>
-              <Button
-                endIcon={<ExpandMore />}
-                sx={navButtonStyle("/blogs")}
-                aria-controls="pages-menu"
-                aria-haspopup="true"
-              >
-                Pages
-              </Button>
-              <Menu
-                id="pages-menu"
-                anchorEl={anchorPages}
-                open={Boolean(anchorPages)}
-                onClose={() => setAnchorPages(null)}
-                {...menuProps}
-              >
-                {pageLinks.map(({ to, label }) => (
-                  <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorPages(null)}>
-                    {label}
-                  </NavLinkBtn>
-                ))}
-              </Menu>
+            {/* Pages Dropdown */}
+            <Box
+              sx={{ position: "relative" }}
+              onMouseEnter={() => setShowPages(true)}
+              onMouseLeave={() => setShowPages(false)}
+            >
+              <Button sx={navButtonStyle("/blogs")}>Pages</Button>
+              {showPages && (
+                <Box sx={dropdownBoxStyle}>
+                  {pageLinks.map(({ to, label }) => (
+                    <Button
+                      key={to}
+                      component={Link}
+                      to={to}
+                      sx={{
+                        justifyContent: "flex-start",
+                        px: 2,
+                        py: 1,
+                        width: "100%",
+                        color: "#333",
+                        "&:hover": {
+                          backgroundColor: theme.palette.action.hover,
+                        },
+                      }}
+                      onClick={() => setShowPages(false)}
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </Box>
+              )}
             </Box>
 
             <Button component={Link} to="/contact" sx={navButtonStyle("/contact")}>
               Contact
             </Button>
 
+            {/* Profile Dropdown */}
             {!isLoggedIn ? (
               authLinks.map(({ to, label }) => (
                 <Button
@@ -240,109 +272,65 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 </Button>
               ))
             ) : (
-              <>
-                <IconButton
-                  onClick={(e) => setAnchorProfile(e.currentTarget)}
-                  sx={{ color: theme.palette.primary.main, ml: 1 }}
-                >
+              <Box
+                sx={{ position: "relative" }}
+                onMouseEnter={() => setShowProfile(true)}
+                onMouseLeave={() => setShowProfile(false)}
+              >
+                <IconButton sx={{ ml: 1 }}>
                   <CgProfile size={26} />
                 </IconButton>
-                <Menu
-                  anchorEl={anchorProfile}
-                  open={Boolean(anchorProfile)}
-                  onClose={() => setAnchorProfile(null)}
-                  {...menuProps}
-                >
-                  {userLinks.map(({ to, label }) => (
-                    <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorProfile(null)}>
-                      {label}
-                    </NavLinkBtn>
-                  ))}
-                  <Divider sx={{ my: 1 }} />
-                  <MenuItem
-                    onClick={() => {
-                      handleLogout();
-                      setAnchorProfile(null);
-                    }}
-                    sx={{
-                      px: 3,
-                      py: 1.2,
-                      color: "red",
-                      fontWeight: 600,
-                      "&:hover": { bgcolor: "rgba(255,0,0,0.08)" },
-                    }}
-                  >
-                    Logout
-                  </MenuItem>
-                </Menu>
-              </>
+                {showProfile && (
+                  <Box sx={dropdownBoxStyle}>
+                    {userLinks.map(({ to, label }) => (
+                      <Button
+                        key={to}
+                        component={Link}
+                        to={to}
+                        sx={{
+                          justifyContent: "flex-start",
+                          px: 2,
+                          py: 1,
+                          width: "100%",
+                          color: "#333",
+                          "&:hover": {
+                            backgroundColor: theme.palette.action.hover,
+                          },
+                        }}
+                        onClick={() => setShowProfile(false)}
+                      >
+                        {label}
+                      </Button>
+                    ))}
+                    <Divider />
+                    <Button
+                      onClick={() => {
+                        handleLogout();
+                        setShowProfile(false);
+                      }}
+                      sx={{
+                        justifyContent: "flex-start",
+                        px: 2,
+                        py: 1,
+                        width: "100%",
+                        color: "red",
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </Box>
+                )}
+              </Box>
             )}
           </Box>
         ) : (
           <>
-            <IconButton
-              color="primary"
-              onClick={(e) => setAnchorMobile(e.currentTarget)}
-              sx={{ ml: 1 }}
-            >
+            <IconButton edge="end" color="inherit" onClick={() => setMobileOpen(true)}>
               <MenuIcon />
             </IconButton>
-            <Menu
-              anchorEl={anchorMobile}
-              open={Boolean(anchorMobile)}
-              onClose={() => setAnchorMobile(null)}
-              {...menuProps}
-              PaperProps={{
-                ...menuProps.PaperProps,
-                sx: { ...menuProps.PaperProps.sx, minWidth: 200 },
-              }}
-            >
-              <Typography
-                sx={{
-                  px: 2,
-                  py: 1,
-                  fontWeight: 700,
-                  color: theme.palette.primary.main,
-                }}
-              >
-                Menu
-              </Typography>
-              <Divider />
-              {mobileLinks.map(({ to, label }) => (
-                <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorMobile(null)}>
-                  {label}
-                </NavLinkBtn>
-              ))}
-              <Divider />
-              {!isLoggedIn
-                ? authLinks.map(({ to, label }) => (
-                    <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorMobile(null)}>
-                      {label}
-                    </NavLinkBtn>
-                  ))
-                : (
-                  <>
-                    {userLinks.map(({ to, label }) => (
-                      <NavLinkBtn key={to} to={to} closeMenu={() => setAnchorMobile(null)}>
-                        {label}
-                      </NavLinkBtn>
-                    ))}
-                    <MenuItem
-                      onClick={() => {
-                        handleLogout();
-                        setAnchorMobile(null);
-                      }}
-                      sx={{
-                        color: "red",
-                        fontWeight: 600,
-                        "&:hover": { bgcolor: "rgba(255,0,0,0.08)" },
-                      }}
-                    >
-                      Logout
-                    </MenuItem>
-                  </>
-                )}
-            </Menu>
+            <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
+              {drawerList}
+            </Drawer>
           </>
         )}
       </Toolbar>

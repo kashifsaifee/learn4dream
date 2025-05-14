@@ -21,11 +21,11 @@ import animationData from "../assets/animation/animation.json";
 
 
 import {
-  CodeIcon,
-  DesignServicesIcon,
-  LanguageIcon,
-  SchoolIcon,
-} from "../utils/icon";
+  Code as CodeIcon,
+  DesignServices as DesignServicesIcon,
+  Language as LanguageIcon,
+  School as SchoolIcon,
+} from "@mui/icons-material";
 import CountUp from "react-countup";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -195,11 +195,12 @@ const HomePage = () => {
 
     const marquee = marqueeRef.current;
     const content = marquee.firstChild;
-    const contentWidth = content.offsetWidth;
+    if (content) {
+      // Duplicate content for seamless looping
+      content.innerHTML += content.innerHTML;
+    }
 
-    // Duplicate content for seamless looping
-    content.innerHTML += content.innerHTML;
-
+    const contentWidth = content.offsetWidth; // Define contentWidth
     gsap.to(content, {
       x: -contentWidth / 2,
       duration: 20,
@@ -253,7 +254,7 @@ const HomePage = () => {
       gsap.from(element, {
         scrollTrigger: {
           trigger: element,
-          start: "top 80%",
+          start: "top 100%",
           toggleActions: "play none none none",
         },
         opacity: 0,
@@ -269,7 +270,7 @@ const HomePage = () => {
     <Box sx={{ overflowX: "auto", width: "100%" }}>
       <Box
         sx={{
-          minHeight: "100vh",
+          minHeight: "70vh",
           background:
             "radial-gradient(circle at center,rgb(255, 255, 255) 0%, #ffffff 80%)",
           display: "flex",
@@ -308,7 +309,7 @@ const HomePage = () => {
                     lineHeight: 1.2,
                     mb: 3,
                     background:
-                      "linear-gradient(90deg,rgb(78, 133, 185), rgba(0, 0, 0, 0.65))",
+                      "linear-gradient(90deg,#4e85b9, rgba(0, 0, 0, 0.65))",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
                     color: "transparent",
@@ -409,9 +410,8 @@ const HomePage = () => {
             {cardData.map((card, index) => (
               <AnimatedCard
                 key={index}
-                image={card.image}
+                icon={card.icon}
                 title={card.title}
-                subheader={card.subheader}
                 description={card.description}
               />
             ))}
@@ -811,7 +811,7 @@ const HomePage = () => {
             background: "linear-gradient(to left, white, transparent)",
           },
         }}
-      />
+      ></Box>
 
       <Box
         sx={{
