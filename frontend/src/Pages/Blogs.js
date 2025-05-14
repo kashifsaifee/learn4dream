@@ -151,6 +151,145 @@
 // };
 
 // export default Blogs;
+// import React from 'react';
+// import {
+//   Box,
+//   Container,
+//   Typography,
+//   Grid,
+//   Button,
+//   CardContent,
+//   CardMedia,
+//   Paper,
+//   Divider
+// } from '@mui/material';
+// import { motion } from 'framer-motion';
+// import { Link } from 'react-router-dom';
+
+// // Sample blogs
+// // import Footer from '../Components/Footer';
+
+
+// const MotionPaper = motion(Paper);
+// const MotionBox = motion(Box);
+
+// const blogs = [
+//   {
+//     id: 1,
+//     title: 'Top 10 Skills to Learn in 2025',
+//     excerpt: 'Discover the most in-demand skills for the future and how Learn4Dream can help you master them.',
+//     link: '/blogs/top-skills-2025',
+//     image: 'https://dummyimage.com/600x350/1e1e2f/ffffff&text=Skills+2025',
+//   },
+//   {
+//     id: 2,
+//     title: 'How to Build a Career in Data Science',
+//     excerpt: 'Data Science is booming. Learn how to start your journey and land a job in this exciting field.',
+//     link: '/blogs/data-science-career',
+//     image: 'https://dummyimage.com/600x350/20232a/ffffff&text=Data+Science',
+//   },
+//   {
+//     id: 3,
+//     title: 'Web Development Roadmap for Beginners',
+//     excerpt: 'Step-by-step roadmap to becoming a professional web developer in 2025.',
+//     link: '/blogs/web-development-roadmap',
+//     image: 'https://dummyimage.com/600x350/2f3542/ffffff&text=Web+Dev',
+//   },
+// ];
+
+
+// const Blogs = () => {
+//   return (
+//     <Box sx={{ bgcolor: '#0e0e10', minHeight: '100vh', pb: 10 }}>
+//       {/* Hero Section */}
+//       <MotionBox
+//         sx={{
+//           background: 'linear-gradient(to right, #1e3c72, #2a5298)',
+//           py: 12,
+//           textAlign: 'center',
+//           color: '#fff',
+//         }}
+//       >
+//         <Container>
+//           <Typography variant="h2" fontWeight="bold" sx={{ mb: 2 }}>
+//             Explore Our Blogs
+//           </Typography>
+//           <Typography variant="h6" sx={{ mb: 4, opacity: 0.8 }}>
+//             Learn, grow, and stay ahead with our expert insights and learning guides.
+//           </Typography>
+//           <Button variant="contained" color="secondary" size="large" sx={{ borderRadius: 20 }}>
+//             Start Learning
+//           </Button>
+//         </Container>
+//       </MotionBox>
+
+//       {/* Blog Grid */}
+//       <Container sx={{ mt: 4 }}>
+//         <Grid container spacing={4}>
+//           {blogs.map((blog, index) => (
+//             <Grid item xs={12} md={4} key={blog.id}>
+//               <MotionPaper
+//                 initial={{ opacity: 0, y: 50 }}
+//                 whileInView={{ opacity: 1, y: 0 }}
+//                 viewport={{ once: true }}
+//                 transition={{ duration: 0.8, delay: index * 0.2 }}
+//                 whileHover={{ scale: 1.03 }}
+//                 sx={{
+//                   background: 'rgba(255, 255, 255, 0.05)',
+//                   backdropFilter: 'blur(15px)',
+//                   borderRadius: 5,
+//                   border: '1px solid rgba(255, 255, 255, 0.1)',
+//                   color: '#fff',
+//                   overflow: 'hidden',
+//                   boxShadow: '0 8px 20px rgba(0,0,0,0.6)',
+//                 }}
+//               >
+//                 <CardMedia
+//                   component="img"
+//                   height="200"
+//                   image={blog.image}
+//                   alt={blog.title}
+//                   sx={{ objectFit: 'cover' }}
+//                 />
+//                 <CardContent>
+//                   <Typography variant="h5" fontWeight="bold" gutterBottom>
+//                     {blog.title}
+//                   </Typography>
+//                   <Typography variant="body2" sx={{ color: '#bbb' }}>
+//                     {blog.excerpt}
+//                   </Typography>
+//                 </CardContent>
+//                 <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+//                 <Box sx={{ p: 2 }}>
+//                   <Button
+//                     fullWidth
+//                     component={Link}
+//                     to={blog.link}
+//                     variant="outlined"
+//                     color="secondary"
+//                     sx={{
+//                       borderRadius: 20,
+//                       color: '#fff',
+//                       borderColor: '#fff',
+//                       '&:hover': {
+//                         backgroundColor: 'rgba(255,255,255,0.1)',
+//                       },
+//                     }}
+//                   >
+//                     Read More
+//                   </Button>
+//                 </Box>
+//               </MotionPaper>
+//             </Grid>
+//           ))}
+//         </Grid>
+//       </Container>
+//     </Box>
+//   );
+// };
+
+// export default Blogs;
+
 import React from 'react';
 import {
   Box,
@@ -160,15 +299,10 @@ import {
   Button,
   CardContent,
   CardMedia,
-  Paper,
-  Divider
+  Paper
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-// Sample blogs
-// import Footer from '../Components/Footer';
-
 
 const MotionPaper = motion(Paper);
 const MotionBox = motion(Box);
@@ -179,106 +313,113 @@ const blogs = [
     title: 'Top 10 Skills to Learn in 2025',
     excerpt: 'Discover the most in-demand skills for the future and how Learn4Dream can help you master them.',
     link: '/blogs/top-skills-2025',
-    image: 'https://dummyimage.com/600x350/1e1e2f/ffffff&text=Skills+2025',
+    image: 'https://dummyimage.com/600x350/e3f2fd/0d47a1&text=Skills+2025',
   },
   {
     id: 2,
     title: 'How to Build a Career in Data Science',
     excerpt: 'Data Science is booming. Learn how to start your journey and land a job in this exciting field.',
     link: '/blogs/data-science-career',
-    image: 'https://dummyimage.com/600x350/20232a/ffffff&text=Data+Science',
+    image: 'https://dummyimage.com/600x350/fff3e0/ef6c00&text=Data+Science',
   },
   {
     id: 3,
     title: 'Web Development Roadmap for Beginners',
     excerpt: 'Step-by-step roadmap to becoming a professional web developer in 2025.',
     link: '/blogs/web-development-roadmap',
-    image: 'https://dummyimage.com/600x350/2f3542/ffffff&text=Web+Dev',
+    image: 'https://dummyimage.com/600x350/e1f5fe/0288d1&text=Web+Dev',
   },
 ];
 
-
 const Blogs = () => {
   return (
-    <Box sx={{ bgcolor: '#0e0e10', minHeight: '100vh', pb: 10 }}>
+    <Box sx={{ bgcolor: '#fff', minHeight: '100vh', pb: 10 }}>
       {/* Hero Section */}
       <MotionBox
         sx={{
-          background: 'linear-gradient(to right, #1e3c72, #2a5298)',
-          py: 12,
+          background: 'linear-gradient(to right, #e3f2fd, #fff3e0)',
+          py: { xs: 8, md: 12 },
           textAlign: 'center',
-          color: '#fff',
+          color: '#0d47a1',
         }}
       >
         <Container>
-          <Typography variant="h2" fontWeight="bold" sx={{ mb: 2 }}>
+          <Typography variant="h3" fontWeight="bold" sx={{ mb: 2 }}>
             Explore Our Blogs
           </Typography>
-          <Typography variant="h6" sx={{ mb: 4, opacity: 0.8 }}>
-            Learn, grow, and stay ahead with our expert insights and learning guides.
+          <Typography variant="h6" sx={{ mb: 4, color: '#424242' }}>
+            Stay ahead with expert insights, trends, and guides to grow your career.
           </Typography>
-          <Button variant="contained" color="secondary" size="large" sx={{ borderRadius: 20 }}>
+          <Button
+            variant="contained"
+            size="large"
+            sx={{
+              borderRadius: 20,
+              bgcolor: '#ff9800',
+              color: '#fff',
+              '&:hover': {
+                bgcolor: '#fb8c00',
+              },
+            }}
+          >
             Start Learning
           </Button>
         </Container>
       </MotionBox>
 
-      {/* Blog Grid */}
-      <Container sx={{ mt: 4 }}>
+      {/* Blog Cards */}
+      <Container sx={{ mt: 8 }}>
         <Grid container spacing={4}>
           {blogs.map((blog, index) => (
-            <Grid item xs={12} md={4} key={blog.id}>
+            <Grid item xs={12} sm={6} md={4} key={blog.id}>
               <MotionPaper
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                whileHover={{ scale: 1.02 }}
                 sx={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(15px)',
-                  borderRadius: 5,
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#fff',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  background: '#ffffff',
+                  borderRadius: 4,
+                  border: '1px solid #e0e0e0',
                   overflow: 'hidden',
-                  boxShadow: '0 8px 20px rgba(0,0,0,0.6)',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
                 }}
               >
                 <CardMedia
                   component="img"
-                  height="200"
+                  height="180"
                   image={blog.image}
                   alt={blog.title}
-                  sx={{ objectFit: 'cover' }}
                 />
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold" gutterBottom>
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" fontWeight="bold" color="#0d47a1" gutterBottom>
                     {blog.title}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#bbb' }}>
+                  <Typography variant="body2" sx={{ color: '#555', mb: 2 }}>
                     {blog.excerpt}
                   </Typography>
-                </CardContent>
-                <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
-                <Box sx={{ p: 2 }}>
                   <Button
-                    fullWidth
                     component={Link}
                     to={blog.link}
                     variant="outlined"
-                    color="secondary"
                     sx={{
                       borderRadius: 20,
-                      color: '#fff',
-                      borderColor: '#fff',
+                      textTransform: 'none',
+                      color: '#0d47a1',
+                      borderColor: '#0d47a1',
+                      fontWeight: 500,
                       '&:hover': {
-                        backgroundColor: 'rgba(255,255,255,0.1)',
+                        backgroundColor: '#e3f2fd',
                       },
                     }}
                   >
                     Read More
                   </Button>
-                </Box>
+                </CardContent>
               </MotionPaper>
             </Grid>
           ))}
