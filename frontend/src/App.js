@@ -41,6 +41,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/all-courses" element={<CourseFilter />} />
+              <Route path="/all-courses" element={<CourseFilter />} />
               <Route path="/course/detail" element={<CourseDetail />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/contact" element={<Contact />} />
