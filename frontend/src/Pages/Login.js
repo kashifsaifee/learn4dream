@@ -284,7 +284,7 @@ export default function Login({ setIsLoggedIn }) {
         localStorage.setItem('token', data.access_token);
         setSuccessMessage(data.message);
         setIsLoggedIn(true);
-        navigate('/');
+        navigate('/profile');
       } else {
         setError(data.message || 'Login failed.');
       }
