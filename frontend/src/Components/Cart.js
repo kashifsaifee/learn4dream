@@ -13,20 +13,26 @@ import { Link } from "react-router-dom";
 import Footer from "../Components/Footer";
 
 export default function Cart() {
-  const [cart, setCart] = useState(() => {
+  const [cart, setCart] = useState([]);
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
     const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+    if (savedCart) setCart(JSON.parse(savedCart));
+  }, []);
+
+  // Update localStorage when cart changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const removeCourse = (id) => {
-    const updatedCart = cart.filter((course) => course.id !== id);
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart((prevCart) => prevCart.filter((course) => course.id !== id));
   };
 
   const handleCheckout = () => {
     alert("Proceeding to checkout...");
-    // Here you can add real checkout logic, like redirecting to payment page
+    // Checkout logic here (e.g., payment gateway)
   };
 
   return (
@@ -40,10 +46,10 @@ export default function Cart() {
       >
         <Typography
           variant="h3"
+          fontWeight={700}
+          textAlign="center"
           sx={{
             mb: 4,
-            fontWeight: 700,
-            textAlign: "center",
             background: "linear-gradient(90deg, #3f51b5, #2196f3)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
@@ -56,10 +62,16 @@ export default function Cart() {
           <Typography
             variant="h6"
             color="text.secondary"
-            sx={{ textAlign: "center", mt: 6 }}
+            textAlign="center"
+            mt={6}
           >
-            Your cart is empty.{" "}
-            <Button component={Link} to="/courses" variant="outlined" sx={{ ml: 1 }}>
+            Your cart is empty.
+            <Button
+              component={Link}
+              to="/courses"
+              variant="outlined"
+              sx={{ ml: 1 }}
+            >
               Browse Courses
             </Button>
           </Typography>
@@ -68,7 +80,11 @@ export default function Cart() {
             <Box
               sx={{
                 display: "grid",
-                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "1fr 1fr",
+                  md: "1fr 1fr 1fr",
+                },
                 gap: 4,
               }}
             >
@@ -99,13 +115,18 @@ export default function Cart() {
                     >
                       {course.description}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" mb={1}>
+                    <Typography variant="body2" color="text.secondary">
                       Duration: {course.duration}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" mb={1}>
+                    <Typography variant="body2" color="text.secondary">
                       Level: {course.level}
                     </Typography>
-                    <Typography variant="h6" color="primary" fontWeight={700}>
+                    <Typography
+                      variant="h6"
+                      color="primary"
+                      fontWeight={700}
+                      mt={1}
+                    >
                       {course.price}
                     </Typography>
                   </CardContent>
@@ -133,19 +154,18 @@ export default function Cart() {
               <Button
                 component={Link}
                 to="/courses"
-                variant="contained"
+                variant="outlined"
                 size="large"
                 sx={{ borderRadius: 50, px: 5 }}
               >
                 Add More Courses
               </Button>
-
               <Button
                 variant="contained"
                 size="large"
                 color="success"
-                sx={{ borderRadius: 50, px: 5 }}
                 onClick={handleCheckout}
+                sx={{ borderRadius: 50, px: 5 }}
               >
                 Checkout
               </Button>

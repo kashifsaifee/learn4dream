@@ -18,7 +18,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { CgProfile } from "react-icons/cg";
 
-// Links
+// Navigation Links
 const courseLinks = [
   { to: "/courses", label: "Courses" },
   { to: "/all-courses", label: "All Courses" },
@@ -111,23 +111,18 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   );
 
   const drawerList = (
-    <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={() => setMobileOpen(false)}
-    >
+    <Box sx={{ width: 250 }} role="presentation" onClick={() => setMobileOpen(false)}>
       <List>
         <ListItem button component={Link} to="/">
           <ListItemText primary="Home" />
         </ListItem>
-
-        {[...courseLinks, ...pageLinks, { to: "/contact", label: "Contact" }]
-          .map(({ to, label }) => (
+        {[...courseLinks, ...pageLinks, { to: "/contact", label: "Contact" }].map(
+          ({ to, label }) => (
             <ListItem button key={to} component={Link} to={to}>
               <ListItemText primary={label} />
             </ListItem>
-          ))}
-
+          )
+        )}
         {!isLoggedIn ? (
           authLinks.map(({ to, label }) => (
             <ListItem button key={to} component={Link} to={to}>
@@ -151,13 +146,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   );
 
   return (
-    <Box
-      onMouseLeave={() => {
-        setShowCourses(false);
-        setShowPages(false);
-        setShowProfile(false);
-      }}
-    >
+    <Box>
       <AppBar
         position="sticky"
         sx={{
@@ -173,7 +162,6 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         }}
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/* Logo */}
           <Typography
             variant="h5"
             component={Link}
@@ -189,36 +177,39 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             }}
           >
             Learn
-            <span style={{ color: theme.palette.secondary.main, fontWeight: 900 }}>4</span>
+            <span style={{ color: theme.palette.secondary.main, fontWeight: 900 }}>
+              4
+            </span>
             Dream
           </Typography>
 
-          {/* Desktop Nav */}
           {!isMobile ? (
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, position: "relative" }}>
-              <Button component={Link} to="/" sx={navButtonStyle("/")}>
-                Home
-              </Button>
+              <Button component={Link} to="/" sx={navButtonStyle("/")}>Home</Button>
 
-              <Box sx={{ position: "relative" }}>
-                <Button onClick={() => {
-                  setShowCourses(!showCourses);
+              <Box
+                sx={{ position: "relative" }}
+                onMouseEnter={() => {
+                  setShowCourses(true);
                   setShowPages(false);
                   setShowProfile(false);
-                }} sx={navButtonStyle("/courses")}>
-                  Courses
-                </Button>
+                }}
+                onMouseLeave={() => setShowCourses(false)}
+              >
+                <Button sx={navButtonStyle("/courses")}>Courses</Button>
                 {showCourses && renderDropdown(courseLinks, () => setShowCourses(false))}
               </Box>
 
-              <Box sx={{ position: "relative" }}>
-                <Button onClick={() => {
-                  setShowPages(!showPages);
+              <Box
+                sx={{ position: "relative" }}
+                onMouseEnter={() => {
+                  setShowPages(true);
                   setShowCourses(false);
                   setShowProfile(false);
-                }} sx={navButtonStyle("/blogs")}>
-                  Pages
-                </Button>
+                }}
+                onMouseLeave={() => setShowPages(false)}
+              >
+                <Button sx={navButtonStyle("/blogs")}>Pages</Button>
                 {showPages && renderDropdown(pageLinks, () => setShowPages(false))}
               </Box>
 
@@ -240,12 +231,16 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   </Button>
                 ))
               ) : (
-                <Box sx={{ position: "relative" }}>
-                  <IconButton onClick={() => {
-                    setShowProfile(!showProfile);
+                <Box
+                  sx={{ position: "relative" }}
+                  onMouseEnter={() => {
+                    setShowProfile(true);
                     setShowCourses(false);
                     setShowPages(false);
-                  }} sx={{ ml: 1 }}>
+                  }}
+                  onMouseLeave={() => setShowProfile(false)}
+                >
+                  <IconButton sx={{ ml: 1 }}>
                     <CgProfile size={26} />
                   </IconButton>
                   {showProfile && (
@@ -292,7 +287,6 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               )}
             </Box>
           ) : (
-            // Mobile Nav
             <>
               <IconButton edge="end" color="inherit" onClick={() => setMobileOpen(true)}>
                 <MenuIcon />
