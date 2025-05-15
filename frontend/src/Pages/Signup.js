@@ -709,11 +709,14 @@ export default function Signup() {
     }
 
     try {
-      const res = await axios.post('http://localhost:3000/signup', {
+      const res = await axios.post('http://localhost:5000/signup', {
         name: form.name,
         email: form.email,
         password: form.password,
-      });
+      },
+
+      );
+
 
       if (res.data.token) localStorage.setItem('token', res.data.token);
 
@@ -901,8 +904,8 @@ export default function Signup() {
               snack.severity === 'success'
                 ? COLORS.success
                 : snack.severity === 'error'
-                ? COLORS.error
-                : COLORS.cardBg,
+                  ? COLORS.error
+                  : COLORS.cardBg,
             color: '#fff',
             fontWeight: 500,
           },
