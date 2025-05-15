@@ -312,6 +312,303 @@
 
 // Signup.js
 
+// import { useState } from 'react';
+// import {
+//   Button,
+//   TextField,
+//   Typography,
+//   IconButton,
+//   InputAdornment,
+//   Divider,
+//   Stack,
+//   Snackbar,
+//   CircularProgress,
+// } from '@mui/material';
+// import { Visibility, VisibilityOff } from '@mui/icons-material';
+// import { motion } from 'framer-motion';
+// import { Link, useNavigate } from 'react-router-dom';
+// import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
+// import styled from 'styled-components';
+// import axios from 'axios';
+
+// // Colors
+// const COLORS = {
+//   background: '#000000',
+//   cardBg: 'rgba(255, 255, 255, 0.05)',
+//   accent: '#4F9BFF',
+//   inputBg: 'rgba(255,255,255,0.08)',
+//   inputText: '#ffffff',
+//   inputLabel: '#bbbbbb',
+//   buttonHover: 'rgba(79,155,255,0.1)',
+//   outline: '#4F9BFF',
+//   error: '#ef4444',
+//   success: '#22c55e',
+// };
+
+// // Styled components
+// const Container = styled.div`
+//   display: flex;
+//   min-height: 100vh;
+//   background: ${COLORS.background};
+//   color: ${COLORS.inputText};
+// `;
+
+// const LeftPanel = styled.div`
+//   flex: 1;
+//   background: linear-gradient(135deg, #1e1e1e 60%, #4F9BFF 100%);
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   padding: 64px 48px;
+//   min-width: 340px;
+//   color: #fff;
+// `;
+
+// const RightPanel = styled(motion.div)`
+//   flex: 1;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
+
+// const FormCard = styled.div`
+//   width: 100%;
+//   max-width: 440px;
+//   background: ${COLORS.cardBg};
+//   backdrop-filter: blur(20px);
+//   border-radius: 20px;
+//   padding: 40px 32px;
+//   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+//   border: 1px solid rgba(255, 255, 255, 0.08);
+// `;
+
+// export default function Signup() {
+//   const navigate = useNavigate();
+//   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
+//   const [showPwd, setShowPwd] = useState(false);
+//   const [showConfirm, setShowConfirm] = useState(false);
+//   const [loading, setLoading] = useState(false);
+//   const [snack, setSnack] = useState({ open: false, message: '', severity: '' });
+
+//   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+//   const togglePwd = () => setShowPwd(!showPwd);
+//   const toggleConfirm = () => setShowConfirm(!showConfirm);
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+
+//     if (!/\S+@\S+\.\S+/.test(form.email)) {
+//       setSnack({ open: true, message: 'Invalid email format.', severity: 'error' });
+//       setLoading(false);
+//       return;
+//     }
+
+//     if (form.password !== form.confirm) {
+//       setSnack({ open: true, message: 'Passwords do not match.', severity: 'error' });
+//       setLoading(false);
+//       return;
+//     }
+
+//     try {
+//       const res = await axios.post('http://localhost:5000/signup', {
+//         name: form.name,
+//         email: form.email,
+//         password: form.password,
+//       });
+
+//       if (res.data.token) localStorage.setItem('token', res.data.token);
+
+//       setSnack({ open: true, message: 'Signup successful!', severity: 'success' });
+//       setTimeout(() => navigate('/profile'), 1200);
+//     } catch (err) {
+//       setSnack({
+//         open: true,
+//         message: err.response?.data?.message || 'Signup failed.',
+//         severity: 'error',
+//       });
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const inputStyle = {
+//     input: { color: COLORS.inputText },
+//     '.MuiFilledInput-root': {
+//       backgroundColor: COLORS.inputBg,
+//       borderRadius: '12px',
+//       border: '1px solid rgba(255,255,255,0.1)',
+//     },
+//   };
+
+//   const handleSocialSignup = (provider) => {
+//     console.log(`Sign up with ${provider}`);
+//   };
+
+//   return (
+//     <Container>
+//       <LeftPanel>
+//         <Typography variant="h3" fontWeight="bold" mb={2}>
+//           Welcome to Learn4Dream
+//         </Typography>
+//         <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 400 }}>
+//           Join our creative learning community and start your journey today.
+//         </Typography>
+//       </LeftPanel>
+
+//       <RightPanel
+//         initial={{ opacity: 0, y: 30 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         transition={{ duration: 0.7 }}
+//       >
+//         <FormCard>
+//           <Typography variant="h4" fontWeight="bold" mb={3} textAlign="center" sx={{ color: COLORS.accent }}>
+//             Sign Up
+//           </Typography>
+
+//           <form onSubmit={handleSubmit}>
+//             {['name', 'email'].map((field) => (
+//               <TextField
+//                 key={field}
+//                 fullWidth
+//                 label={field === 'name' ? 'Full Name' : 'Email'}
+//                 name={field}
+//                 variant="filled"
+//                 type={field === 'email' ? 'email' : 'text'}
+//                 required
+//                 value={form[field]}
+//                 onChange={handleChange}
+//                 sx={{ mb: 3, ...inputStyle }}
+//                 InputLabelProps={{ style: { color: COLORS.inputLabel } }}
+//               />
+//             ))}
+
+//             <TextField
+//               fullWidth
+//               label="Password"
+//               name="password"
+//               type={showPwd ? 'text' : 'password'}
+//               variant="filled"
+//               required
+//               value={form.password}
+//               onChange={handleChange}
+//               sx={{ mb: 3, ...inputStyle }}
+//               InputLabelProps={{ style: { color: COLORS.inputLabel } }}
+//               InputProps={{
+//                 endAdornment: (
+//                   <InputAdornment position="end">
+//                     <IconButton onClick={togglePwd} edge="end" sx={{ color: COLORS.inputLabel }}>
+//                       {showPwd ? <VisibilityOff /> : <Visibility />}
+//                     </IconButton>
+//                   </InputAdornment>
+//                 ),
+//               }}
+//             />
+
+//             <TextField
+//               fullWidth
+//               label="Confirm Password"
+//               name="confirm"
+//               type={showConfirm ? 'text' : 'password'}
+//               variant="filled"
+//               required
+//               value={form.confirm}
+//               onChange={handleChange}
+//               sx={{ mb: 3, ...inputStyle }}
+//               InputLabelProps={{ style: { color: COLORS.inputLabel } }}
+//               InputProps={{
+//                 endAdornment: (
+//                   <InputAdornment position="end">
+//                     <IconButton onClick={toggleConfirm} edge="end" sx={{ color: COLORS.inputLabel }}>
+//                       {showConfirm ? <VisibilityOff /> : <Visibility />}
+//                     </IconButton>
+//                   </InputAdornment>
+//                 ),
+//               }}
+//             />
+
+//             <Button
+//               type="submit"
+//               fullWidth
+//               size="large"
+//               variant="contained"
+//               disabled={loading}
+//               sx={{
+//                 mb: 3,
+//                 borderRadius: 3,
+//                 fontWeight: 'bold',
+//                 textTransform: 'none',
+//                 bgcolor: COLORS.accent,
+//                 color: '#000',
+//                 '&:hover': {
+//                   bgcolor: '#76baff',
+//                 },
+//               }}
+//             >
+//               {loading ? <CircularProgress size={24} sx={{ color: '#000' }} /> : 'Sign Up'}
+//             </Button>
+//           </form>
+
+//           <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.12)' }}>OR</Divider>
+
+//           <Stack spacing={2}>
+//             {[{ name: 'Google', icon: <FaGoogle /> }, { name: 'Microsoft', icon: <FaMicrosoft /> }].map(
+//               ({ name, icon }) => (
+//                 <Button
+//                   key={name}
+//                   fullWidth
+//                   variant="outlined"
+//                   startIcon={icon}
+//                   onClick={() => handleSocialSignup(name)}
+//                   sx={{
+//                     borderColor: COLORS.outline,
+//                     color: COLORS.inputText,
+//                     textTransform: 'none',
+//                     '&:hover': {
+//                       backgroundColor: COLORS.buttonHover,
+//                       borderColor: COLORS.accent,
+//                     },
+//                   }}
+//                 >
+//                   Sign up with {name}
+//                 </Button>
+//               )
+//             )}
+//           </Stack>
+
+//           <Typography mt={4} textAlign="center" fontSize="0.9rem" sx={{ color: COLORS.inputLabel }}>
+//             Already have an account?{' '}
+//             <Link to="/login" style={{ color: COLORS.accent, textDecoration: 'none' }}>
+//               Log in
+//             </Link>
+//           </Typography>
+//         </FormCard>
+//       </RightPanel>
+
+//       <Snackbar
+//         open={snack.open}
+//         autoHideDuration={4500}
+//         onClose={() => setSnack({ ...snack, open: false })}
+//         message={snack.message}
+//         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+//         ContentProps={{
+//           sx: {
+//             bgcolor:
+//               snack.severity === 'success'
+//                 ? COLORS.success
+//                 : snack.severity === 'error'
+//                 ? COLORS.error
+//                 : COLORS.cardBg,
+//             color: '#fff',
+//             fontWeight: 500,
+//           },
+//         }}
+//       />
+//     </Container>
+//   );
+// }
+
+
 import { useState } from 'react';
 import {
   Button,
@@ -331,17 +628,16 @@ import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// Color palette
+// Colors
 const COLORS = {
-  background: '#f0f4f8',
-  cardBg: '#ffffff',
-  accent: '#4F9BFF', // blue
-  secondary: '#FFA726', // orange
-  inputBg: '#f9fafb',
-  inputText: '#1f2937',
-  inputLabel: '#6b7280',
-  buttonHover: '#e3f2fd',
-  outline: '#90caf9',
+  background: '#000000',
+  cardBg: 'rgba(255, 255, 255, 0.05)',
+  accent: '#4F9BFF',
+  inputBg: 'rgba(255,255,255,0.08)',
+  inputText: '#ffffff',
+  inputLabel: '#bbbbbb',
+  buttonHover: 'rgba(79,155,255,0.1)',
+  outline: '#4F9BFF',
   error: '#ef4444',
   success: '#22c55e',
 };
@@ -356,13 +652,13 @@ const Container = styled.div`
 
 const LeftPanel = styled.div`
   flex: 1;
-  background: linear-gradient(135deg, #ffffff 0%, #E0F0FF 50%, #FFE5B4 100%);
+  background: linear-gradient(135deg, #1e1e1e 60%, #4F9BFF 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 64px 48px;
-  min-width: 320px;
-  color: #1f2937;
+  min-width: 340px;
+  color: #fff;
 `;
 
 const RightPanel = styled(motion.div)`
@@ -376,10 +672,11 @@ const FormCard = styled.div`
   width: 100%;
   max-width: 440px;
   background: ${COLORS.cardBg};
+  backdrop-filter: blur(20px);
   border-radius: 20px;
   padding: 40px 32px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e0e0e0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 `;
 
 export default function Signup() {
@@ -411,7 +708,7 @@ export default function Signup() {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/signup', {
+      const res = await axios.post('http://localhost:3000/signup', {
         name: form.name,
         email: form.email,
         password: form.password,
@@ -437,7 +734,7 @@ export default function Signup() {
     '.MuiFilledInput-root': {
       backgroundColor: COLORS.inputBg,
       borderRadius: '12px',
-      border: '1px solid #e0e0e0',
+      border: '1px solid rgba(255,255,255,0.1)',
     },
   };
 
@@ -469,7 +766,6 @@ export default function Signup() {
           <form onSubmit={handleSubmit}>
             {['name', 'email'].map((field) => (
               <TextField
-
                 key={field}
                 fullWidth
                 label={field === 'name' ? 'Full Name' : 'Email'}
@@ -528,6 +824,7 @@ export default function Signup() {
               }}
             />
 
+            {/* === SIGN UP BUTTON START === */}
             <Button
               type="submit"
               fullWidth
@@ -540,17 +837,18 @@ export default function Signup() {
                 fontWeight: 'bold',
                 textTransform: 'none',
                 bgcolor: COLORS.accent,
-                color: '#fff',
+                color: '#000',
                 '&:hover': {
                   bgcolor: '#76baff',
                 },
               }}
             >
-              {loading ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Sign Up'}
+              {loading ? <CircularProgress size={24} sx={{ color: '#000' }} /> : 'Sign Up'}
             </Button>
+            {/* === SIGN UP BUTTON END === */}
           </form>
 
-          <Divider sx={{ my: 3, borderColor: '#ddd' }}>OR</Divider>
+          <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.12)' }}>OR</Divider>
 
           <Stack spacing={2}>
             {[{ name: 'Google', icon: <FaGoogle /> }, { name: 'Microsoft', icon: <FaMicrosoft /> }].map(
@@ -579,7 +877,7 @@ export default function Signup() {
 
           <Typography mt={4} textAlign="center" fontSize="0.9rem" sx={{ color: COLORS.inputLabel }}>
             Already have an account?{' '}
-            <Link to="/login" style={{ color: COLORS.secondary, textDecoration: 'none' }}>
+            <Link to="/login" style={{ color: COLORS.accent, textDecoration: 'none' }}>
               Log in
             </Link>
           </Typography>
@@ -598,8 +896,8 @@ export default function Signup() {
               snack.severity === 'success'
                 ? COLORS.success
                 : snack.severity === 'error'
-                  ? COLORS.error
-                  : COLORS.cardBg,
+                ? COLORS.error
+                : COLORS.cardBg,
             color: '#fff',
             fontWeight: 500,
           },

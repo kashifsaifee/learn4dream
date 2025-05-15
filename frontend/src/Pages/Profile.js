@@ -17,7 +17,7 @@ const Profile = () => {
     if (!token) {
       setError('You must be logged in to view your profile');
       setLoading(false);
-      navigate("/login");
+      navigate("/profile");
       return;
     }
 
