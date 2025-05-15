@@ -17,7 +17,7 @@ import Profile from "./Pages/Profile";
 import CourseDetail from "./Pages/CourseDetail";
 import CourseFilter from "./Pages/CourseFilter";
 import './App.css';
-
+import Cart from "./Components/Cart";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +44,7 @@ function App() {
               <Route path="/course/detail" element={<CourseDetail />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/mycourses" element={<Cart />} />
 
               <Route
                 path="/login"

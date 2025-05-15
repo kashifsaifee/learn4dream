@@ -24,8 +24,8 @@ const DotHoverButton = ({ text = "Hover this link" }) => {
       <motion.div
         initial={{ width: 10, height: 10 }}
         animate={{
-          width: hovered ? 32 : 10,
-          height: hovered ? 32 : 10,
+          width: hovered ? 24 : 10,
+          height: hovered ? 24 : 10,
         }}
         transition={{ duration: 0.3 }}
         style={{
@@ -41,7 +41,7 @@ const DotHoverButton = ({ text = "Hover this link" }) => {
       >
         {hovered ? "→" : ""}
       </motion.div>
-
+        {/* here txt color */}
       <Typography
         variant="body1"
         sx={{
