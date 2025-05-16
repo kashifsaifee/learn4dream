@@ -18,7 +18,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { CgProfile } from "react-icons/cg";
 
-// Links
 const courseLinks = [
   { to: "/courses", label: "Courses" },
   { to: "/all-courses", label: "All Courses" },
@@ -42,39 +41,46 @@ const userLinks = [
 
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const location = useLocation();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [showCourses, setShowCourses] = useState(false);
-  const [showPages, setShowPages] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(null);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    navigate("/");
+  // Updated isActive function: supports single path or array of paths
+  const isActive = (paths) => {
+    if (typeof paths === "string") {
+      paths = [paths];
+    }
+    return paths.some((path) => {
+      if (path === "/") {
+        return location.pathname === "/";
+      }
+      return (
+        location.pathname === path ||
+        location.pathname.startsWith(path + "/")
+      );
+    });
   };
 
-  const navButtonStyle = (path) => ({
-    color: location.pathname.startsWith(path)
-      ? theme.palette.primary.main
-      : "#222",
-    fontWeight: location.pathname.startsWith(path) ? 700 : 500,
+  const navButtonStyle = (pathOrPaths) => ({
+    color: isActive(pathOrPaths) ? theme.palette.primary.main : "#222",
+    fontWeight: isActive(pathOrPaths) ? 700 : 500,
     textTransform: "none",
     fontSize: "1rem",
     px: 2,
     py: 1,
     borderRadius: 2,
-    whiteSpace: "nowrap",
     position: "relative",
+    whiteSpace: "nowrap",
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
       color: theme.palette.primary.main,
     },
   });
 
-  const dropdownBoxStyle = {
+  const dropdownStyle = {
     position: "absolute",
     top: "100%",
     left: 0,
@@ -87,22 +93,29 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     py: 1,
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
   const renderDropdown = (links, closeFn) => (
-    <Box sx={dropdownBoxStyle}>
+    <Box sx={dropdownStyle}>
       {links.map(({ to, label }) => (
         <Button
           key={to}
           component={Link}
           to={to}
+          onClick={closeFn}
           sx={{
             justifyContent: "flex-start",
             px: 2,
             py: 1,
             width: "100%",
             color: "#333",
-            "&:hover": { backgroundColor: theme.palette.action.hover },
+            "&:hover": {
+              backgroundColor: theme.palette.action.hover,
+            },
           }}
-          onClick={closeFn}
         >
           {label}
         </Button>
@@ -120,14 +133,14 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         <ListItem button component={Link} to="/">
           <ListItemText primary="Home" />
         </ListItem>
-
-        {[...courseLinks, ...pageLinks, { to: "/contact", label: "Contact" }]
-          .map(({ to, label }) => (
+        {[...courseLinks, ...pageLinks, { to: "/contact", label: "Contact" }].map(
+          ({ to, label }) => (
             <ListItem button key={to} component={Link} to={to}>
               <ListItemText primary={label} />
             </ListItem>
-          ))}
-
+          )
+        )}
+        <Divider />
         {!isLoggedIn ? (
           authLinks.map(({ to, label }) => (
             <ListItem button key={to} component={Link} to={to}>
@@ -153,9 +166,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   return (
     <Box
       onMouseLeave={() => {
-        setShowCourses(false);
-        setShowPages(false);
-        setShowProfile(false);
+        setDropdown(null);
       }}
     >
       <AppBar
@@ -164,10 +175,9 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
           bgcolor: "#fff",
           color: "#222",
           boxShadow: 3,
-          width: { xs: "100%", md: "60%" },
-          top: 0,
+          width: { xs: "100%", md: "80%" },
+          transform: { md: "translateX(-10%)" },
           left: { md: "50%" },
-          transform: { md: "translateX(-30%)" },
           zIndex: 1300,
           borderRadius: { md: 1 },
         }}
@@ -189,37 +199,46 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             }}
           >
             Learn
-            <span style={{ color: theme.palette.secondary.main, fontWeight: 900 }}>4</span>
+            <span style={{ color: theme.palette.secondary.main, fontWeight: 900 }}>
+              4
+            </span>
             Dream
           </Typography>
 
-          {/* Desktop Nav */}
           {!isMobile ? (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, position: "relative" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Button component={Link} to="/" sx={navButtonStyle("/")}>
                 Home
               </Button>
 
+              {/* Courses Dropdown */}
               <Box sx={{ position: "relative" }}>
-                <Button onClick={() => {
-                  setShowCourses(!showCourses);
-                  setShowPages(false);
-                  setShowProfile(false);
-                }} sx={navButtonStyle("/courses")}>
+                <Button
+                  onClick={() =>
+                    setDropdown(dropdown === "courses" ? null : "courses")
+                  }
+                  sx={navButtonStyle(courseLinks.map(link => link.to))}
+                  onMouseEnter={() => setDropdown("courses")}
+                >
                   Courses
                 </Button>
-                {showCourses && renderDropdown(courseLinks, () => setShowCourses(false))}
+                {dropdown === "courses" &&
+                  renderDropdown(courseLinks, () => setDropdown(null))}
               </Box>
 
+              {/* Pages Dropdown */}
               <Box sx={{ position: "relative" }}>
-                <Button onClick={() => {
-                  setShowPages(!showPages);
-                  setShowCourses(false);
-                  setShowProfile(false);
-                }} sx={navButtonStyle("/blogs")}>
+                <Button
+                  onClick={() =>
+                    setDropdown(dropdown === "pages" ? null : "pages")
+                  }
+                  sx={navButtonStyle(pageLinks.map(link => link.to))}
+                  onMouseEnter={() => setDropdown("pages")}
+                >
                   Pages
                 </Button>
-                {showPages && renderDropdown(pageLinks, () => setShowPages(false))}
+                {dropdown === "pages" &&
+                  renderDropdown(pageLinks, () => setDropdown(null))}
               </Box>
 
               <Button component={Link} to="/contact" sx={navButtonStyle("/contact")}>
@@ -227,34 +246,32 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               </Button>
 
               {!isLoggedIn ? (
-                authLinks.map(({ to, label }) => (
-                  <Button
-                    key={to}
-                    component={Link}
-                    to={to}
-                    variant={label === "Sign Up" ? "contained" : "outlined"}
-                    color="primary"
-                    sx={{ borderRadius: 2, ml: 1 }}
-                  >
-                    {label}
+                <>
+                  <Button component={Link} to="/login" sx={navButtonStyle("/login")}>
+                    Login
                   </Button>
-                ))
+                  <Button component={Link} to="/signup" sx={navButtonStyle("/signup")}>
+                    Sign-Up
+                  </Button>
+                </>
               ) : (
                 <Box sx={{ position: "relative" }}>
-                  <IconButton onClick={() => {
-                    setShowProfile(!showProfile);
-                    setShowCourses(false);
-                    setShowPages(false);
-                  }} sx={{ ml: 1 }}>
+                  <IconButton
+                    onClick={() =>
+                      setDropdown(dropdown === "profile" ? null : "profile")
+                    }
+                    sx={{ ml: 1 }}
+                  >
                     <CgProfile size={26} />
                   </IconButton>
-                  {showProfile && (
-                    <Box sx={dropdownBoxStyle}>
+                  {dropdown === "profile" && (
+                    <Box sx={dropdownStyle}>
                       {userLinks.map(({ to, label }) => (
                         <Button
                           key={to}
                           component={Link}
                           to={to}
+                          onClick={() => setDropdown(null)}
                           sx={{
                             justifyContent: "flex-start",
                             px: 2,
@@ -265,7 +282,6 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                               backgroundColor: theme.palette.action.hover,
                             },
                           }}
-                          onClick={() => setShowProfile(false)}
                         >
                           {label}
                         </Button>
@@ -274,7 +290,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                       <Button
                         onClick={() => {
                           handleLogout();
-                          setShowProfile(false);
+                          setDropdown(null);
                         }}
                         sx={{
                           justifyContent: "flex-start",
@@ -292,12 +308,15 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               )}
             </Box>
           ) : (
-            // Mobile Nav
             <>
-              <IconButton edge="end" color="inherit" onClick={() => setMobileOpen(true)}>
+              <IconButton edge="end" onClick={() => setMobileOpen(true)}>
                 <MenuIcon />
               </IconButton>
-              <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
+              <Drawer
+                anchor="right"
+                open={mobileOpen}
+                onClose={() => setMobileOpen(false)}
+              >
                 {drawerList}
               </Drawer>
             </>

@@ -628,16 +628,17 @@ import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// Colors
+// Color palette
 const COLORS = {
-  background: '#000000',
-  cardBg: 'rgba(255, 255, 255, 0.05)',
-  accent: '#4F9BFF',
-  inputBg: 'rgba(255,255,255,0.08)',
-  inputText: '#ffffff',
-  inputLabel: '#bbbbbb',
-  buttonHover: 'rgba(79,155,255,0.1)',
-  outline: '#4F9BFF',
+  background: 'linear-gradient(to right, #ffffff, #eaf6ff)',
+  cardBg: 'rgba(255, 255, 255, 0.85)',
+  accent: '#007BFF',
+  highlight: '#FF6B00',
+  inputBg: 'rgba(255,255,255,0.7)',
+  inputText: '#333',
+  inputLabel: '#666',
+  buttonHover: 'rgba(0, 123, 255, 0.1)',
+  outline: '#007BFF',
   error: '#ef4444',
   success: '#22c55e',
 };
@@ -652,13 +653,13 @@ const Container = styled.div`
 
 const LeftPanel = styled.div`
   flex: 1;
-  background: linear-gradient(135deg, #1e1e1e 60%, #4F9BFF 100%);
+  background: linear-gradient(135deg, #007bff 0%, #ff6b00 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 64px 48px;
+  color: white;
   min-width: 340px;
-  color: #fff;
 `;
 
 const RightPanel = styled(motion.div)`
@@ -670,13 +671,13 @@ const RightPanel = styled(motion.div)`
 
 const FormCard = styled.div`
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   background: ${COLORS.cardBg};
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
   border-radius: 20px;
   padding: 40px 32px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 `;
 
 export default function Signup() {
@@ -708,11 +709,14 @@ export default function Signup() {
     }
 
     try {
-      const res = await axios.post('http://localhost:3000/signup', {
+      const res = await axios.post('http://localhost:5000/signup', {
         name: form.name,
         email: form.email,
         password: form.password,
-      });
+      },
+
+      );
+
 
       if (res.data.token) localStorage.setItem('token', res.data.token);
 
@@ -734,7 +738,7 @@ export default function Signup() {
     '.MuiFilledInput-root': {
       backgroundColor: COLORS.inputBg,
       borderRadius: '12px',
-      border: '1px solid rgba(255,255,255,0.1)',
+      border: '1px solid rgba(0,0,0,0.1)',
     },
   };
 
@@ -748,7 +752,7 @@ export default function Signup() {
         <Typography variant="h3" fontWeight="bold" mb={2}>
           Welcome to Learn4Dream
         </Typography>
-        <Typography variant="body1" sx={{ opacity: 0.9, maxWidth: 400 }}>
+        <Typography variant="body1" sx={{ opacity: 0.95, maxWidth: 400 }}>
           Join our creative learning community and start your journey today.
         </Typography>
       </LeftPanel>
@@ -759,7 +763,13 @@ export default function Signup() {
         transition={{ duration: 0.7 }}
       >
         <FormCard>
-          <Typography variant="h4" fontWeight="bold" mb={3} textAlign="center" sx={{ color: COLORS.accent }}>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            mb={3}
+            textAlign="center"
+            sx={{ color: COLORS.accent }}
+          >
             Sign Up
           </Typography>
 
@@ -824,7 +834,6 @@ export default function Signup() {
               }}
             />
 
-            {/* === SIGN UP BUTTON START === */}
             <Button
               type="submit"
               fullWidth
@@ -837,18 +846,17 @@ export default function Signup() {
                 fontWeight: 'bold',
                 textTransform: 'none',
                 bgcolor: COLORS.accent,
-                color: '#000',
+                color: '#fff',
                 '&:hover': {
-                  bgcolor: '#76baff',
+                  bgcolor: '#339aff',
                 },
               }}
             >
-              {loading ? <CircularProgress size={24} sx={{ color: '#000' }} /> : 'Sign Up'}
+              {loading ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Sign Up'}
             </Button>
-            {/* === SIGN UP BUTTON END === */}
           </form>
 
-          <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.12)' }}>OR</Divider>
+          <Divider sx={{ my: 3, borderColor: 'rgba(0,0,0,0.1)' }}>OR</Divider>
 
           <Stack spacing={2}>
             {[{ name: 'Google', icon: <FaGoogle /> }, { name: 'Microsoft', icon: <FaMicrosoft /> }].map(
@@ -877,7 +885,7 @@ export default function Signup() {
 
           <Typography mt={4} textAlign="center" fontSize="0.9rem" sx={{ color: COLORS.inputLabel }}>
             Already have an account?{' '}
-            <Link to="/login" style={{ color: COLORS.accent, textDecoration: 'none' }}>
+            <Link to="/login" style={{ color: COLORS.highlight, textDecoration: 'none' }}>
               Log in
             </Link>
           </Typography>
@@ -896,8 +904,8 @@ export default function Signup() {
               snack.severity === 'success'
                 ? COLORS.success
                 : snack.severity === 'error'
-                ? COLORS.error
-                : COLORS.cardBg,
+                  ? COLORS.error
+                  : COLORS.cardBg,
             color: '#fff',
             fontWeight: 500,
           },

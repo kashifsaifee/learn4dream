@@ -61,16 +61,7 @@ function App() {
               />
               <Route
                 path="/profile"
-                element={
-                  isLoggedIn ? (
-                    <Profile />
-                  ) : (
-                    <Login
-                      setIsLoggedIn={setIsLoggedIn}
-                      handleLogin={handleLogin}
-                    />
-                  )
-                }
+                element= {<Profile/>}
               />
             </Routes>
           </Box>
