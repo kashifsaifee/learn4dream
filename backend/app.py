@@ -50,6 +50,9 @@ logging.basicConfig(level=LOG_LEVEL)
 mongo = PyMongo(app)
 jwt = JWTManager(app)
 
+# Explicit reference to courses collection
+course_collection = mongo.db.courses
+
 # === Helper Functions ===
 def verify_google_token(token):
     try:
@@ -155,6 +158,63 @@ def google_signin():
     access_token = create_access_token(identity={"name": name, "email": email})
     return jsonify({"status": "success", "access_token": access_token}), 200
 
+@app.route('/add-course', methods=['POST'])
+def add_course():
+    data = request.get_json()
+    title = data.get('title')
+    description = data.get('description')
+    email = data.get('email')
+
+    if not email:
+        return jsonify({'message': 'User email is required'}), 400
+
+    course = {
+        'title': title,
+        'description': description,
+        'email': email
+    }
+
+    course_collection.insert_one(course)
+    return jsonify({'message': 'Course added successfully'}), 201
+
+# Your new route with email filter to get courses:
+@app.route('/api/courses', methods=['POST'])
+def get_user_courses():
+    data = request.get_json()
+    user_email = data.get('email')
+    if not user_email:
+        return jsonify({"error": "Email required"}), 400
+    
+    user_courses = list(course_collection.find({"email": user_email}))
+
+    for course in user_courses:
+        course['_id'] = str(course['_id'])
+
+    return jsonify(user_courses), 200
+
+@app.route('/courses', methods=['POST'])
+def get_courses():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({"message": "Email is required"}), 400
+
+    courses = list(course_collection.find({"email": email}))
+
+    for course in courses:
+        course['_id'] = str(course['_id'])
+
+    return jsonify(courses), 200
+
+@app.route('/courses', methods=['GET'])
+def get_all_courses():
+    courses = list(course_collection.find())
+    for course in courses:
+        course['_id'] = str(course['_id'])  # convert ObjectId to string
+    return jsonify(courses), 200
+
+
 # === Start Server ===
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
