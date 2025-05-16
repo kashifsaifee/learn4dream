@@ -164,10 +164,11 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
           bgcolor: "#fff",
           color: "#222",
           boxShadow: 3,
-          width: { xs: "100%", md: "60%" },
+          width: { xs: "100%", md: "80%" },
+          transform: { md: "translateX(-10%)" },
           top: 0,
           left: { md: "50%" },
-          transform: { md: "translateX(-30%)" },
+          // transform: { md: "translateX(-30%)" },
           zIndex: 1300,
           borderRadius: { md: 1 },
         }}
@@ -225,6 +226,15 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               <Button component={Link} to="/contact" sx={navButtonStyle("/contact")}>
                 Contact
               </Button>
+
+                  <Button component={Link} to="/login" sx={navButtonStyle("/login")}>
+                Login
+              </Button>
+
+               <Button component={Link} to="/signup" sx={navButtonStyle("/signup")}>
+                Sign-Up
+              </Button>
+
                <Button component={Link} to="/profile" sx={navButtonStyle("/profile")}>
                 Profile
               </Button>
