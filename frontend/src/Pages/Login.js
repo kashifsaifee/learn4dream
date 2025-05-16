@@ -458,7 +458,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaMicrosoft } from 'react-icons/fa';
 
-export default function Login({ setIsLoggedIn }) {
+export default function Login({setIsLoggedIn }) {
   const [showPwd, setShowPwd] = useState(false);
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
