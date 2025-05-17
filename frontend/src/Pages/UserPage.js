@@ -11,42 +11,49 @@ import {
   Paper,
 } from "@mui/material";
 
-// User data without bio
+// Sample user data
 const user = {
-  name: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+1 234 567 890",
-  address: "123 Main Street, Springfield, USA",
-  profilePicture: "https://i.pravatar.cc/150?img=3",
+  name: "Alice Johnson",
+  email: "alice.johnson@example.com",
+  profilePicture: "https://i.pravatar.cc/150?img=5",
+  bio: "Frontend developer passionate about creating interactive web experiences.",
 };
 
+// Sample enrolled courses
 const enrolledCourses = [
   {
     id: 1,
-    title: "React for Beginners",
-    instructor: "Jane Smith",
-    image: "https://source.unsplash.com/400x200/?react",
-    progress: "45%",
+    title: "Advanced React & Redux",
+    instructor: "Emily Clark",
+    image: "https://source.unsplash.com/400x200/?react,code",
+    progress: "60%",
   },
   {
     id: 2,
-    title: "Mastering JavaScript",
-    instructor: "Mark Johnson",
-    image: "https://source.unsplash.com/400x200/?javascript",
-    progress: "78%",
+    title: "UI/UX Design Fundamentals",
+    instructor: "Michael Lee",
+    image: "https://source.unsplash.com/400x200/?design,ui",
+    progress: "95%",
+  },
+  {
+    id: 3,
+    title: "TypeScript Essentials",
+    instructor: "Laura Kim",
+    image: "https://source.unsplash.com/400x200/?typescript",
+    progress: "30%",
   },
 ];
 
-const Profile = () => {
+const UserPage = () => {
   return (
     <Box sx={{ p: 4 }}>
-      {/* User Info Section */}
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 3, mb: 5 }}>
+      {/* User Info Card */}
+      <Paper elevation={3} sx={{ p: 3, mb: 5, borderRadius: 3 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
           <Avatar
             src={user.profilePicture}
             alt={user.name}
-            sx={{ width: 100, height: 100 }}
+            sx={{ width: 90, height: 90 }}
           />
           <Box>
             <Typography variant="h5" fontWeight="bold">
@@ -55,33 +62,21 @@ const Profile = () => {
             <Typography variant="body1" color="text.secondary">
               {user.email}
             </Typography>
-            <Typography variant="body2" color="text.secondary" mt={1}>
-              {user.phone}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {user.address}
+            <Typography variant="body2" mt={1}>
+              {user.bio}
             </Typography>
           </Box>
         </Box>
       </Paper>
 
-      <Divider sx={{ mb: 4 }} />
-
-      {/* Enrolled Courses Section */}
+      {/* Enrolled Courses */}
       <Typography variant="h6" gutterBottom>
         Enrolled Courses
       </Typography>
       <Grid container spacing={3}>
         {enrolledCourses.map((course) => (
-          <Grid item xs={12} md={6} lg={4} key={course.id}>
-            <Card
-              sx={{
-                borderRadius: 3,
-                boxShadow: 3,
-                transition: "transform 0.3s ease",
-                "&:hover": { transform: "scale(1.02)", boxShadow: 6 },
-              }}
-            >
+          <Grid item xs={12} sm={6} md={4} key={course.id}>
+            <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
               <CardMedia
                 component="img"
                 height="140"
@@ -89,7 +84,9 @@ const Profile = () => {
                 alt={course.title}
               />
               <CardContent>
-                <Typography variant="h6">{course.title}</Typography>
+                <Typography variant="subtitle1" fontWeight="bold">
+                  {course.title}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Instructor: {course.instructor}
                 </Typography>
@@ -105,4 +102,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UserPage;

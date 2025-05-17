@@ -21,57 +21,59 @@ import { Link } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { motion } from "framer-motion";
 
-const courses = [
-  {
-    id: "fullstack",
-    title: "Full Stack Development",
-    description: "Master both frontend and backend development with modern technologies including React, Node.js, and MongoDB.",
-    price: "$999",
-    image: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
-    duration: "12 weeks",
-    level: "Intermediate",
-    rating: 4.8
-  },
-  {
-    id: "cs",
-    title: "Computer Science",
-    description: "Build a strong foundation in computer science fundamentals, algorithms, and data structures.",
-    price: "$799",
-    image:'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
-    duration: "10 weeks",
-    level: "Beginner",
-    rating: 4.5
-  },
-  {
-    id: "data",
-    title: "Data Science",
-    description: "Learn data analysis, machine learning, and statistical modeling with Python and R.",
-    price: "$899",
-    image: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
-    duration: "14 weeks",
-    level: "Advanced",
-    rating: 4.9
-  },
-];
+// Removed your static 'courses' array here
 
 export default function Courses() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCourses, setFilteredCourses] = useState(courses);
+  const [fetchedCourses, setFetchedCourses] = useState([]);  // New state for fetched courses
+  const [filteredCourses, setFilteredCourses] = useState([]);
   const [loading, setLoading] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [cart, setCart] = useState(() => {
-    // Load saved cart from localStorage if available
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
   });
   const containerRef = useRef(null);
 
+  const userEmail = localStorage.getItem("userEmail"); // Get user email for fetching courses
+
+  // Fetch courses for the logged-in user
   useEffect(() => {
-    const filtered = courses.filter((course) =>
+    if (!userEmail) return;
+
+    fetch('http://localhost:5000/api/courses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: userEmail }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Fetched courses:", data);
+        if (Array.isArray(data)) {
+          // yaha paar - each course has an id (fallback to index if not)
+          const coursesWithId = data.map((course, index) => ({
+            id: course.id || course._id || index,
+            ...course
+          }));
+          setFetchedCourses(coursesWithId);
+        } else {
+          console.error("Fetched data is not an array:", data);
+          setFetchedCourses([]);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching courses:', err);
+        setFetchedCourses([]);
+      });
+  }, [userEmail]);
+
+  // Filter courses by search term on fetchedCourses (not static anymore)
+  useEffect(() => {
+    const filtered = fetchedCourses.filter((course) =>
       course.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredCourses(filtered);
-  }, [searchTerm]);
+  }, [searchTerm, fetchedCourses]);
 
   // Save cart to localStorage when cart changes
   useEffect(() => {
@@ -87,13 +89,12 @@ export default function Courses() {
   };
 
   const enrollCourse = async (courseId) => {
-    // If course is already in cart, do nothing
     if (cart.find((item) => item.id === courseId)) return;
 
     setLoading(courseId);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay
-      const courseToAdd = courses.find((course) => course.id === courseId);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const courseToAdd = fetchedCourses.find((course) => course.id === courseId);
       setCart((prevCart) => [...prevCart, courseToAdd]);
       alert("Added to cart");
     } catch (error) {
@@ -215,8 +216,8 @@ export default function Courses() {
             gap: 3,
             py: 2,
             px: 1,
-            scrollbarWidth: 'none',  // For Firefox
-            '&::-webkit-scrollbar': {  // For Chrome/Safari
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
               display: 'none'
             }
           }}
@@ -321,31 +322,26 @@ export default function Courses() {
                       justifyContent: "space-between",
                       alignItems: "center"
                     }}>
-                      <Typography variant="h6" color="primary" fontWeight={700}>
-                        {course.price}
+                      <Typography
+                        variant="h6"
+                        fontWeight={700}
+                        color="primary"
+                      >
+                        ₹{course.price}
                       </Typography>
+
                       <Button
                         variant="contained"
                         size="small"
                         onClick={() => enrollCourse(course.id)}
                         disabled={loading === course.id || cart.find(item => item.id === course.id)}
                         sx={{
-                          borderRadius: 50,
-                          px: 3,
+                          borderRadius: 20,
                           textTransform: "none",
                           fontWeight: 600,
-                          boxShadow: "none",
-                          "&:hover": {
-                            boxShadow: "none"
-                          }
                         }}
                       >
-                        {cart.find(item => item.id === course.id)
-                          ? "Added"
-                          : loading === course.id
-                            ? "Adding..."
-                            : "Enroll Now"
-                        }
+                        {loading === course.id ? "Adding..." : cart.find(item => item.id === course.id) ? "Added" : "Enroll"}
                       </Button>
                     </Box>
                   </Card>
@@ -353,7 +349,7 @@ export default function Courses() {
               </Box>
             ))
           ) : (
-            <Typography variant="body1" sx={{ mx: "auto", mt: 4, color: "text.secondary" }}>
+            <Typography variant="body1" sx={{ m: 2 }}>
               No courses found.
             </Typography>
           )}
