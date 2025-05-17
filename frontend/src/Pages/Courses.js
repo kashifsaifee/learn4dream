@@ -27,7 +27,7 @@ const courses = [
     title: "Full Stack Development",
     description: "Master both frontend and backend development with modern technologies including React, Node.js, and MongoDB.",
     price: "$999",
-    image: "https://source.unsplash.com/random/600x400/?coding",
+    image: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
     duration: "12 weeks",
     level: "Intermediate",
     rating: 4.8
@@ -37,7 +37,7 @@ const courses = [
     title: "Computer Science",
     description: "Build a strong foundation in computer science fundamentals, algorithms, and data structures.",
     price: "$799",
-    image: "https://source.unsplash.com/random/600x400/?computer",
+    image:'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
     duration: "10 weeks",
     level: "Beginner",
     rating: 4.5
@@ -47,7 +47,7 @@ const courses = [
     title: "Data Science",
     description: "Learn data analysis, machine learning, and statistical modeling with Python and R.",
     price: "$899",
-    image: "https://source.unsplash.com/random/600x400/?data",
+    image: 'https://dummyimage.com/600x400/000/fff&text=Learn4Dream',
     duration: "14 weeks",
     level: "Advanced",
     rating: 4.9
