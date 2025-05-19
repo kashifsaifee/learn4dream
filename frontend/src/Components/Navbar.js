@@ -17,6 +17,7 @@ import { Menu as MenuIcon } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { CgProfile } from "react-icons/cg";
+import { FiLogIn, FiUserPlus } from "react-icons/fi";
 
 const courseLinks = [
   { to: "/courses", label: "Courses" },
@@ -30,8 +31,8 @@ const pageLinks = [
 ];
 
 const authLinks = [
-  { to: "/login", label: "Login" },
-  { to: "/signup", label: "Sign Up" },
+  { to: "/login", label: "Login", icon: <FiLogIn /> },
+  { to: "/signup", label: "Sign Up", icon: <FiUserPlus /> },
 ];
 
 const userLinks = [
@@ -48,36 +49,38 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdown, setDropdown] = useState(null);
 
-  // Updated isActive function: supports single path or array of paths
   const isActive = (paths) => {
-    if (typeof paths === "string") {
-      paths = [paths];
-    }
-    return paths.some((path) => {
-      if (path === "/") {
-        return location.pathname === "/";
-      }
-      return (
-        location.pathname === path ||
-        location.pathname.startsWith(path + "/")
-      );
-    });
+    if (typeof paths === "string") paths = [paths];
+    return paths.some((path) =>
+      path === "/"
+        ? location.pathname === "/"
+        : location.pathname === path || location.pathname.startsWith(path + "/")
+    );
   };
 
-  const navButtonStyle = (pathOrPaths) => ({
-    color: isActive(pathOrPaths) ? theme.palette.primary.main : "#222",
+  const navButtonStyle = (pathOrPaths, special = false) => ({
+    color: isActive(pathOrPaths)
+      ? theme.palette.primary.main
+      : theme.palette.text.primary,
     fontWeight: isActive(pathOrPaths) ? 700 : 500,
-    textTransform: "none",
     fontSize: "1rem",
     px: 2,
     py: 1,
     borderRadius: 2,
-    position: "relative",
-    whiteSpace: "nowrap",
+    textTransform: "none",
+    boxShadow: special ? "0px 2px 6px rgba(0, 0, 0, 0.1)" : "none",
+    border: special ? `1px solid ${theme.palette.primary.main}` : "none",
+    backgroundColor: special ? theme.palette.primary.light : "transparent",
+    transition: "all 0.3s ease",
     "&:hover": {
-      backgroundColor: theme.palette.action.hover,
-      color: theme.palette.primary.main,
+      backgroundColor: special
+        ? theme.palette.primary.main
+        : theme.palette.action.hover,
+      color: special ? "#fff" : theme.palette.primary.main,
     },
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
   });
 
   const dropdownStyle = {
@@ -112,6 +115,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             py: 1,
             width: "100%",
             color: "#333",
+            transition: "background-color 0.3s ease",
             "&:hover": {
               backgroundColor: theme.palette.action.hover,
             },
@@ -130,12 +134,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
       onClick={() => setMobileOpen(false)}
     >
       <List>
-        <ListItem button component={Link} to="/">
+        <ListItem component={Link} to="/">
           <ListItemText primary="Home" />
         </ListItem>
         {[...courseLinks, ...pageLinks, { to: "/contact", label: "Contact" }].map(
           ({ to, label }) => (
-            <ListItem button key={to} component={Link} to={to}>
+            <ListItem key={to} component={Link} to={to}>
               <ListItemText primary={label} />
             </ListItem>
           )
@@ -143,18 +147,33 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         <Divider />
         {!isLoggedIn ? (
           authLinks.map(({ to, label }) => (
-            <ListItem button key={to} component={Link} to={to}>
-              <ListItemText primary={label} />
+            <ListItem key={to} component={Link} to={to}>
+              <ListItemText
+                primary={label}
+                sx={{
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  borderRadius: 2,
+                  px: 2,
+                  py: 0.5,
+                  textAlign: "center",
+                  color: theme.palette.primary.main,
+                  "&:hover": {
+                    backgroundColor: theme.palette.primary.light,
+                    color: "#fff",
+                    transition: "all 0.3s ease",
+                  },
+                }}
+              />
             </ListItem>
           ))
         ) : (
           <>
             {userLinks.map(({ to, label }) => (
-              <ListItem button key={to} component={Link} to={to}>
+              <ListItem key={to} component={Link} to={to}>
                 <ListItemText primary={label} />
               </ListItem>
             ))}
-            <ListItem button onClick={handleLogout}>
+            <ListItem component="button" onClick={handleLogout}>
               <ListItemText primary="Logout" sx={{ color: "red" }} />
             </ListItem>
           </>
@@ -164,11 +183,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
   );
 
   return (
-    <Box
-      onMouseLeave={() => {
-        setDropdown(null);
-      }}
-    >
+    <Box onMouseLeave={() => setDropdown(null)}>
       <AppBar
         position="sticky"
         sx={{
@@ -183,7 +198,6 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         }}
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/* Logo */}
           <Typography
             variant="h5"
             component={Link}
@@ -211,13 +225,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                 Home
               </Button>
 
-              {/* Courses Dropdown */}
               <Box sx={{ position: "relative" }}>
                 <Button
                   onClick={() =>
                     setDropdown(dropdown === "courses" ? null : "courses")
                   }
-                  sx={navButtonStyle(courseLinks.map(link => link.to))}
+                  sx={navButtonStyle(courseLinks.map((link) => link.to))}
                   onMouseEnter={() => setDropdown("courses")}
                 >
                   Courses
@@ -226,13 +239,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   renderDropdown(courseLinks, () => setDropdown(null))}
               </Box>
 
-              {/* Pages Dropdown */}
               <Box sx={{ position: "relative" }}>
                 <Button
                   onClick={() =>
                     setDropdown(dropdown === "pages" ? null : "pages")
                   }
-                  sx={navButtonStyle(pageLinks.map(link => link.to))}
+                  sx={navButtonStyle(pageLinks.map((link) => link.to))}
                   onMouseEnter={() => setDropdown("pages")}
                 >
                   Pages
@@ -247,12 +259,17 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
               {!isLoggedIn ? (
                 <>
-                  <Button component={Link} to="/login" sx={navButtonStyle("/login")}>
-                    Login
-                  </Button>
-                  <Button component={Link} to="/signup" sx={navButtonStyle("/signup")}>
-                    Sign-Up
-                  </Button>
+                  {authLinks.map(({ to, label, icon }) => (
+                    <Button
+                      key={to}
+                      component={Link}
+                      to={to}
+                      sx={navButtonStyle(to, true)}
+                      startIcon={icon}
+                    >
+                      {label}
+                    </Button>
+                  ))}
                 </>
               ) : (
                 <Box sx={{ position: "relative" }}>
@@ -278,6 +295,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                             py: 1,
                             width: "100%",
                             color: "#333",
+                            transition: "background-color 0.3s ease",
                             "&:hover": {
                               backgroundColor: theme.palette.action.hover,
                             },
