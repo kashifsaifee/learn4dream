@@ -344,4 +344,3 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     </Box>
   );
 }
- h
